@@ -1,0 +1,7 @@
+node_modules/
+.DS_Store
+
+# Run artifacts that skills write while they work. Never commit them.
+sessions/
+reports/
+*.log

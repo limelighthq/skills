@@ -1,0 +1,8 @@
+# Every change needs one review from an owner of the path it touches.
+# Add a team's lead as the owner of that team's plugin when the plugin is created.
+
+*                       @glisom
+
+# The validator and CI decide what may ship, so changes to them get the same review.
+/tools/                 @glisom
+/.github/               @glisom

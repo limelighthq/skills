@@ -1,0 +1,6 @@
+{
+  "name": "company",
+  "description": "Skills for everyone at Limelight: where work goes, and everyday document tasks.",
+  "author": { "name": "Limelight" },
+  "repository": "https://github.com/limelighthq/skills"
+}

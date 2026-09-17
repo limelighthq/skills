@@ -1,0 +1,22 @@
+{
+  "name": "limelight",
+  "description": "Limelight's shared agent skills. One plugin per team.",
+  "owner": {
+    "name": "Limelight",
+    "url": "https://github.com/limelighthq"
+  },
+  "plugins": [
+    {
+      "name": "company",
+      "source": "./plugins/company",
+      "description": "Skills for everyone at Limelight: where work goes, and everyday document tasks.",
+      "category": "productivity"
+    },
+    {
+      "name": "engineering",
+      "source": "./plugins/engineering",
+      "description": "Skills for engineers: session handoffs, recaps, cited research, architecture scans, UI evidence, and small improvement PRs.",
+      "category": "development"
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+name: Skill request
+description: Ask for a new skill, or a change to one. No GitHub or coding knowledge needed.
+title: "[skill] "
+labels: [skill-request]
+body:
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What do you need?
+      options:
+        - A new skill
+        - A change to an existing skill
+        - A skill is wrong or out of date
+    validations:
+      required: true
+  - type: input
+    id: skill
+    attributes:
+      label: Skill name
+      description: The existing skill, or a short name for the new one.
+  - type: textarea
+    id: task
+    attributes:
+      label: The task
+      description: Describe the task the way you would explain it to a new teammate. Include the steps you follow today.
+    validations:
+      required: true
+  - type: textarea
+    id: trigger
+    attributes:
+      label: When should an agent use it?
+      description: Give two or three example requests, in the words you would type.
+    validations:
+      required: true
+  - type: textarea
+    id: done
+    attributes:
+      label: What does a good result look like?
+      description: Paste or link an example if you have one. Remove private data first.

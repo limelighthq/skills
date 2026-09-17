@@ -1,0 +1,17 @@
+{
+  "name": "@limelighthq/skills",
+  "private": true,
+  "description": "Limelight's shared agent skills: one marketplace, one plugin per team, validated on every change.",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "validate": "node tools/validate.mjs",
+    "test": "node --test \"tests/*.test.mjs\"",
+    "new:skill": "node tools/new-skill.mjs"
+  },
+  "devDependencies": {
+    "yaml": "2.9.1"
+  }
+}

@@ -144,5 +144,5 @@ Stop and ask a person when:
 ## Worked example
 
 [references/example-entry.md](references/example-entry.md) is a complete posted entry: six items,
-all five kinds, properties and body. Read it before writing your first entry. It sets the level of
-detail this log expects, which prose here cannot convey.
+properties and body. Read it before writing your first entry. It sets the level of detail this log
+expects, which prose here cannot convey.

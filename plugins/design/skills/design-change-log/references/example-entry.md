@@ -34,9 +34,11 @@ behaviour, and a ship step that could not run is recorded rather than skipped.
 | Status | New |
 | Linear, Notes | *(empty — engineering owns these)* |
 
-`Kinds` lists four, not five: the entry has no Vocabulary-only ruling worth flagging beyond the
-two terms below, and it ticks exactly the sections it filled. `Items` is 6 because the behaviour
-section has six numbered items.
+`Items` is 6 because the behaviour section has six numbered items.
+
+**One inconsistency to be aware of.** This entry has a filled Vocabulary section but does not tick
+`Vocabulary` in `Kinds`. Follow the rule in SKILL.md, not this row: tick a kind for every section
+you fill. Raise it with Grant if you think the rule should be looser.
 
 ## Body
 

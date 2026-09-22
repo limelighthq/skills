@@ -7,6 +7,7 @@ The repo is a plugin marketplace named `limelight`. Each team has one plugin. Ev
 | Plugin | For | Skills |
 | --- | --- | --- |
 | [`company`](plugins/company) | Everyone | `limelight-work`, `md-render` |
+| [`design`](plugins/design) | Designers | `design-change-log` |
 | [`engineering`](plugins/engineering) | Engineers | `annotate-ui-screenshots`, `deep-module-scan`, `handoff`, `one-percent-better`, `recap`, `research` |
 
 ## Install
@@ -16,6 +17,7 @@ The repo is a plugin marketplace named `limelight`. Each team has one plugin. Ev
 ```
 /plugin marketplace add limelighthq/skills
 /plugin install company@limelight
+/plugin install design@limelight
 /plugin install engineering@limelight
 ```
 
@@ -34,6 +36,7 @@ Add this to the repo's `.claude/settings.json`. Teammates get the marketplace an
   },
   "enabledPlugins": {
     "company@limelight": true,
+    "design@limelight": true,
     "engineering@limelight": true
   }
 }

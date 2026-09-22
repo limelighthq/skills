@@ -7,7 +7,7 @@ The repo is a plugin marketplace named `limelight`. Each team has one plugin. Ev
 | Plugin | For | Skills |
 | --- | --- | --- |
 | [`company`](plugins/company) | Everyone | `limelight-work`, `md-render` |
-| [`engineering`](plugins/engineering) | Engineers | `annotate-ui-screenshots`, `deep-module-scan`, `handoff`, `one-percent-better`, `recap`, `research` |
+| [`engineering`](plugins/engineering) | Engineers | `annotate-ui-screenshots`, `deep-module-scan`, `handoff`, `one-percent-better`, `recap`, `research`, `ship-to-production` |
 
 ## Install
 

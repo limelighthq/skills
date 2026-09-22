@@ -10,3 +10,4 @@ Skills for engineers. They work in any repo. Skills that depend on one repo's la
 | [`one-percent-better`](skills/one-percent-better/SKILL.md) | Find and open one small, evidence-backed improvement PR. |
 | [`recap`](skills/recap/SKILL.md) | Get a terse step-by-step recap of the current session. |
 | [`research`](skills/research/SKILL.md) | Send a question to a background agent that reads primary sources and cites them. |
+| [`ship-to-production`](skills/ship-to-production/SKILL.md) | Ship a `limelighthq/code` change from open PR to production. Needs git and the gh CLI. |

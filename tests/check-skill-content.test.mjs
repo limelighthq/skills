@@ -35,6 +35,24 @@ test('a relative link to a missing file is an error', () => {
   assert.match(result.errors[0].message, /references\/formats\.md/);
 });
 
+test('bundled-script-missing: catches commands pointing to unbundled scripts', () => {
+  const result = check({ body: '```bash\npython3 "<resolved-skill-root>/scripts/missing.py" input.md\n```\n' });
+  assert.deepEqual(rules(result.errors), ['bundled-script-missing']);
+});
+
+test('bundled script commands resolve from the skill root even in references', () => {
+  const result = check({ files: {
+    'references/usage.md': 'Run `python3 "<resolved-skill-root>/scripts/render.py"`.\n',
+    'scripts/render.py': '#!/usr/bin/env python3\nprint("ok")\n',
+  } });
+  assert.deepEqual(result.errors, []);
+});
+
+test('bundled-script-missing: external source URLs do not claim a bundled script', () => {
+  const result = check({ body: 'Read [the upstream implementation](https://example.test/scripts/render.py).\n' });
+  assert.deepEqual(result.errors, []);
+});
+
 test('a link that leaves the skill directory is an error because skills install standalone', () => {
   const result = check({ body: 'Policy lives in [the workflow doc](../../docs/pr-workflow.md).\n' });
   assert.deepEqual(rules(result.errors), ['link-escapes-skill']);
@@ -75,6 +93,18 @@ test('an absolute path into a home directory is an error', () => {
 
 test('a placeholder home path is allowed', () => {
   const result = check({ body: 'Config lives at `/Users/<you>/.config/tool` or `/home/$USER/.config/tool`.\n' });
+  assert.deepEqual(result.errors, []);
+});
+
+for (const path of ['${CLAUDE_SKILL_DIR}/scripts/run.py', '${CODEX_HOME}/skills/tool', '~/.claude/handoffs/note.md', '~/.codex/skills/tool']) {
+  test(`host-specific-path: rejects an installed host path (${path})`, () => {
+    const result = check({ body: `Run or write to \`${path}\`.\n`, files: { 'scripts/run.py': 'print("ok")\n' } });
+    assert.deepEqual(rules(result.errors), ['host-specific-path']);
+  });
+}
+
+test('host-specific-path: permits paths resolved from the loaded skill and user-selected output', () => {
+  const result = check({ body: 'Resolve the loaded SKILL.md directory as SKILL_ROOT. Run `python3 "$SKILL_ROOT/scripts/run.py"`. Save to the user-selected destination.\n', files: {'scripts/run.py': '#!/usr/bin/env python3\nprint("ok")\n'} });
   assert.deepEqual(result.errors, []);
 });
 

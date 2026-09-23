@@ -77,6 +77,38 @@ test('a plugin without .claude-plugin/plugin.json is an error', () => {
   assert.deepEqual(rules(checkRepo(root).errors), ['plugin-manifest-missing']);
 });
 
+test('portable-manifest-missing: every plugin needs the standard entry point', () => {
+  const root = makeRepo(tempDir());
+  unlinkSync(join(root, 'plugins/engineering/plugin.json'));
+  assert.deepEqual(rules(checkRepo(root).errors), ['portable-manifest-missing']);
+});
+
+for (const content of ['null', '{', '{"name":"engineering"}', '{"$schema":"https://wrong.test/schema","name":"engineering"}']) {
+  test(`portable-manifest-invalid: rejects an unreadable manifest or unsupported schema (${content})`, () => {
+    const root = makeRepo(tempDir());
+    writeFiles(root, { 'plugins/engineering/plugin.json': content });
+    assert.deepEqual(rules(checkRepo(root).errors), ['portable-manifest-invalid']);
+  });
+}
+
+test('portable-manifest-drift: both entry points describe the same plugin', () => {
+  const root = makeRepo(tempDir());
+  writeFiles(root, { 'plugins/engineering/plugin.json': JSON.stringify({
+    $schema: 'https://agent-plugins.org/schemas/1.0.0/plugin.schema.json',
+    name: 'engineering', description: 'Stale copy',
+  }) });
+  assert.deepEqual(rules(checkRepo(root).errors), ['portable-manifest-drift']);
+});
+
+test('plugin-version-pinned: the portable manifest also follows commit-based releases', () => {
+  const root = makeRepo(tempDir());
+  writeFiles(root, { 'plugins/engineering/plugin.json': JSON.stringify({
+    $schema: 'https://agent-plugins.org/schemas/1.0.0/plugin.schema.json',
+    name: 'engineering', description: 'engineering skills', version: '1.0.0',
+  }) });
+  assert.deepEqual(rules(checkRepo(root).errors), ['plugin-version-pinned']);
+});
+
 test('plugin.json name must equal the plugin directory name', () => {
   const root = makeRepo(tempDir());
   writeFiles(root, { 'plugins/engineering/.claude-plugin/plugin.json': JSON.stringify({ name: 'eng', description: 'x' }) });

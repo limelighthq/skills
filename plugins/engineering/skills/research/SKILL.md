@@ -1,22 +1,24 @@
 ---
 name: research
-description: "Delegates an investigation to a background agent that reads primary sources - official docs, library source code, specs, first-party changelogs - and captures the findings as a cited markdown file under docs/research/, so hard-won answers stop evaporating into session memory."
-when_to_use: "Use when a question needs real source-reading rather than recall - a vendor API's actual behavior, a library migration, an auth flow's contract, a spec detail - especially when the answer will inform a ticket or PR. Trigger phrases include \"research this\", \"dig into the docs\", \"find out how X actually works\", \"what does the spec say\", \"조사해줘\", \"문서 찾아봐\"."
+description: "Investigates primary sources and produces a cited research note. Use when asked to research a question, dig into docs, check an API or specification, compare migration behavior, or 조사해줘 / 문서 찾아봐, especially to inform a ticket or PR."
+compatibility: Needs access to primary sources through supplied documents, files, browsing, or a connector. Background agents and filesystem writes are optional.
 metadata:
   version: "1.0.0"
 ---
 
 # research
 
-Announce at start: "Using research - dispatching a background investigation."
+Announce the question being investigated and whether the work will run here or in an available background agent.
 
 ## The job
 
-Spin up ONE background subagent so the main session keeps working while it reads. Its brief:
+If the host supports delegation and parallel work would help, use one background agent with the brief below. Otherwise do the investigation in the current session. The research contract is the same in either case:
 
 1. **Primary sources are the ground truth.** Official documentation, the library's source code, specs and RFCs, first-party changelogs. A blog post or forum answer may point the way, but every claim that matters is followed back to the source that owns it - and cited from there.
 2. **Answer the question asked**, then stop - findings, not a survey.
-3. **Write one markdown file** to `docs/research/YYYY-MM-DD-<slug>.md` and report its path.
+3. **Deliver one research note.** In a writable project, save `docs/research/YYYY-MM-DD-<slug>.md` relative to that project and report the path. If no project or writable filesystem is available, return the same Markdown in the conversation for the user to save. State whether it was saved; do not claim a commit that did not happen.
+
+Read supplied sources when browsing is unavailable. Label supplied excerpts as such and distinguish them from documents independently fetched. If no source supports the requested answer, state the evidence gap and request the missing document or access. Do not replace verification with memory.
 
 ## The document contract
 
@@ -47,5 +49,5 @@ What would make this stale - version bumps, beta flags, dated limits - so a futu
 
 ## What this skill is NOT
 
-- Not a scratchpad summary - the file is committed, structured, and cited.
+- Not a scratchpad summary - the note is structured and cited; commit it when the task's repository workflow calls for that.
 - Not scope-to-tickets - this answers a question; it does not plan work.

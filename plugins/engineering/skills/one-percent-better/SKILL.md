@@ -1,7 +1,7 @@
 ---
 name: one-percent-better
 description: "Use only when explicitly invoked by name, when an autonomous or daily improvement-discovery pass is requested, or when asked to find and open one worthwhile improvement PR without a predefined ticket. Do not use for an ordinary scoped request that already names the desired change."
-disallowed-tools: AskUserQuestion
+compatibility: Requires repository read/write access, git, a test runtime, and authenticated PR access through a CLI, API, or connector. Recurring runs additionally need a scheduler and durable state storage.
 metadata:
   version: "1.0.0"
 ---
@@ -16,10 +16,12 @@ Any repository layer may change, but autonomous authority ends at the pull
 request: never merge, deploy, mutate production, apply production migrations,
 change external services, create tickets, or send unrelated notifications.
 
+This is an autonomous pass: make routine choices from repository guidance. If a required decision or capability is missing, report the blocker and stop before dependent edits. Do not wait on interactive questions in an unattended run. Use the host's actual git, file, execution, and PR tools; a skill does not grant permissions the host or user has withheld.
+
 Invoke as:
 
 ```text
-/one-percent-better [target]
+Use one-percent-better [target]
 ```
 
 A supplied target is a hard scope boundary. Supporting edits outside it must be
@@ -29,11 +31,13 @@ required for integration or verification and explained in the PR.
 
 ### 1. Start clean and enforce the cap
 
-Read repository instructions, pitfalls, and testing conventions. A run must
-successfully fetch current origin/main before editing. Fetch or authentication
+Read repository instructions, pitfalls, and testing conventions. Determine the
+repository's upstream and default branch from its git configuration or hosting
+service, then successfully fetch that branch before editing. Fetch or authentication
 failure means make no edits and report the exact blocker. Then use a clean
-isolated worktree and a unique
-`claude/one-percent-better-YYYYMMDD-<slug>` branch. Never disturb a dirty or
+isolated worktree (reuse the host's existing isolated checkout if clean) and a unique
+`one-percent-better-YYYYMMDD-<slug>` branch with the repository or host's required prefix.
+If neither specifies one, use `improvement/`. Never disturb a dirty or
 user-owned worktree.
 
 Inspect open PR bodies before discovery. One open PR carrying the marker below
@@ -130,20 +134,31 @@ merge or start another candidate.
 
 ## Scheduled mode
 
-Only when explicitly asked, create or update a daily current-session cron whose
-prompt says:
+Only when explicitly asked, use the host's supported scheduler to create or update
+a daily run. Check existing schedules for the same repository and target first.
+If no scheduler or durable state storage is available, return the proposed prompt
+and explain what is missing; do not claim a schedule exists or start an unrequested
+one-off improvement. Follow the scheduler's actual timezone and cadence settings.
+Persist state under a stable key for the repository and target in the scheduler's
+storage or a persistent user-selected file outside disposable worktrees.
+
+The saved prompt says:
 
 ```text
-Run /one-percent-better <exact target if any> once. Daily cadence. Open at most
+Use one-percent-better <exact target if any> once in <repository location>. Daily cadence. Open at most
 one PR, never merge, stop after opening it, stay silent when the WIP cap is
 occupied or no candidate qualifies, and pause after the same blocker occurs on
-three consecutive ticks.
+three consecutive runs. Read and update <durable state location/key> each run.
 ```
 
-Track the cron identifier and a normalized blocker key in retained session
-context; reset the streak after any different outcome. On the third consecutive
-match, report once and delete or pause that cron. Successful PRs do not end the
-daily cron; the WIP cap keeps later ticks silent until review clears it.
+Fill the placeholders before scheduling. Store the schedule identifier, last
+outcome, normalized blocker key, and consecutive blocker count in that durable
+state; reset the streak after any different outcome. Never rely on conversation
+memory surviving the next run. On the third consecutive match, report once and
+pause that schedule with the host's scheduler tool. If pausing fails, report the
+failure without claiming it stopped. Successful PRs do not end the daily schedule;
+the WIP cap keeps later runs silent until review clears it. Confirm the scheduler
+returned a saved schedule identifier before reporting that scheduling succeeded.
 
 ## Red flags
 

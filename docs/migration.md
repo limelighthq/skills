@@ -19,9 +19,9 @@ Only files tracked on each repo's default branch were read, so local run artifac
 
 A skill was imported when it works in any repo without a rewrite. The test: no links that leave the skill directory, and no dependence on one repo's paths, scripts, local services, or docs. Skills that fail the test stay where they are. They are not worse skills. They belong next to the code they serve.
 
-## Imported
+## Initial imports
 
-Every import had one mechanical change: house fields (`version`, `requires_skills`, `requires_mcp`) moved under `metadata` as strings, and `description` and `when_to_use` were re-quoted on one line. Other edits are listed.
+At initial import, house fields (`version`, `requires_skills`, `requires_mcp`) moved under `metadata` as strings, and `description` and `when_to_use` were re-quoted on one line. Other edits at that time are listed below. The portability pass later replaced the host-specific fields and paths.
 
 | Skill | Plugin | From | Other edits |
 | --- | --- | --- | --- |
@@ -58,6 +58,14 @@ The source repos still hold their original copies. Removing a copy is a separate
 - Vendor skills such as Stripe's. Install them from the vendor's plugin.
 - Skills inside personal agent directories.
 
-## No team skills yet
+## Team skills at initial migration
 
 Every skill found was written by engineering. No marketing, sales, design, or operations skill exists yet. Those plugins get created together with their first skill, through a [skill request](https://github.com/limelighthq/skills/issues/new?template=skill-request.yml) or a pull request.
+
+## Portability pass, 2026-09-23
+
+Imported `decide` into `company` from [glisom/skills at 8cb1fa1](https://github.com/glisom/skills/tree/8cb1fa1aef87aa2769a38b4bef1ac698f3e20130/plugins/decide/skills/decide). The import was explicitly requested by its author. It now addresses the current user, uses an available question tool or plain text, waits for asynchronous answers, and continues work only within the existing authorization.
+
+The shared skills now use spec-only frontmatter, resource paths resolved from the installed skill, capability-based tool guidance, and honest fallbacks. `research` supports inline work; `handoff` supports chat output; recurring `one-percent-better` runs require durable state. The renderer documentation describes only bundled functionality, and PDF and preview execution no longer depend on a global CLI or the current working directory.
+
+Added standard Agent Plugins manifests alongside the existing Claude-compatible manifests, an explicit `plugins/` installation boundary, dependency files, discovery fixtures, and installation/script checks. See [portability.md](portability.md) for the tested scope and remaining host requirements.

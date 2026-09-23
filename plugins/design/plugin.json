@@ -1,0 +1,9 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "design",
+  "description": "Skills for designers: shipping mock changes and recording them where engineering reads them.",
+  "author": {
+    "name": "Limelight"
+  },
+  "repository": "https://github.com/limelighthq/skills"
+}

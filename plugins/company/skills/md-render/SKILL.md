@@ -1,76 +1,48 @@
 ---
 name: md-render
-description: "Render Markdown files to HTML, PDF, or other formats with styling and formatting options. Use when you need to convert .md files to presentation-ready formats, generate documentation websites, create styled PDFs from markdown, or preview markdown with custom themes and layouts."
-compatibility: Requires python3 with the markdown package. PDF output also needs weasyprint. Live preview also needs watchdog.
+description: "Renders Markdown to styled HTML or PDF and serves local previews. Use when asked to convert a Markdown file, export a document, generate a styled PDF, or preview Markdown with a theme or custom CSS."
+compatibility: Requires Python 3.10 or newer with Markdown and Pygments. PDF output also needs WeasyPrint and its native libraries. Local preview also needs watchdog and a host that can run a local server.
 ---
 
 # Markdown Renderer
 
-Convert Markdown files to HTML, PDF, and other formats with professional styling.
+## Resolve paths and dependencies
 
-## Core Functionality
+1. Find the directory containing this loaded `SKILL.md`. Replace `<skill-root>` below with its actual absolute path; it is not a variable the host sets. Keep input and output in the user's project or chosen output directory, outside the installed skill.
+2. Select the available Python interpreter (`python3`, `python`, or `py -3`) and check its version. Use that same interpreter for installation and execution. Quote every path, including paths with spaces.
+3. If dependencies are missing and local installation is allowed, create a task-local virtual environment. Install [requirements.txt](requirements.txt) for HTML, [requirements-pdf.txt](requirements-pdf.txt) for PDF, or [requirements-preview.txt](requirements-preview.txt) for preview with the environment's Python and `-m pip install -r "<absolute-requirements-path>"`. Never assume global packages or a CLI on `PATH` belong to the chosen interpreter.
+4. If execution, files, or a required package is unavailable, explain the missing capability. Offer HTML source in chat or a host-native renderer when suitable, and label that alternative. Do not claim to have rendered, saved, or inspected an artifact that was not produced.
 
-### HTML Rendering
-- Convert `.md` to styled HTML with CSS themes
-- Syntax highlighting for code blocks
-- Custom CSS injection for branding
-- Responsive layouts for mobile/desktop
+## Render
 
-### PDF Generation  
-- Professional PDF output from markdown
-- Custom page layouts and margins
-- Print-optimized styling
-- Table of contents generation
+Replace `<python>` with the chosen interpreter and the other placeholders with absolute paths.
 
-### Live Preview
-- Real-time markdown preview server
-- Hot reload on file changes
-- Multiple theme options
+**HTML:**
 
-## Quick Start
-
-**Basic HTML render:**
-```bash
-scripts/md_to_html.py input.md output.html
+```text
+<python> "<skill-root>/scripts/md_to_html.py" "<input.md>" "<output.html>" --theme github
 ```
 
-**PDF generation:**
-```bash  
-scripts/md_to_pdf.py input.md output.pdf --theme professional
+Themes: `github`, `professional`, `minimal`, `academic`. Add `--css "<custom.css>"` for custom HTML styling. The built-in Markdown extensions cover tables, fenced code, footnotes, attributes, and a table of contents at an explicit `[TOC]` marker.
+
+**PDF:**
+
+```text
+<python> "<skill-root>/scripts/md_to_pdf.py" "<input.md>" "<output.pdf>" --theme professional
 ```
 
-**Live preview:**
-```bash
-scripts/preview_server.py input.md --port 3000
+PDF rendering invokes WeasyPrint from the same Python environment. See [TROUBLESHOOTING.md](references/TROUBLESHOOTING.md) if its native libraries are missing.
+
+**Local preview:**
+
+```text
+<python> "<skill-root>/scripts/preview_server.py" "<input.md>" --port 3000 --no-browser
 ```
 
-## Styling Options
+Open the printed URL with the host's browser tool when available. The file watcher regenerates the HTML after edits; refresh the browser to see them. Stop the server when the preview is no longer needed. If the host cannot expose a local server, render a standalone HTML file instead. Never assume a desktop browser is present.
 
-**Built-in themes:**
-- `github` - GitHub-style rendering
-- `professional` - Clean business document style  
-- `minimal` - Simple, focused layout
-- `academic` - Research paper formatting
+## Verify and deliver
 
-**Custom CSS:**
-```bash
-scripts/md_to_html.py input.md output.html --css custom.css
-```
+Confirm the command succeeded and the output exists. Inspect the HTML or PDF with an available browser, document viewer, or image renderer when layout matters. If visual inspection is unavailable, state that limitation. Return a usable file link or attachment and the output format.
 
-## Advanced Features
-
-**For complex documents**: See [ADVANCED.md](references/ADVANCED.md) for:
-- Multi-file projects
-- Custom plugins and extensions
-- Template customization
-- Batch processing workflows
-
-**For specific formats**: See [FORMATS.md](references/FORMATS.md) for:
-- Slide deck generation (reveal.js)
-- Documentation sites (static site generation)
-- eBook formats (EPUB)
-- LaTeX conversion
-
-## Troubleshooting
-
-Common issues and solutions in [TROUBLESHOOTING.md](references/TROUBLESHOOTING.md).
+[ADVANCED.md](references/ADVANCED.md) covers supported styling and batch use. [FORMATS.md](references/FORMATS.md) explains which formats need separate tooling. Check each script's `--help` before using flags not shown here.

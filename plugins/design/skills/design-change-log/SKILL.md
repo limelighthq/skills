@@ -1,8 +1,7 @@
 ---
 name: design-change-log
 description: "Ships a merged mock change from limelighthq/ux-flow-v1 to engineering: confirms the mirror PR, sends the Slack brief, and writes one row in the Design Change Log database in Notion. Use after merging a design mock change upstream, or when asked to post a design update, log a mock change, or write a change-log entry engineers can build from."
-when_to_use: "Trigger phrases include \"post the design update\", \"log this mock change\", \"write the change log entry\", \"ship this to engineering\", \"add a row to the Design Change Log\"."
-compatibility: Requires the gh CLI authenticated to the limelighthq org, a Notion client with write access to the Limelight workspace, and Slack.
+compatibility: Requires authenticated GitHub access to the limelighthq org, through a CLI, API, or connector. Publishing also needs Notion write access to the Limelight workspace and Slack messaging access.
 metadata:
   version: "1.0.0"
   owner: design
@@ -24,7 +23,15 @@ says what an implementer must now build, what they must not build on, and what c
 - Write access to the `Design updates` database in Notion
   (data source `collection://c019c231-b4ab-4462-a5da-0a76d273ceca`).
 
-If the mirror PR is not merged, stop. The entry describes shipped mocks.
+If the mirror PR is not merged, stop publishing. A draft may identify the missing evidence, but a published entry describes shipped mocks.
+
+Use the host's available repository, Notion, and Slack tools and their actual
+schemas. Resolve the configured database by its ID; connector-specific URI syntax
+may differ. Confirm the Slack recipient from the current request or workspace
+configuration before sending. If a required connection is missing, draft from
+the evidence that is available and report exactly which verification or publishing
+step remains blocked. Do not invent PR state, send a substitute notification, or
+claim an entry was published. No skill installation creates these service connections.
 
 ## Ship sequence
 
@@ -32,10 +39,10 @@ If the mirror PR is not merged, stop. The entry describes shipped mocks.
    `Date` property and the date in the `Update` title, not today's date.
 2. **Find the mirror PR.** It is in `limelighthq/agent-platform`, titled
    `sync ux-flow-v1 prototypes from upstream`, on a branch named `sync-ux-flow-<YYYYMMDD>-<HHMM>`.
-   Nothing opens it automatically. If none exists for your upstream merge, open it before going on.
+   Nothing opens it automatically. If none exists for your upstream merge, report that the mirror PR must be created and merged before publication. Do not assume this skill authorizes a separate repository sync.
 3. **Read the sha off the mirror PR body.** The body carries a line
    `Source: limelighthq/ux-flow-v1@<sha>`. Copy that sha into `Mock revision`. If the line is
-   missing, stop and ask. Do not read the sha from the branch, the merge commit, or your own
+   missing, stop publication and request the source line; a draft must label it missing. Do not read the sha from the branch, the merge commit, or your own
    memory of the push: `Mock revision` must match what actually shipped downstream.
 4. **Draft the entry and get approval.** Write the properties and the body in full, show them to
    the person running the skill, and wait. This is the one stop before anything leaves the
@@ -132,14 +139,14 @@ the summary and know whether this update touches their work.
 
 ## Stop conditions
 
-Stop and ask a person when:
+Stop publishing and report the blocker when:
 
 - The mirror PR is missing or unmerged.
 - The mirror PR body has no `Source: limelighthq/ux-flow-v1@<sha>` line.
 - You cannot name a file and an identifier for an item.
-- The update reverses an earlier ruling. Confirm what goes in `Supersedes` before posting.
+- The update reverses an earlier ruling without an agreed `Supersedes` value. Ask for that decision before posting.
 - A step of the ship sequence could not run. Say so in "Process notes" rather than skipping it
-  silently.
+  silently. You may still return an explicitly unpublished draft with the missing evidence labeled.
 
 ## Worked example
 

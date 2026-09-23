@@ -7,31 +7,12 @@ import { parseSkillFile, scalarStyle } from './frontmatter.mjs';
 // https://agentskills.io/specification
 const SPEC_FIELDS = ['name', 'description', 'license', 'compatibility', 'metadata', 'allowed-tools'];
 
-// https://code.claude.com/docs/en/skills (frontmatter reference). Other harnesses ignore these.
-const CLAUDE_CODE_FIELDS = [
-  'when_to_use',
-  'argument-hint',
-  'arguments',
-  'disable-model-invocation',
-  'user-invocable',
-  'disallowed-tools',
-  'model',
-  'effort',
-  'context',
-  'agent',
-  'background',
-  'hooks',
-  'paths',
-  'shell',
-];
-
-const ALLOWED_FIELDS = new Set([...SPEC_FIELDS, ...CLAUDE_CODE_FIELDS]);
+const ALLOWED_FIELDS = new Set(SPEC_FIELDS);
 
 const NAME_PATTERN = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 const NAME_MAX = 64;
 const DESCRIPTION_MAX = 1024;
 const COMPATIBILITY_MAX = 500;
-const LISTING_MAX = 1536; // Claude Code truncates description + when_to_use here.
 
 const FIRST_OR_SECOND_PERSON = /^(i|we|you|my|our|your)\b/i;
 const TRIGGER_CLAUSE = /\buse (this |it |only |the skill )*(when|whenever|for|if|after|before|at|every)\b|\bwhen (the user|a user|someone|asked|you)\b|\btriggers? (on|phrases?)\b/i;
@@ -67,7 +48,7 @@ function checkFrontmatter(parsed, dirName, error, warn) {
 
   for (const field of Object.keys(data)) {
     if (!ALLOWED_FIELDS.has(field)) {
-      error('unknown-field', `"${field}" is not an Agent Skills or Claude Code field; move custom fields under \`metadata\``);
+      error('unknown-field', `"${field}" is not an Agent Skills field; put trigger wording in description, behavior in the body, and custom data under \`metadata\``);
     }
   }
 
@@ -91,7 +72,7 @@ function checkFrontmatter(parsed, dirName, error, warn) {
     error('description-placeholder', '`description` still contains TODO from the template; write what the skill does and when to use it');
   }
 
-  for (const field of ['description', 'when_to_use']) {
+  for (const field of ['description']) {
     const style = scalarStyle(parsed, field);
     if (!style) continue;
     if (!style.singleLine) {
@@ -103,20 +84,19 @@ function checkFrontmatter(parsed, dirName, error, warn) {
 
   checkMetadata(data.metadata, error);
 
+  if (data['allowed-tools'] !== undefined && (typeof data['allowed-tools'] !== 'string' || data['allowed-tools'].trim() === '')) {
+    error('allowed-tools-invalid', '`allowed-tools` must be a non-empty, space-separated string; tool names and permission enforcement still depend on the host');
+  }
+
   if (data.compatibility !== undefined && (typeof data.compatibility !== 'string' || data.compatibility.length > COMPATIBILITY_MAX)) {
     error('compatibility-too-long', `\`compatibility\` must be a string of at most ${COMPATIBILITY_MAX} chars`);
   }
 
   if (typeof description !== 'string') return;
-  const whenToUse = typeof data.when_to_use === 'string' ? data.when_to_use : '';
-
-  if (description.length + whenToUse.length > LISTING_MAX) {
-    warn('listing-too-long', `\`description\` + \`when_to_use\` is ${description.length + whenToUse.length} chars; Claude Code truncates the listing at ${LISTING_MAX}`);
-  }
   if (FIRST_OR_SECOND_PERSON.test(description.trim())) {
     warn('description-person', '`description` should be third person ("Renders...", not "I render..." or "You can...")');
   }
-  if (!whenToUse && !TRIGGER_CLAUSE.test(description)) {
+  if (!TRIGGER_CLAUSE.test(description)) {
     warn('description-no-trigger', '`description` should say when to use the skill ("Use when..."); agents pick skills from this text alone');
   }
 }

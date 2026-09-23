@@ -1,7 +1,7 @@
 ---
 name: deep-module-scan
-description: "Read-only architecture scan that finds shallow-module clusters in a target area and ranks module-deepening candidates by coupling and test gap. Reports the cluster members, the evidence that they are coupled, current test coverage, a proposed deepened interface, and the test boundary that interface would make possible. Reports only - never writes code, never edits modules, never files Linear tickets."
-when_to_use: "Use when an area of the codebase is hard for agents (or people) to change safely, when tests there are mock-heavy or absent, or before investing in a refactor and you want the highest-leverage boundary first. Trigger phrases include \"deep module scan\", \"scan the architecture\", \"find shallow modules\", \"where should we refactor\", \"why is this area hard to test\", \"module boundaries\", \"아키텍처 스캔\", \"모듈 경계 봐줘\"."
+description: "Reports shallow-module clusters ranked by coupling and test gaps in a scoped code area. Use when asked for a deep module scan, architecture scan, refactor candidates, hard-to-test boundaries, or 아키텍처 스캔 / 모듈 경계 봐줘. Reports only; does not edit code or create tickets."
+compatibility: Needs read access to the target source files and tests, through a filesystem, repository connector, or supplied source bundle.
 metadata:
   version: "1.0.0"
 ---
@@ -26,6 +26,8 @@ deep-module-scan <target-path>
 
 - `<target-path>` (**required**) — a directory to scan, e.g. `deep-module-scan packages/db/src` or
   `deep-module-scan apps/web/src/lib/ivy`.
+
+Treat this as a request with a target path, not a shell command. Read through the host's file or repository tools. If the target sources are unavailable, ask for access or a source bundle and stop; do not infer module relationships from filenames alone.
 
 **Announce at start:** `"Using deep-module-scan on <target> — I'll report ranked deepening candidates. I won't change any code or file tickets."`
 
@@ -121,5 +123,4 @@ half the target reads as complete. Name the exclusions.
 
 - Ticket creation belongs to whatever planning skill or process the repo uses; this skill reports,
   it never files.
-- `.claude/PITFALLS.md` #6 (tests that codify the bug, empty test files) — the recurring symptom whose
-  structural cause this scan surfaces.
+- Tests that codify an existing bug or contain no assertions are evidence of a test gap, not a reason to assume the module boundary is sound.

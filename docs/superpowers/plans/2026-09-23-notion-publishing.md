@@ -20,7 +20,7 @@
 - [x] Add publishing tests, then implement schema checks, explicit adoption, plans, idempotent updates, drift checks, and verified completion markers.
 - [x] Add the command, configuration, gated workflow, and maintainer runbook. Update shipping instructions to distinguish configured automation from live deployment.
 - [x] Run validation, all Node tests, installation checks, bundled-script checks, and an offline catalog preview. Review the complete patch.
-- [ ] Create a reviewable PR.
+- [x] Create a reviewable PR: https://github.com/limelighthq/skills/pull/4.
 - [ ] Activate only after the Limelight connection, adoption plan, and live publish are verified.
 
 ## Review focus

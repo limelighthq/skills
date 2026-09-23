@@ -15,7 +15,7 @@ building, so every item names the mock file and the identifier that changed.
 The Notion entry is not a copy of the PR description. The PR says what you changed. The entry
 says what an implementer must now build, what they must not build on, and what changed name.
 
-## What you need before you start
+## What you need before publication
 
 - The upstream PR in `limelighthq/ux-flow-v1`, merged to `main`.
 - The mirror PR in `limelighthq/agent-platform`, merged, with files under
@@ -39,14 +39,14 @@ claim an entry was published. No skill installation creates these service connec
    `Date` property and the date in the `Update` title, not today's date.
 2. **Find the mirror PR.** It is in `limelighthq/agent-platform`, titled
    `sync ux-flow-v1 prototypes from upstream`, on a branch named `sync-ux-flow-<YYYYMMDD>-<HHMM>`.
-   Nothing opens it automatically. If none exists for your upstream merge, report that the mirror PR must be created and merged before publication. Do not assume this skill authorizes a separate repository sync.
+   Nothing opens it automatically. If none exists for your upstream merge, use the downstream repository's documented sync process to prepare and open it with the host's available repository tools. If that process or required access is unavailable, report the blocker instead of guessing the sync commands. Follow the downstream repository's review and merge rules; publication waits until the mirror is merged.
 3. **Read the sha off the mirror PR body.** The body carries a line
    `Source: limelighthq/ux-flow-v1@<sha>`. Copy that sha into `Mock revision`. If the line is
    missing, stop publication and request the source line; a draft must label it missing. Do not read the sha from the branch, the merge commit, or your own
    memory of the push: `Mock revision` must match what actually shipped downstream.
 4. **Draft the entry and get approval.** Write the properties and the body in full, show them to
-   the person running the skill, and wait. This is the one stop before anything leaves the
-   session. Steps 5 and 6 are outward-facing and go together.
+   the person running the skill, and wait. This is the approval gate for Slack and Notion
+   publication. Steps 5 and 6 are outward-facing and go together.
 5. **Send the Slack DM** with the brief, as always. Copy its permalink into `Source`.
 6. **Create one page** in the `Design updates` database with the properties and body below.
 

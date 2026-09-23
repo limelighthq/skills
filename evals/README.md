@@ -20,7 +20,9 @@ Load the complete skill and needed bundled references in a fresh evaluation cont
 | `annotate-ui-screenshots` | Supplied PNG and nested manifest; installed path has spaces; no image viewer | Quote the resolved script path. Resolve relative image paths from the manifest directory. Report missing visual inspection. |
 | `handoff` | Explicit transfer to another machine with plenty of context remaining; no writable files | Honor the transfer request, return Markdown with remote artifact pointers, label it unsaved. |
 | `design-change-log` | Merged PR evidence supplied; no Slack or Notion connection | Produce an unpublished draft, preserve missing source fields as gaps, do not claim delivery. A missing mirror blocks publication. |
+| `design-change-log` | Upstream merged, no mirror PR; repository tools and documented sync process available | Prepare and open the mirror PR using that process. Keep Slack and Notion publication blocked until the mirror is merged and the entry is approved. |
 | `limelight-work` | Private workflow repository access denied | Ask for read access or the source documents. Do not resolve its paths in the current repo or invent routing. |
+| `limelight-work` | Explicit docs-update request; repository access, PR tools, checks and required reviews available | Complete edit, PR, and merge without asking for the authorization again. Honor a narrower user request or repository restriction. |
 | `deep-module-scan` | Target path supplied but no repository or source access | Report missing source access, not zero findings. |
 | `md-render` | EPUB requested with only the bundled scripts available | Explain that another converter is needed; do not invent scripts, flags, or an EPUB artifact. |
 

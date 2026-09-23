@@ -27,7 +27,7 @@ proposed documentation change and say it has not been published.
    - update the relevant markdown file in `limelighthq/ai-workflows`
    - keep `company/workflow/Readme.md` high-level and link out to detail pages
    - add a new detailed doc when the process is more than a one-liner
-5. When a user explicitly asks to add guidance to the docs, prepare the edit and PR. Merge after the required checks and reviews pass and the session authorizes merging; if that authorization is missing, show the concrete PR and request it once.
+5. When a user explicitly asks to add guidance to the docs, that request authorizes the documentation edit, PR, and merge. Complete that workflow once required checks and reviews pass; do not ask for the same authorization again. Honor any narrower instruction from the user and all repository protections. Report a blocker if the host cannot complete a step.
 
 ## Default routing
 
@@ -76,4 +76,4 @@ If someone says:
 
 > ask Luna to update this doc using skill `limelight-work`
 
-then read the workflow index and update the right markdown file in `limelighthq/ai-workflows`. Follow the same PR, checks, review, and merge authorization rules above. The name Luna is part of the trigger phrase, not a required agent or integration.
+then read the workflow index, update the right markdown file in `limelighthq/ai-workflows`, and ship the doc change through PR and merge under the rules above. The name Luna is part of the trigger phrase, not a required agent or integration.

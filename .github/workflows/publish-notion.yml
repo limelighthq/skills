@@ -8,10 +8,14 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: Review a plan or publish the current main revision
+        description: Review, set up schema, or publish the current main revision
         type: choice
-        options: [plan, publish]
+        options: [plan, schema-plan, schema-apply, publish]
         default: plan
+      repair_skill:
+        description: Optional reviewed skill to repair (plan or publish only)
+        type: string
+        default: ''
 
 permissions:
   contents: read
@@ -22,7 +26,7 @@ concurrency:
 
 jobs:
   publish:
-    if: github.repository == 'limelighthq/skills' && github.ref == 'refs/heads/main' && vars.NOTION_SYNC_ENABLED == 'true'
+    if: github.repository == 'limelighthq/skills' && github.ref == 'refs/heads/main' && (github.event_name == 'workflow_dispatch' || vars.NOTION_SYNC_ENABLED == 'true')
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -39,13 +43,33 @@ jobs:
       - run: npm ci
       - run: npm run validate
       - run: npm test
-      - name: Plan or publish
+      - name: Run the requested publishing operation
+        shell: bash
         env:
           NOTION_API_TOKEN: ${{ secrets.NOTION_API_TOKEN }}
           REQUESTED_MODE: ${{ inputs.mode }}
+          REPAIR_SKILL: ${{ inputs.repair_skill }}
+          TRIGGER_EVENT: ${{ github.event_name }}
         run: |
-          if [ "$REQUESTED_MODE" = "plan" ]; then
-            npm run notion:plan
-          else
-            npm run notion:publish -- --apply
+          if [ "$TRIGGER_EVENT" != workflow_dispatch ]; then
+            REQUESTED_MODE=publish
           fi
+          repair_args=()
+          if [ -n "$REPAIR_SKILL" ]; then
+            if [[ ! "$REPAIR_SKILL" =~ ^[a-z0-9]+(-[a-z0-9]+)*$ || ${#REPAIR_SKILL} -gt 64 ]]; then
+              echo 'Repair must name one valid skill.' >&2
+              exit 1
+            fi
+            if [[ "$REQUESTED_MODE" != plan && "$REQUESTED_MODE" != publish ]]; then
+              echo 'Repair is supported only with plan or publish.' >&2
+              exit 1
+            fi
+            repair_args=(--repair "$REPAIR_SKILL")
+          fi
+          case "$REQUESTED_MODE" in
+            plan) npm run notion:plan -- "${repair_args[@]}" ;;
+            schema-plan) npm run notion:schema ;;
+            schema-apply) npm run notion:schema -- --apply ;;
+            publish) npm run notion:publish -- --apply "${repair_args[@]}" ;;
+            *) echo 'Unknown publishing mode.' >&2; exit 1 ;;
+          esac

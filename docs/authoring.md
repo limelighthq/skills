@@ -17,6 +17,7 @@ The description is the part that most often decides whether a skill works. A goo
 - Write in third person: "Builds release notes", not "I build" or "You can use this to".
 - Say what the skill does, then when to use it. Include the words people type when they need it.
 - Put the key use case first. Listings get truncated.
+- Keep every essential trigger in `description`; vendor-only frontmatter is not loaded consistently.
 - Keep the value on one line. Wrap it in double quotes if it contains `: ` or ` #`.
 
 ```yaml
@@ -47,7 +48,10 @@ A skill is installed on its own, into tools you have never seen, at a path you d
 - Bundle every file the skill needs inside its directory. Do not link to files elsewhere in any repo.
 - Refer to bundled files by paths relative to the skill root, such as `references/formats.md`, and keep them one level deep. Agents may only skim a file that is reached through a chain of links.
 - Name other skills in plain text, never by file path. The other skill may not be installed.
-- Declare real requirements in `compatibility`: a runtime, a CLI, network access, or one specific agent.
+- Declare real requirements in `compatibility`: file access, a runtime, network access, or authenticated service access. Describe required capabilities rather than naming one agent. Repeat requirements in the body if they matter when the skill is loaded through a service that strips optional metadata.
+- Use the host's available tools and actual schemas. If delegation is absent, work inline. If saving is absent, return Markdown or an artifact. If an essential execution or service capability is missing, report it and keep partial output clearly labeled.
+- Resolve scripts from the loaded `SKILL.md`, quote paths, and invoke through the available interpreter. Do not assume the working directory is the skill directory.
+- Persist recurring-run state outside disposable worktrees; do not assume the scheduler retains conversation history.
 - Give a reference file over 100 lines a `## Contents` heading, so the agent can read part of it.
 
 ## Scripts
@@ -70,3 +74,5 @@ Name where a secret lives, such as an environment variable or a secret manager. 
 - Every step is an action. No step restates what an agent does by default.
 - Irreversible actions sit behind one explicit approval.
 - `npm run validate` passes with no new warnings.
+- [Portability checks](portability.md) pass for any changed packaging or script behavior.
+- Missing tools produce an honest draft or blocker; all supported paths retain the workflow's authorization boundaries.

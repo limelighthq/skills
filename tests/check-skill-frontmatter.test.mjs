@@ -66,13 +66,6 @@ test('a block-scalar description is an error because Claude Code lists it as emp
   assert.deepEqual(rules(result.errors), ['description-not-single-line']);
 });
 
-test('a block-scalar when_to_use is an error for the same reason', () => {
-  const result = check('changelog', {
-    frontmatter: 'name: changelog\ndescription: Builds a changelog.\nwhen_to_use: |\n  Use when releasing.',
-  });
-  assert.deepEqual(rules(result.errors), ['description-not-single-line']);
-});
-
 test('an unquoted description containing " #" is an error because YAML truncates it', () => {
   const result = check('changelog', { frontmatter: 'name: changelog\ndescription: Builds notes for issue #12. Use when releasing.' });
   assert.deepEqual(rules(result.errors), ['description-truncated-by-comment']);
@@ -83,7 +76,7 @@ test('a quoted description may contain " #"', () => {
   assert.deepEqual(result.errors, []);
 });
 
-test('Claude Code extension fields are allowed', () => {
+test('unknown-field: host-specific frontmatter is not portable', () => {
   const result = check('changelog', {
     frontmatter: [
       'name: changelog',
@@ -94,6 +87,19 @@ test('Claude Code extension fields are allowed', () => {
       'argument-hint: "[version]"',
     ].join('\n'),
   });
+  assert.deepEqual(rules(result.errors), ['unknown-field', 'unknown-field', 'unknown-field']);
+  assert.deepEqual(rules(result.warnings), ['description-no-trigger']);
+});
+
+for (const value of ['[Read, Bash]', 'true', '42', '""', 'null']) {
+  test(`allowed-tools-invalid: rejects a non-string or empty tool list (${value})`, () => {
+    const result = check('changelog', { frontmatter: `name: changelog\ndescription: Builds notes. Use when releasing.\nallowed-tools: ${value}` });
+    assert.deepEqual(rules(result.errors), ['allowed-tools-invalid']);
+  });
+}
+
+test('a spec-format allowed-tools string remains valid', () => {
+  const result = check('changelog', { frontmatter: 'name: changelog\ndescription: Builds notes. Use when releasing.\nallowed-tools: Read Bash(git:*)' });
   assert.deepEqual(result.errors, []);
 });
 
@@ -114,14 +120,6 @@ test('metadata must map string keys to string values', () => {
 test('compatibility over 500 characters is an error', () => {
   const result = check('changelog', { frontmatter: `name: changelog\ndescription: Builds notes. Use when releasing.\ncompatibility: ${'x'.repeat(501)}` });
   assert.deepEqual(rules(result.errors), ['compatibility-too-long']);
-});
-
-test('description plus when_to_use over 1,536 characters warns about listing truncation', () => {
-  const result = check('changelog', {
-    frontmatter: `name: changelog\ndescription: Builds notes. ${'d'.repeat(900)}\nwhen_to_use: Use when releasing. ${'w'.repeat(700)}`,
-  });
-  assert.deepEqual(result.errors, []);
-  assert.deepEqual(rules(result.warnings), ['listing-too-long']);
 });
 
 test('a first-person or second-person description warns', () => {

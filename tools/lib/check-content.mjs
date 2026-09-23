@@ -8,6 +8,7 @@ const REFERENCE_TOC_MIN_LINES = 100;
 
 const HOME_PATH = /(?:\/Users\/|\/home\/|[A-Za-z]:\\Users\\)([^\s/\\`"')]+)/g;
 const HOME_PLACEHOLDER = /^[<{$[]|^(you|your|name|user|username|me|someone|example)$/i;
+const HOST_PATH = /\$\{?(?:CLAUDE_(?:SKILL_DIR|PLUGIN_ROOT|PROJECT_DIR|PLUGIN_DATA)|CODEX_HOME)\b|~\/[.](?:claude|codex|cursor|gemini)\//;
 
 // Shapes of real credentials. Findings never echo the match.
 const SECRET_PATTERNS = [
@@ -51,9 +52,19 @@ export function checkContent(skillDir, body, error, warn) {
     const text = buffer.toString('utf8');
 
     checkSecretsAndPaths(text, rel, file, error);
+    if (HOST_PATH.test(text)) {
+      error('host-specific-path', `${rel} assumes a host installation path or variable; resolve bundled files from the loaded SKILL.md and use a user-selected output directory`, file);
+    }
 
     if (extname(file) === '.md') {
       checkLinks(text, file, skillDir, error);
+      const localReferences = text.replace(/\b[a-z][a-z0-9+.-]*:\/\/[^\s<>"'`)]+/gi, '');
+      const scripts = new Set([...localReferences.matchAll(/\bscripts\/[A-Za-z0-9_./-]+\.(?:py|sh|mjs|js)\b/g)].map((match) => match[0]));
+      for (const script of scripts) {
+        if (!existsSync(join(skillDir, script))) {
+          error('bundled-script-missing', `${rel} refers to ${script}, but the skill does not bundle it`, file);
+        }
+      }
       if (rel !== 'SKILL.md') checkContentsHeading(text, rel, file, warn);
     }
 

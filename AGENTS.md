@@ -9,10 +9,10 @@ This repo is a plugin marketplace of agent skills. People outside engineering re
 
 ## Rules
 
-- Run `npm run validate` and `npm test` before you say a change is done. Both must pass.
+- Run `npm run validate` and `npm test` before you say a change is done. Both must pass. Run the script and install checks in `docs/portability.md` when changing bundled scripts, packaging, or discovery.
 - A skill is self-contained. Every file it needs lives inside its own directory. Never link out of the skill directory, and never assume the skill is installed at a fixed path.
 - Skill names are unique across all plugins. Check before you add one.
-- Put a field that is not in the Agent Skills spec or the Claude Code reference under `metadata`, as a string.
+- Keep shared frontmatter within the Agent Skills spec. Put custom data under `metadata`, as strings; put trigger wording in `description` and portable behavior in the body.
 - Do not add `version` to a `plugin.json` or to a marketplace entry. Each merge to `main` is the release.
 - Do not create a plugin with no skills. Add the plugin in the same change as its first skill, and list it in `.claude-plugin/marketplace.json`.
 - A reworded `description` changes when agents pick the skill. Treat it as a behavior change and test it on real requests.

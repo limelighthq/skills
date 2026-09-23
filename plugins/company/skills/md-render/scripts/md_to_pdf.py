@@ -28,14 +28,13 @@ def convert_md_to_pdf(input_file, output_file=None, theme='professional'):
     with tempfile.NamedTemporaryFile(mode='w', suffix='.html', delete=False) as temp_html:
         temp_html_path = temp_html.name
     
-    # Convert to HTML first
-    if not convert_md_to_html(input_file, temp_html_path, theme):
-        return False
-    
     # Convert HTML to PDF using weasyprint
     try:
+        if not convert_md_to_html(input_file, temp_html_path, theme):
+            return False
         result = subprocess.run([
-            'weasyprint', 
+            sys.executable, '-m', 'weasyprint',
+            '--base-url', str(input_path.resolve().parent),
             temp_html_path, 
             str(output_path)
         ], capture_output=True, text=True, check=True)
@@ -45,12 +44,10 @@ def convert_md_to_pdf(input_file, output_file=None, theme='professional'):
         
     except subprocess.CalledProcessError as e:
         print(f"Error generating PDF: {e.stderr}")
-        print("\nNote: This script requires weasyprint. Install with:")
-        print("pip install weasyprint")
+        print("\nCheck that WeasyPrint and its native libraries are installed for this Python interpreter.")
         return False
     except FileNotFoundError:
-        print("Error: weasyprint not found. Install with:")
-        print("pip install weasyprint")
+        print(f"Error: could not launch the selected Python interpreter: {sys.executable}")
         return False
     finally:
         # Clean up temporary file

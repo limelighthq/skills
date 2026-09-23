@@ -45,6 +45,7 @@ export function makeRepo(root, { marketplace, plugins = { engineering: ['changel
   for (const [plugin, skills] of Object.entries(plugins)) {
     writeFiles(join(root, 'plugins', plugin), {
       '.claude-plugin/plugin.json': JSON.stringify({ name: plugin, description: `${plugin} skills` }, null, 2),
+      'plugin.json': JSON.stringify({ $schema: 'https://agent-plugins.org/schemas/1.0.0/plugin.schema.json', name: plugin, description: `${plugin} skills` }, null, 2),
       'README.md': `# ${plugin}\n`,
     });
     for (const skill of skills) makeSkill(join(root, 'plugins', plugin, 'skills'), skill);

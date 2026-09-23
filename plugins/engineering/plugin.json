@@ -1,0 +1,9 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "engineering",
+  "description": "Skills for engineers: session handoffs, recaps, cited research, architecture scans, UI evidence, and small improvement PRs.",
+  "author": {
+    "name": "Limelight"
+  },
+  "repository": "https://github.com/limelighthq/skills"
+}

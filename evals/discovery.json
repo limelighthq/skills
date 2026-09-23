@@ -1,0 +1,92 @@
+[
+  {
+    "skill": "decide",
+    "positive": [
+      "Use decide to walk me through the open product choices.",
+      "Help me compare options for these unresolved questions.",
+      "We have several decisions only I can make. Take them one at a time."
+    ],
+    "negative": "What is the current date?"
+  },
+  {
+    "skill": "limelight-work",
+    "positive": [
+      "Where should this Limelight workflow live?",
+      "Which company process should I follow to turn this idea into work?",
+      "Update our workflow docs with the missing escalation guidance."
+    ],
+    "negative": "Render this Markdown as a PDF."
+  },
+  {
+    "skill": "md-render",
+    "positive": [
+      "Convert my Markdown document to styled HTML.",
+      "Export this Markdown report as a PDF.",
+      "Preview notes.md with a custom theme."
+    ],
+    "negative": "Help me choose between two database vendors."
+  },
+  {
+    "skill": "design-change-log",
+    "positive": [
+      "Post the design update for this merged mock change.",
+      "Log this shipped ux-flow-v1 mock change for engineering.",
+      "Write a Design Change Log entry from these merged upstream and mirror PRs."
+    ],
+    "negative": "Implement this UI feature before the design PR is merged."
+  },
+  {
+    "skill": "annotate-ui-screenshots",
+    "positive": [
+      "Annotate these screenshots as proof of the UI change.",
+      "Capture responsive-state screenshot evidence for this pull request.",
+      "Create annotated visual comparisons of these two interface states."
+    ],
+    "negative": "Optimize this SQL query without changing the interface."
+  },
+  {
+    "skill": "deep-module-scan",
+    "positive": [
+      "Scan packages/cache/src for shallow module clusters.",
+      "Find refactor candidates in this area based on coupling and test gaps.",
+      "Why are module boundaries in src/billing so hard to test?"
+    ],
+    "negative": "Refactor this single function to use a clearer name."
+  },
+  {
+    "skill": "handoff",
+    "positive": [
+      "Prepare a handoff so another agent can continue this task.",
+      "Package this work for a fresh session on another machine.",
+      "Hand these decisions and next steps to my colleague."
+    ],
+    "negative": "Recap what we did in this session for me."
+  },
+  {
+    "skill": "one-percent-better",
+    "positive": [
+      "Use one-percent-better on src/cache.",
+      "Find and open one worthwhile improvement PR without a predefined ticket.",
+      "Set up a daily autonomous improvement-discovery pass."
+    ],
+    "negative": "Fix the null pointer on line 20 of cache.ts."
+  },
+  {
+    "skill": "recap",
+    "positive": [
+      "Recap our progress so far.",
+      "Catch me up on what we did in this session.",
+      "Give me a step-by-step summary of the work done."
+    ],
+    "negative": "Write a handoff for a new agent on another machine."
+  },
+  {
+    "skill": "research",
+    "positive": [
+      "Research the vendor API contract using primary sources.",
+      "Dig into the official migration docs and cite the behavior changes.",
+      "What does the specification say about deleting an absent key?"
+    ],
+    "negative": "Summarize the steps we already took in this conversation."
+  }
+]

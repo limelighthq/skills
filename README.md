@@ -2,11 +2,11 @@
 
 One repo for the skills Limelight's AI agents share. A skill is a folder with a `SKILL.md` file that teaches an agent how to do one task the way we do it.
 
-The repo is a plugin marketplace named `limelight`. Each team has one plugin. Every skill follows the open [Agent Skills](https://agentskills.io/specification) format, so the same files work in Claude, Claude Code, Codex, Cursor, and other agents.
+The repo is a plugin marketplace named `limelight`. Each team has one plugin. Shared skills follow the open [Agent Skills](https://agentskills.io/specification) format. The same skill folders can load in Codex, Claude Code, Cursor, OpenCode, and other compatible agents. Each skill states the tools it needs and what to do when they are unavailable. See the [portability contract and checks](docs/portability.md).
 
 | Plugin | For | Skills |
 | --- | --- | --- |
-| [`company`](plugins/company) | Everyone | `limelight-work`, `md-render` |
+| [`company`](plugins/company) | Everyone | `decide`, `limelight-work`, `md-render` |
 | [`design`](plugins/design) | Designers | `design-change-log` |
 | [`engineering`](plugins/engineering) | Engineers | `annotate-ui-screenshots`, `deep-module-scan`, `handoff`, `one-percent-better`, `recap`, `research` |
 
@@ -25,7 +25,7 @@ The repo is private. If the add step fails on authentication, run `gh auth setup
 
 Plugins here set no version on purpose. Claude Code then treats each commit on `main` as a new version, so a merged change reaches everyone on their next marketplace update. `claude plugin validate` prints a "no version specified" warning because of this. The warning is expected.
 
-### Pin the plugins in a repo
+### Enable Claude Code plugins in a repo
 
 Add this to the repo's `.claude/settings.json`. Teammates get the marketplace and the plugins when they trust the folder.
 
@@ -42,17 +42,45 @@ Add this to the repo's `.claude/settings.json`. Teammates get the marketplace an
 }
 ```
 
-### Other agents
+### Codex plugins
 
-The [`skills` CLI](https://github.com/vercel-labs/skills) reads this repo's marketplace file and installs skills into Codex, Cursor, and other agents.
-
-```bash
-npx skills add limelighthq/skills --list
-```
+Codex supports the existing marketplace catalog and plugin layout. Add the marketplace:
 
 ```bash
-npx skills add limelighthq/skills --skill handoff
+codex plugin marketplace add limelighthq/skills
 ```
+
+Then install `company`, `design`, or `engineering` from Codex's plugin browser. Each plugin also includes a standard root `plugin.json` for [Agent Plugins](https://agent-plugins.org/specification) clients. Both manifests load the same skill files.
+
+### Individual skills in Codex, Cursor, OpenCode, and other agents
+
+The [`skills` CLI](https://github.com/vercel-labs/skills) copies or links complete skill folders into the selected agent's discovery directory. Run these commands in the project where you want the skills. Version 1.7.0 is used by this repo's install checks.
+
+```bash
+npx skills@1.7.0 add https://github.com/limelighthq/skills/tree/main/plugins --list
+```
+
+Install all shared skills for Codex:
+
+```bash
+npx skills@1.7.0 add https://github.com/limelighthq/skills/tree/main/plugins --agent codex --skill '*' --copy
+```
+
+Or select one skill and one agent:
+
+```bash
+npx skills@1.7.0 add https://github.com/limelighthq/skills/tree/main/plugins --agent cursor --skill handoff --copy
+```
+
+Replace `cursor` with `opencode`, `claude-code`, or another supported target. Add `--global` for a personal installation across projects. Use one installation route per host to avoid duplicate skill discovery. Private repository access must already work through Git.
+
+Install from `plugins/`, not the repository root: generic root discovery also finds this repo's maintenance skills. With a local checkout, use `npx skills@1.7.0 add ./plugins` and the same options. Update CLI-managed project skills with `npx skills@1.7.0 update -p`; remove one with:
+
+```bash
+npx skills@1.7.0 remove handoff --agent cursor
+```
+
+Without an installer, copy the **whole** `plugins/<plugin>/skills/<skill>/` folder into the host's documented skill directory. Codex uses `.agents/skills/` in a project. Preserve bundled scripts, references, and requirements; copying only `SKILL.md` is insufficient. A chat-only system can follow the text, but executable workflows still need their declared tools.
 
 ## Change or add a skill
 
@@ -82,24 +110,26 @@ Read [docs/authoring.md](docs/authoring.md) before you write a skill. [docs/conv
 ```
 .claude-plugin/marketplace.json     the catalog: one entry per plugin
 plugins/<plugin>/
-  .claude-plugin/plugin.json        plugin name and description
+  plugin.json                       standard Agent Plugins manifest
+  .claude-plugin/plugin.json        Claude-compatible manifest
   README.md                         who the plugin is for
   skills/<skill>/
     SKILL.md                        required: frontmatter + instructions
     references/                     optional: detail the agent reads on demand
     scripts/                        optional: code the agent runs
     assets/                         optional: templates and static files
-.claude/skills/                     this repo's own maintenance skills, not shipped to teammates
+.claude/skills/                     maintenance skills, excluded by the plugins/ install route
 templates/skill/                    what `npm run new:skill` copies
 tools/                              the validator and the scaffolder
 tests/                              tests for the tools
+evals/                              repeatable discovery and behavior scenarios
 docs/                               authoring guide, conventions, migration record
 ```
 
 ## How a change ships
 
 1. A pull request changes a skill.
-2. CI runs the tool tests and `npm run validate`. Any error blocks the merge.
+2. CI runs validation, tool tests, installation checks, and bundled script tests. Any error blocks the merge.
 3. An owner from [CODEOWNERS](.github/CODEOWNERS) reviews the change.
 4. The merge to `main` is the release. There is no version to bump.
 5. Someone publishes the change to the [Limelight Skills](https://app.notion.com/p/0368efd473c142a08302c2e183ef7616) database in Notion, so agents that cannot read this repo get it too. This step is manual: run the `publish-skills-to-notion` skill in `.claude/skills/`. Notion can lag `main` until someone does.

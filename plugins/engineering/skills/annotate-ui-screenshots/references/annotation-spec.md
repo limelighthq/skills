@@ -2,6 +2,8 @@
 
 Use one JSON object per screenshot. Authors always express rectangles against the raw source PNG.
 
+Relative `input` and `output` paths resolve from the manifest file's directory, not the shell's working directory or the installed skill. Use absolute paths when the files live elsewhere.
+
 ## Fields
 
 | Field | Required | Rules |
@@ -59,7 +61,7 @@ Use stable neighboring filenames:
 ## Render
 
 ```bash
-python3 <runtime-skill-path>/scripts/annotate_screenshot.py --spec <scope>-<state>-spec.json
+python3 "<resolved-skill-root>/scripts/annotate_screenshot.py" --spec "<absolute-project-path>/<scope>-<state>-spec.json"
 ```
 
 On success the renderer prints a concise line such as:

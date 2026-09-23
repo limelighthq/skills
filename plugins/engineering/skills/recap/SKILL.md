@@ -1,7 +1,6 @@
 ---
 name: recap
-description: "Produces a terse, chronological, step-by-step recap of the work done so far in the current session - one short sentence per step, oldest first, ending with where things stand now."
-when_to_use: "Use whenever the user asks to summarize progress, recap what's been done, catch someone up mid-session, or get a step-by-step rundown - even when they only imply it. Trigger phrases include \"recap\", \"recap what we've done\", \"summarize our progress\", \"step by step summary\", \"what have we done so far\", \"where are we\", \"remind me what we did\", \"단계별로 요약\", \"지금까지 한 거 요약\", \"한 단계씩 요약\", \"우리 뭐 했지\"."
+description: "Produces a terse chronological recap of the current session. Use when asked to recap progress, summarize what has been done, catch someone up, explain where things stand, or 단계별로 요약 / 지금까지 한 거 요약 / 우리 뭐 했지."
 metadata:
   version: "1.0.0"
 ---

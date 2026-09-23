@@ -1,5 +1,6 @@
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
+import { isDeepStrictEqual } from 'node:util';
 
 import { checkSkill } from './check-skill.mjs';
 
@@ -120,8 +121,35 @@ function checkPlugin(pluginDir, pluginName, error, warn) {
     }
   }
 
+  checkPortableManifest(pluginDir, pluginName, manifest.value, error);
+
   if (!existsSync(join(pluginDir, 'README.md'))) {
     warn('plugin-readme-missing', `plugin "${pluginName}" has no README.md to say who it is for`, pluginDir);
+  }
+}
+
+function checkPortableManifest(pluginDir, pluginName, legacy, error) {
+  const file = join(pluginDir, 'plugin.json');
+  const manifest = readJson(file);
+  const schema = 'https://agent-plugins.org/schemas/1.0.0/plugin.schema.json';
+  if (manifest.missing) {
+    error('portable-manifest-missing', 'add plugin.json at the plugin root so Agent Plugins clients can discover it', file);
+    return;
+  }
+  if (manifest.invalid || manifest.value?.$schema !== schema) {
+    error('portable-manifest-invalid', `plugin.json must be a JSON object declaring $schema: ${schema}`, file);
+    return;
+  }
+  if (manifest.value.version !== undefined) {
+    error('plugin-version-pinned', 'portable plugin.json sets `version`; omit it so releases follow repository revisions', file);
+    return;
+  }
+  // This repo ships skills-only plugins. Both entry points must describe the same package.
+  // Let the existing checks explain a broken legacy manifest before reporting drift.
+  if (legacy?.name === pluginName && typeof legacy.description === 'string' && legacy.description.trim() && legacy.version === undefined) {
+    if (!isDeepStrictEqual(manifest.value, { $schema: schema, ...legacy })) {
+      error('portable-manifest-drift', 'root plugin.json must match .claude-plugin/plugin.json plus the Agent Plugins $schema; both load the same skills/ directory', file);
+    }
   }
 }
 

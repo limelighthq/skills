@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Live preview server for Markdown files with hot reload
+Preview server that regenerates Markdown output for manual browser refreshes.
 """
 
 import argparse
@@ -8,13 +8,14 @@ import http.server
 import socketserver
 import webbrowser
 import time
-import threading
+import sys
+from functools import partial
 from pathlib import Path
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 from md_to_html import convert_md_to_html
 import tempfile
-import os
+from urllib.parse import quote
 
 class MarkdownHandler(FileSystemEventHandler):
     def __init__(self, md_file, html_file, theme):
@@ -38,10 +39,11 @@ class MarkdownHandler(FileSystemEventHandler):
             convert_md_to_html(str(self.md_file), str(self.html_file), self.theme)
 
 class PreviewServer:
-    def __init__(self, md_file, port, theme):
-        self.md_file = Path(md_file)
+    def __init__(self, md_file, port, theme, open_browser=True):
+        self.md_file = Path(md_file).resolve()
         self.port = port
         self.theme = theme
+        self.open_browser = open_browser
         self.temp_dir = Path(tempfile.mkdtemp())
         self.html_file = self.temp_dir / f"{self.md_file.stem}.html"
         
@@ -56,21 +58,22 @@ class PreviewServer:
         observer.schedule(event_handler, str(self.md_file.parent), recursive=False)
         observer.start()
         
-        # Start HTTP server
-        os.chdir(self.temp_dir)
+        # Serve output without changing the process working directory.
         
         class QuietHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             def log_message(self, format, *args):
                 pass  # Suppress request logs
                 
-        with socketserver.TCPServer(("", self.port), QuietHTTPRequestHandler) as httpd:
-            url = f"http://localhost:{self.port}/{self.html_file.name}"
-            print(f"📖 Preview available at: {url}")
-            print(f"👁  Watching {self.md_file.name} for changes...")
+        handler = partial(QuietHTTPRequestHandler, directory=str(self.temp_dir))
+        with socketserver.TCPServer(("127.0.0.1", self.port), handler) as httpd:
+            url = f"http://127.0.0.1:{httpd.server_address[1]}/{quote(self.html_file.name)}"
+            print(f"📖 Preview available at: {url}", flush=True)
+            print(f"👁  Watching {self.md_file.name} for changes; refresh the browser after edits.")
             print("🛑 Press Ctrl+C to stop")
             
             # Auto-open browser
-            webbrowser.open(url)
+            if self.open_browser:
+                webbrowser.open(url)
             
             try:
                 httpd.serve_forever()
@@ -87,6 +90,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Live preview server for Markdown")
     parser.add_argument("input", help="Input markdown file")
     parser.add_argument("--port", type=int, default=8000, help="Server port (default: 8000)")
+    parser.add_argument("--no-browser", action='store_true', help="Print the URL without opening a local browser")
     parser.add_argument("--theme", choices=['github', 'professional', 'minimal', 'academic'], 
                        default='github', help="CSS theme to apply")
     
@@ -97,7 +101,7 @@ if __name__ == "__main__":
         sys.exit(1)
     
     try:
-        server = PreviewServer(args.input, args.port, args.theme)
+        server = PreviewServer(args.input, args.port, args.theme, open_browser=not args.no_browser)
         server.start()
     except ImportError as e:
         if "watchdog" in str(e):

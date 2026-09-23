@@ -8,8 +8,12 @@ metadata:
 
 # Publish skills to Notion
 
-The repo is authoritative. Notion holds a copy so agents that cannot read this repo can still
-load a skill. Publishing is one direction only: repo to Notion, never back.
+Notion holds a copy of each skill so agents that cannot read this repo can still load one.
+Publishing is one direction only: repo to Notion, never back.
+
+This repo is authoritative **for the rows it owns**. The database is wider than this repo: it also
+mirrors skills that live in `limelighthq/agent-platform`, which `docs/migration.md` lists under
+"Not imported". Their `Source path` starts with `.claude/skills/`. Leave them alone.
 
 **Target:** the `Limelight Skills` database, `0368efd473c142a08302c2e183ef7616`, data source
 `collection://e1fbcbba-39c7-4e9a-abf0-496952ad0b1a`.
@@ -34,9 +38,12 @@ load a skill. Publishing is one direction only: repo to Notion, never back.
 3. **Decide per skill.**
    - In the repo, not in Notion → create a row, then upload.
    - In both → upload again to refresh the body and files. Fix `Source path` if it drifted.
-   - In Notion, not in the repo → **stop and ask.** Never delete a row on your own. A row can
-     outlive its skill because the skill moved, not because it died, and the row may be an
-     active Notion AI skill that something else depends on.
+   - In Notion, not in the repo, `Source path` starting `.claude/skills/` → **expected, skip it
+     silently.** The database also mirrors skills that live in other repos, mostly
+     `agent-platform`. They have no counterpart here and this skill does not publish them.
+   - In Notion, not in the repo, any other `Source path` → **stop and ask.** Never delete a row
+     on your own. A row can outlive its skill because the skill moved, not because it died, and
+     the row may be an active Notion AI skill that something else depends on.
 4. **Create the row** (new skills only) in the data source, setting every property in the table
    above except `Files`.
 5. **Pack the skill:** `scripts/pack-skill.sh <skill-dir> <out-dir>`. It prints `content_length`
@@ -91,7 +98,7 @@ and re-query afterwards to confirm nothing was cleared.
 
 Stop and ask a person when:
 
-- A skill is in Notion but not in the repo.
+- A skill is in Notion but not in the repo, and its `Source path` does not start `.claude/skills/`.
 - A row's `Origin` disagrees with `docs/migration.md`.
 - An upload fails twice. Report the error rather than retrying blind.
 - You are about to change the `Tags` options, the property descriptions, or the database

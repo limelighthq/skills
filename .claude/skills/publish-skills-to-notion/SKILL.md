@@ -11,6 +11,16 @@ metadata:
 Notion holds a copy of each skill so agents that cannot read this repo can still load one.
 Publishing is one direction only: repo to Notion, never back.
 
+This is the legacy manual upload procedure. Rows with a non-empty `Sync state`
+property belong to the automated publisher: skip them, including new or incomplete
+publishes. Never clear that property or overwrite a managed row with this procedure.
+Keep their skill names protected even while automation is paused: never create a
+replacement row or perform any manual action for a corresponding repo skill.
+If automation is active for this repo, report that publication belongs to its workflow
+and stop; creating rows here would bypass the publisher's ownership and verification.
+When automation is not active, continue only for unmanaged rows. Resolve activation
+status from the repository's publishing runbook and workflow settings before writing.
+
 This repo is authoritative **for the rows it owns**. The database is wider than this repo: it also
 mirrors skills that live in `limelighthq/agent-platform`, which `docs/migration.md` lists under
 "Not imported". Their `Source path` starts with `.claude/skills/`. Leave them alone.
@@ -34,7 +44,9 @@ mirrors skills that live in `limelighthq/agent-platform`, which `docs/migration.
 1. **List what the repo has.** Every directory matching `plugins/*/skills/*/` with a `SKILL.md`.
    Read each one's `name` and `description` from the frontmatter.
 2. **List what Notion has.** Query the data source for `Skill name`, `Origin`, `Source path`,
-   `Tags`. Compare on `Skill name`.
+   `Tags`, and `Sync state` if present. Record every name with non-empty `Sync state` as
+   protected, then exclude both those rows and the corresponding repo skills from all
+   manual actions, including creation. Compare the remaining rows on `Skill name`.
 3. **Decide per skill.**
    - In the repo, not in Notion → create a row, then upload.
    - In both → upload again to refresh the body and files. Fix `Source path` if it drifted.

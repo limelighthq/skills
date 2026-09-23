@@ -1,0 +1,18 @@
+{
+  "repository": "limelighthq/skills",
+  "branch": "main",
+  "databaseId": "0368efd4-73c1-42a0-8302-c2e183ef7616",
+  "dataSourceId": "e1fbcbba-39c7-4e9a-abf0-496952ad0b1a",
+  "origins": {
+    "handoff": "limelighthq/agent-platform",
+    "recap": "limelighthq/agent-platform",
+    "research": "limelighthq/agent-platform",
+    "one-percent-better": "limelighthq/agent-platform",
+    "deep-module-scan": "limelighthq/agent-platform",
+    "annotate-ui-screenshots": "limelighthq/agent-platform",
+    "md-render": "limelighthq/limelight-site",
+    "limelight-work": "limelighthq/ai-workflows",
+    "decide": "glisom/skills"
+  },
+  "adopt": {}
+}

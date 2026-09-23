@@ -7,6 +7,7 @@ The repo is a plugin marketplace named `limelight`. Each team has one plugin. Ev
 | Plugin | For | Skills |
 | --- | --- | --- |
 | [`company`](plugins/company) | Everyone | `limelight-work`, `md-render` |
+| [`design`](plugins/design) | Designers | `design-change-log` |
 | [`engineering`](plugins/engineering) | Engineers | `annotate-ui-screenshots`, `deep-module-scan`, `handoff`, `one-percent-better`, `recap`, `research` |
 
 ## Install
@@ -16,6 +17,7 @@ The repo is a plugin marketplace named `limelight`. Each team has one plugin. Ev
 ```
 /plugin marketplace add limelighthq/skills
 /plugin install company@limelight
+/plugin install design@limelight
 /plugin install engineering@limelight
 ```
 
@@ -34,6 +36,7 @@ Add this to the repo's `.claude/settings.json`. Teammates get the marketplace an
   },
   "enabledPlugins": {
     "company@limelight": true,
+    "design@limelight": true,
     "engineering@limelight": true
   }
 }
@@ -86,6 +89,7 @@ plugins/<plugin>/
     references/                     optional: detail the agent reads on demand
     scripts/                        optional: code the agent runs
     assets/                         optional: templates and static files
+.claude/skills/                     this repo's own maintenance skills, not shipped to teammates
 templates/skill/                    what `npm run new:skill` copies
 tools/                              the validator and the scaffolder
 tests/                              tests for the tools
@@ -98,5 +102,6 @@ docs/                               authoring guide, conventions, migration reco
 2. CI runs the tool tests and `npm run validate`. Any error blocks the merge.
 3. An owner from [CODEOWNERS](.github/CODEOWNERS) reviews the change.
 4. The merge to `main` is the release. There is no version to bump.
+5. Someone publishes the change to the [Limelight Skills](https://app.notion.com/p/0368efd473c142a08302c2e183ef7616) database in Notion, so agents that cannot read this repo get it too. This step is manual: run the `publish-skills-to-notion` skill in `.claude/skills/`. Notion can lag `main` until someone does.
 
 [docs/migration.md](docs/migration.md) records where the first skills came from and which skills still live in other repos.

@@ -132,6 +132,6 @@ docs/                               authoring guide, conventions, migration reco
 2. CI runs validation, tool tests, installation checks, and bundled script tests. Any error blocks the merge.
 3. An owner from [CODEOWNERS](.github/CODEOWNERS) reviews the change.
 4. The merge to `main` is the release. There is no version to bump.
-5. Someone publishes the change to the [Limelight Skills](https://app.notion.com/p/0368efd473c142a08302c2e183ef7616) database in Notion, so agents that cannot read this repo get it too. This step is manual: run the `publish-skills-to-notion` skill in `.claude/skills/`. Notion can lag `main` until someone does.
+5. The **Publish skills to Notion** workflow updates the [Limelight Skills](https://app.notion.com/p/0368efd473c142a08302c2e183ef7616) copy after validation and checks it daily, once its one-time activation is complete. New skills are discovered automatically. Follow [the publishing runbook](docs/notion-publishing.md) for activation, plans, ownership conflicts, and recovery. Until activation, publication is manual and Notion can lag `main`.
 
 [docs/migration.md](docs/migration.md) records where the first skills came from and which skills still live in other repos.

@@ -89,6 +89,7 @@ plugins/<plugin>/
     references/                     optional: detail the agent reads on demand
     scripts/                        optional: code the agent runs
     assets/                         optional: templates and static files
+.claude/skills/                     this repo's own maintenance skills, not shipped to teammates
 templates/skill/                    what `npm run new:skill` copies
 tools/                              the validator and the scaffolder
 tests/                              tests for the tools
@@ -101,5 +102,6 @@ docs/                               authoring guide, conventions, migration reco
 2. CI runs the tool tests and `npm run validate`. Any error blocks the merge.
 3. An owner from [CODEOWNERS](.github/CODEOWNERS) reviews the change.
 4. The merge to `main` is the release. There is no version to bump.
+5. Someone publishes the change to the [Limelight Skills](https://app.notion.com/p/0368efd473c142a08302c2e183ef7616) database in Notion, so agents that cannot read this repo get it too. This step is manual: run the `publish-skills-to-notion` skill in `.claude/skills/`. Notion can lag `main` until someone does.
 
 [docs/migration.md](docs/migration.md) records where the first skills came from and which skills still live in other repos.

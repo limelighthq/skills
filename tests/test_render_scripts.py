@@ -48,14 +48,43 @@ class RenderScriptsTest(unittest.TestCase):
         self.assertTrue(output.read_bytes().startswith(b'%PDF-'))
 
     def test_preview_updates_relative_input_without_opening_a_browser(self):
+        self.check_preview()
+
+    def test_preview_serves_complete_html_during_refresh(self):
+        self.check_preview(pause_refresh=True)
+
+    def check_preview(self, pause_refresh=False):
         with socket.socket() as reservation:
             reservation.bind(('127.0.0.1', 0))
             port = reservation.getsockname()[1]
         log = (self.cwd / 'preview.log').open('w+', encoding='utf-8')
         self.addCleanup(log.close)
+        # Hold a refresh midway through writing so a concurrent HTTP request
+        # reliably exercises the same race as a browser refresh during rendering.
+        writing = self.cwd / 'writing'
+        wrapper = self.cwd / 'slow_preview.py'
+        command = [sys.executable, str(SCRIPTS / 'preview_server.py'), self.source.name,
+                   '--port', str(port), '--no-browser']
+        if pause_refresh:
+            wrapper.write_text(f'''
+import sys
+import time
+from pathlib import Path
+sys.path.insert(0, {str(SCRIPTS)!r})
+import preview_server
+original = preview_server.convert_md_to_html
+def slow_refresh(source, output, theme):
+    if Path(output).exists():
+        Path(output).write_text('', encoding='utf-8')
+        Path({str(writing)!r}).touch()
+        time.sleep(2)
+    return original(source, output, theme)
+preview_server.convert_md_to_html = slow_refresh
+preview_server.PreviewServer(sys.argv[1], int(sys.argv[2]), 'github', open_browser=False).start()
+''', encoding='utf-8')
+            command = [sys.executable, str(wrapper), self.source.name, str(port)]
         process = subprocess.Popen(
-            [sys.executable, str(SCRIPTS / 'preview_server.py'), self.source.name,
-             '--port', str(port), '--no-browser'], cwd=self.cwd,
+            command, cwd=self.cwd,
             stdout=log, stderr=subprocess.STDOUT,
         )
         def cleanup():
@@ -83,7 +112,15 @@ class RenderScriptsTest(unittest.TestCase):
 
         wait_for('Original title</h1>')
         self.source.write_text('# Updated title\n', encoding='utf-8')
-        wait_for('Updated title</h1>')
+        if not pause_refresh:
+            wait_for('Updated title</h1>')
+            return
+        deadline = time.monotonic() + 10
+        while not writing.exists() and time.monotonic() < deadline:
+            time.sleep(0.01)
+        self.assertTrue(writing.exists(), 'Preview never started refreshing')
+        with urlopen(url, timeout=5) as response:
+            self.assertIn('Updated title</h1>', response.read().decode('utf-8'))
 
 
 if __name__ == '__main__':

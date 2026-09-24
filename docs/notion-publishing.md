@@ -1,6 +1,30 @@
-# Publishing skills to Notion
+# Syncing skills with Notion
 
-Git is the source of truth for this repository's skills. Notion is the team's searchable copy. Add a skill, open a pull request, and merge after review. GitHub Actions publishes new and changed skills on every merge to `main` and checks for drift daily at 09:23 UTC. New teammates and new skills do not need new sync infrastructure.
+GitHub and Notion are both places to edit managed skills. Git `main` is the validated release installed by the team. The coordinated **Sync skills with Notion** workflow imports Notion changes through pull requests, validates them, and publishes the resulting release back to Notion. With `NOTION_BIDIRECTIONAL_ENABLED=true`, it runs after merges and every 15 minutes at minutes 7, 22, 37, and 52. Scheduled Actions can be delayed. New teammates and new Git-created skills do not need new sync infrastructure.
+
+**Two-way rollout:** implemented with automatic imports gated until the live acceptance check below passes. The original publisher remains active during this transition. Do not describe reverse syncing as active solely because the forward publisher is running.
+
+## Editing and review
+
+Edit a managed skill's page instructions or Description in Notion. Keep its publisher footer, Skill name, Origin, Source path, and Sync state intact. The importer preserves other YAML fields and comments from Git. To change supporting files in Notion, replace Files with one complete `<skill-name>.zip`, keeping `SKILL.md` at the archive root and including every supporting file. The page body and Description take precedence over the ZIP's older `SKILL.md`; change other frontmatter fields through Git. New Notion-only rows are not automatically enrolled. Create new skills through the repository so their team plugin is explicit.
+
+Each import opens an auditable pull request. The default automatically merges after marketplace, installation, and Linux/macOS/Windows script checks succeed. Set `NOTION_IMPORT_AUTO_MERGE=false` to require human review instead. Both-side edits, identity changes, unsupported content, invalid ZIPs, and failed checks remain pending; automation does not choose which version wins. Preserve both versions, resolve them in Git, then use the reviewed repair procedure below if needed.
+
+Small files under `.notion-sync/` are committed import receipts, not temporary run output. They bind the exact Notion snapshot, previous publisher state, page ID, and resulting Git skill hash. The publisher uses them to acknowledge imported edits and prevent loops. Do not edit these receipts by hand. A change after planning makes the candidate stale; rerun to prepare a fresh import. A stale pull request stays open for inspection and can be closed once its replacement has shipped.
+
+## Activating two-way sync
+
+The existing Notion secret and connection are sufficient. The workflow uses GitHub's short-lived repository token, with no personal token, new server, or second repository. Candidate checks run without write credentials or inherited Notion secrets. Bot-created pull requests are validated explicitly through a reusable workflow; publication also runs explicitly after bot merges.
+
+1. Merge the two-way workflow with `NOTION_BIDIRECTIONAL_ENABLED` unset or false.
+2. Run **Sync skills with Notion**, mode `plan`, and confirm no unexpected imports or conflicts.
+3. Make one reversible edit in a managed Notion skill. Run mode `sync`; verify its pull request, all four validation jobs, merge, published content, and exact ZIP readback.
+4. Restore that test through a GitHub change. Run mode `sync` and verify the Notion restoration and a final no-op plan.
+5. Set `NOTION_BIDIRECTIONAL_ENABLED=true`. The old workflow automatically relinquishes scheduled and push publication; both workflows share a serialization group. Keep `NOTION_SYNC_ENABLED=true` for fallback.
+
+For local read-only import planning, run `npm run notion:import-plan` with `NOTION_API_TOKEN` and a read-capable `GH_TOKEN` already in the environment. Never paste credentials into shell history or chat. For routine operations, use GitHub Actions with the saved secret.
+
+To pause automatic two-way runs, set `NOTION_BIDIRECTIONAL_ENABLED=false`. If `NOTION_SYNC_ENABLED=true`, the original forward publisher resumes and still refuses to overwrite Notion drift. To pause both directions, set both variables false. Manual operations remain available. To roll back an imported edit, revert the Git change and let the publisher propagate the restored release; if another Notion edit is pending, resolve it first.
 
 **Rollout status:** activated on September 23, 2026, with `NOTION_SYNC_ENABLED=true`. The [first successful publish](https://github.com/limelighthq/skills/actions/runs/35950818191) verified all ten skills and their exact ZIP bytes. The [follow-up plan](https://github.com/limelighthq/skills/actions/runs/35951019523) skipped all ten unchanged skills without conflicts and left seven unrelated rows alone. The dedicated **Limelight Skills Publisher** connection has only read, insert, and update content capabilities, scoped to this Skills database. Workspace owners can always manage the connection, and the GitHub repository has multiple administrators.
 
@@ -12,7 +36,7 @@ In the team's [native Notion AI acceptance test](https://app.notion.com/chat?t=3
 
 The publisher discovers tracked `plugins/*/skills/*/SKILL.md` files and includes every tracked file in each skill directory. It publishes the name, description, Markdown body, origin, source path, and one complete ZIP attachment to the existing Limelight Skills database. The archive preserves original frontmatter, supporting files, and executable modes. Untracked files and repository maintenance skills are excluded.
 
-Use the Git installation instructions in the README for exact copies. Notion renders its own `SKILL.md` on export; optional frontmatter can be lost, and the ZIP remains an attachment rather than native folders. Notion's [official starter kit](https://github.com/makenotion/notion-skills-github-sync/blob/main/src/notion/archive.ts) expands ZIP attachments when exporting to GitHub. Other clients may not. Do not route this mirror back into this repository or promise that `npx skills add <notion-url>` reproduces it exactly.
+Use the Git installation instructions in the README for exact copies. Notion renders its own `SKILL.md` on export; optional frontmatter can be lost, and the ZIP remains an attachment rather than native folders. Notion's [official starter kit](https://github.com/makenotion/notion-skills-github-sync/blob/main/src/notion/archive.ts) expands ZIP attachments when exporting to GitHub. Our coordinated importer retains Git frontmatter and validates complete bundles. Do not install the independent one-way exporter over this repository or promise that every generic Notion installer reproduces the bundle exactly.
 
 The target IDs and imported skills' original repositories live in `notion-sync.json`. A skill born here automatically gets `limelighthq/skills` as its origin. Adding an imported skill requires its provenance entry, not new sync infrastructure. Existing Notion tags and other properties are preserved. Set human-facing tags in Notion as needed; this publisher does not change shared tag options.
 

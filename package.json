@@ -14,7 +14,8 @@
     "notion:catalog": "node tools/notion-sync.mjs catalog",
     "notion:plan": "node tools/notion-sync.mjs plan",
     "notion:schema": "node tools/notion-sync.mjs schema",
-    "notion:publish": "node tools/notion-sync.mjs publish"
+    "notion:publish": "node tools/notion-sync.mjs publish",
+    "notion:import-plan": "node tools/notion-import.mjs plan"
   },
   "devDependencies": {
     "yaml": "2.9.1"

@@ -8,6 +8,7 @@ import { parseArgs } from 'node:util';
 import { buildCatalog } from './notion/catalog.mjs';
 import { NotionClient } from './notion/client.mjs';
 import { planSync, applyPlan, schemaChanges } from './notion/sync.mjs';
+import { loadReceipts } from './notion/receipts.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const git = (...args) => execFileSync('git', args, { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
@@ -17,7 +18,9 @@ function requireMain(config) {
   const remote = git('remote', 'get-url', 'origin').replace(/\.git$/, '');
   if (![ `https://github.com/${config.repository}`, `git@github.com:${config.repository}` ].includes(remote)) throw new Error('Origin does not match notion-sync.json.');
   const revision = git('rev-parse', 'HEAD');
-  const main = git('ls-remote', '--exit-code', 'origin', `refs/heads/${config.branch}`).split(/\s/)[0];
+  const main = process.env.GITHUB_ACTIONS && process.env.GH_TOKEN
+    ? execFileSync('gh', ['api', `repos/${config.repository}/git/ref/heads/${config.branch}`, '--jq', '.object.sha'], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim()
+    : git('ls-remote', '--exit-code', 'origin', `refs/heads/${config.branch}`).split(/\s/)[0];
   if (revision !== main) throw new Error(`Apply must use the latest ${config.branch} revision. Re-run from main.`);
   if (process.env.GITHUB_ACTIONS && (process.env.GITHUB_REPOSITORY !== config.repository || process.env.GITHUB_REF !== `refs/heads/${config.branch}`)) throw new Error('Apply is restricted to the configured repository and branch.');
   return revision;
@@ -57,14 +60,15 @@ async function main() {
     return;
   }
   if (Object.keys(additions).length) report([`Missing publisher fields: ${Object.keys(additions).join(', ')}. Review npm run notion:schema before activation.`, '']);
-  const plan = await planSync(api, config, skills, { repair: values.repair });
+  const receipts = loadReceipts(root, skills);
+  const plan = await planSync(api, config, skills, { repair: values.repair, receipts });
   report(['# Notion publishing plan', '', `Repository: ${config.repository} at ${revision}`, '', ...plan.actions.map(action => `- ${action.kind}: ${action.skill.name}${action.pageId ? ` (${action.pageId})` : ''}`),
     ...plan.conflicts.map(conflict => `- Conflict: ${conflict}`), '', `${plan.ignored} unrelated rows left alone.`]);
   if (plan.conflicts.length) throw new Error('Resolve the listed conflicts before publishing.');
   if (!values.apply) { report(['Read-only plan. No Notion changes made.']); return; }
   if (Object.keys(additions).length) throw new Error('Apply the reviewed schema additions first.');
   // Resolve name collisions again immediately before apply, without using a saved/stale plan.
-  const current = await planSync(api, config, skills, { repair: values.repair });
+  const current = await planSync(api, config, skills, { repair: values.repair, receipts });
   const published = await applyPlan(api, config, current, { revision });
   report([`Verified ${published} published skills; ${skills.length - published} unchanged.`]);
 }

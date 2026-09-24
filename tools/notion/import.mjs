@@ -38,12 +38,12 @@ export async function planImports(api, config, skills, receipts = {}) {
       const { row, state } = owned[0];
       if (state.phase !== 'complete') throw new Error('Incomplete publish; inspect and repair it first.');
       if (row.parent?.data_source_id && row.parent.data_source_id.replaceAll('-', '') !== config.dataSourceId.replaceAll('-', '')) throw new Error('Page moved outside the configured database.');
-      for (const [property, expected] of [['Skill name', skill.name], ['Origin', skill.origin], ['Source path', skill.sourcePath]]) {
-        if (propertyText(row.properties[property]) !== expected) throw new Error(`Changed ${property}; resolve identity or ownership explicitly.`);
-      }
       const content = await api.request('GET', `/pages/${row.id}/markdown`);
       const remote = remoteSnapshot(row, content);
       if (remote === state.remote) continue;
+      for (const [property, expected] of [['Skill name', skill.name], ['Origin', skill.origin], ['Source path', skill.sourcePath]]) {
+        if (propertyText(row.properties[property]) !== expected) throw new Error(`Changed ${property}; resolve identity or ownership explicitly.`);
+      }
       const previous = receipts[skill.name];
       const acknowledged = receiptBaseMatches(previous, row, skill);
       if (acknowledged && previous.remote === remote) continue;

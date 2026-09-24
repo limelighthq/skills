@@ -32,10 +32,10 @@ Files: `tools/notion/import.mjs`, `tools/notion/sync.mjs`, `tools/notion/catalog
 
 Interfaces: `planImports(api, config, skills, receipts)` returns candidates and conflicts; `planSync(..., { receipts })` recognizes only a matching receipt. `skillHash(skill)` computes the existing catalog hash from source path, origin, files.
 
-- [ ] Write behavior tests for a real publish, a Notion body edit, preserving frontmatter, verified re-publication, no-op, double edits, conflicting Git edits, and mismatched receipts.
-- [ ] Run `node --test tests/notion-import.test.mjs` and confirm the missing behavior fails.
-- [ ] Implement pure reconciliation and receipt matching; preserve the existing fail-before-write behavior.
-- [ ] Run `npm test` and commit the passing task.
+- [x] Write behavior tests for a real publish, a Notion body edit, preserving frontmatter, verified re-publication, no-op, double edits, conflicting Git edits, and mismatched receipts.
+- [x] Run `node --test tests/notion-import.test.mjs` and confirm the missing behavior fails.
+- [x] Implement pure reconciliation and receipt matching; preserve the existing fail-before-write behavior.
+- [x] Run `npm test` and commit the passing task.
 
 ## Task 2: Supporting bundles
 
@@ -43,9 +43,9 @@ Files: `tools/notion/unpack.py`, `tools/notion/client.mjs`, `tools/notion/import
 
 Interfaces: `downloadFile(file)` returns capped bytes without credentials to storage; ZIP reader returns regular, confined relative paths, bytes, and modes.
 
-- [ ] Test a complete changed ZIP, preserved modes, traversal, links, duplicates, excessive expansion, and remote changes during download.
-- [ ] Observe failure, implement safe extraction and file download, then rerun tests.
-- [ ] Commit only passing behavior.
+- [x] Test a complete changed ZIP, preserved modes, traversal, links, duplicates, excessive expansion, and remote changes during download.
+- [x] Observe failure, implement safe extraction and file download, then rerun tests.
+- [x] Commit only passing behavior.
 
 ## Task 3: GitHub coordinator and workflow
 
@@ -53,18 +53,26 @@ Files: `tools/notion-import.mjs`, `tools/notion/github.mjs`, `.github/workflows/
 
 Interfaces: trusted main CLI `prepare` creates or reuses an immutable candidate branch/PR, emits SHA and PR number; `finish` validates candidate scope, current main, and current Notion snapshots before merging. `notion-sync.mjs` loads committed receipts during publish.
 
-- [ ] Test coordinator guard decisions using mocked external API boundaries and real local Git candidates.
-- [ ] Observe failures; implement candidate construction, checks, stale-source rejection and merge.
-- [ ] Reuse validation as a callable workflow with an explicit revision and no inherited secrets. Run publication explicitly after the bot merge.
-- [ ] Keep the import schedule disabled until manual end-to-end verification passes; share the publishing concurrency group.
-- [ ] Run `npm run validate`, `npm test`, `npm run test:install`, Python script checks, and `actionlint`; commit.
+- [x] Test coordinator guard decisions using mocked external API boundaries and real local Git candidates.
+- [x] Observe failures; implement candidate construction, checks, stale-source rejection and merge.
+- [x] Reuse validation as a callable workflow with an explicit revision and no inherited secrets. Run publication explicitly after the bot merge.
+- [x] Keep the import schedule disabled until manual end-to-end verification passes; share the publishing concurrency group.
+- [x] Run `npm run validate`, `npm test`, `npm run test:install`, Python script checks, and `actionlint`; commit.
 
 ## Task 4: Documentation, review and activation
 
 Files: `AGENTS.md`, `README.md`, `docs/notion-publishing.md`, legacy publishing skill, this plan.
 
-- [ ] Explain both authoring surfaces, automatic merge preference, supported ZIP editing, conflict handling, and rollout boundary.
-- [ ] Obtain independent whole-branch review and resolve substantive findings with regression tests.
-- [ ] Open and attach a pull request, verify CI, then merge under existing setup authorization.
-- [ ] Run an unchanged import plan, a reversible Notion-to-GitHub test, GitHub-to-Notion restoration, and final no-op verification.
-- [ ] Enable automatic reconciliation only after those checks; record exact results and any remaining human-only action.
+- [x] Explain both authoring surfaces, automatic merge preference, supported ZIP editing, conflict handling, and rollout boundary.
+- [x] Obtain independent whole-branch review and resolve substantive findings with regression tests.
+- [x] Open and attach a pull request, verify CI, then merge under existing setup authorization.
+- [x] Run an unchanged import plan, a reversible Notion-to-GitHub test, GitHub-to-Notion restoration, and final no-op verification.
+- [x] Enable automatic reconciliation only after those checks; record exact results and any remaining human-only action.
+
+## Execution record
+
+Completed September 24, 2026. Implementation merged in #9. Independent review found and verified fixes for a Notion undo made before publication and Windows ZIP permissions. All 126 Node tests, repository validation, installation checks for ten skills across four agents, 17 local Python tests including PDF, actionlint, and all four GitHub CI jobs passed.
+
+The real GitHub candidate and merge path was verified end-to-end in run 36019862700 and #10, in addition to pure coordinator guard tests. #11 restored the original recap bytes; run 36020407267 published the restoration. Run 36020407802 found zero imports and ten unchanged skills. Both activation variables are true. No new credentials, server, or personal integration was required.
+
+The legacy manual skill was left unchanged because it already excludes every managed row and stops while automation is active. New Notion-only enrollment remains outside this rollout; new Git-created skills join both directions automatically. Notion formatting normalization was observed and is documented in the runbook.

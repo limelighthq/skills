@@ -279,6 +279,21 @@ test('stops on two paths that differ only in letter case, before touching the pr
   assert.equal(read(skill, 'assets/kit/images/Logos/logo.svg'), '<svg/>');
 });
 
+test('keeps the previous copy when a write fails partway through', () => {
+  const skill = join(tempDir(), 'fixture-design-system');
+  run(fixture(), { skill });
+  const nested = '00112233445566778899aabbccddeeff';
+  const source = fixture({ [`blobs/${nested}.svg`]: '<svg id="nested"/>' });
+  const index = JSON.parse(read(source, 'project/design-system.json'));
+  // logo.svg is a file, so nothing can be written under logo.svg/.
+  index.assetGroups.Logos.files['logo.svg/nested.svg'] = { name: 'logo.svg/nested.svg', blob: nested, size: 18, type: 'image/svg+xml' };
+  writeFileSync(join(source, 'project/design-system.json'), JSON.stringify(index));
+  assert.throws(() => run(source, { skill }));
+  assert.equal(read(skill, 'assets/kit/images/Logos/logo.svg'), '<svg/>');
+  assert.match(read(skill, 'references/source.md'), /- Version: 1-a/);
+  assert.deepEqual(readdirSync(skill).filter((name) => name.startsWith('.')), []);
+});
+
 test('leaves no staging folder in the skill after a run', () => {
   const { skill } = run(fixture());
   assert.deepEqual(readdirSync(skill).filter((name) => name.startsWith('.')), []);

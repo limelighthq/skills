@@ -4,6 +4,8 @@ Git is the source of truth for this repository's skills. Notion is the team's se
 
 **Rollout status:** the infrastructure is merged. Automatic runs are gated by `NOTION_SYNC_ENABLED`, currently `false`. Manual plans, schema setup, and the initial publish work while automatic runs are paused. Publishing is not live until the steps below have been completed and a real publish has been verified.
 
+The dedicated connection and GitHub secret passed the live schema check on September 23, 2026, and the missing `Sync state` property was added and verified. The complete API inventory found nine matching pages, one new skill (`decide`), and seven unrelated pages. The adoption mappings in `notion-sync.json` refer to those nine reviewed pages. Their bodies are older repo versions, with no unique edits to carry into Git. Eight have no attachments. The `design-change-log` reference folder contains `example-entry.md`, whose preview matches the bundled reference. Initial publication replaces its Files entry with the complete repo ZIP; the publisher does not delete the old folder. Native agent access to ZIP contents remains part of the live verification below.
+
 ## What gets published
 
 The publisher discovers tracked `plugins/*/skills/*/SKILL.md` files and includes every tracked file in each skill directory. It publishes the name, description, Markdown body, origin, source path, and one complete ZIP attachment to the existing Limelight Skills database. The archive preserves original frontmatter, supporting files, and executable modes. Untracked files and repository maintenance skills are excluded.

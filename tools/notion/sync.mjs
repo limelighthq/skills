@@ -19,7 +19,7 @@ export function schemaChanges(properties) {
   return missing;
 }
 
-function stateOf(row) {
+export function stateOf(row) {
   const raw = propertyText(row.properties?.['Sync state']);
   if (!raw) return null;
   try {
@@ -55,11 +55,16 @@ async function snapshot(api, row) {
   return remoteSnapshot(row, await api.request('GET', `/pages/${row.id}/markdown`));
 }
 
-function revisionGuard(row) {
+export function revisionGuard(row) {
   return digest(JSON.stringify({ state: propertyText(row.properties['Sync state']), parent: row.parent }));
 }
 
-export async function planSync(api, config, skills, { repair = [] } = {}) {
+export function receiptBaseMatches(receipt, row, skill) {
+  return receipt?.format === 1 && receipt.pageId === row.id && receipt.source === skill.hash &&
+    receipt.guard === revisionGuard(row) && JSON.stringify(receipt.baseline) === JSON.stringify(stateOf(row));
+}
+
+export async function planSync(api, config, skills, { repair = [], receipts = {} } = {}) {
   const rows = await api.listRows(config.dataSourceId);
   const indexed = rows.map(row => ({ row, state: stateOf(row), name: propertyText(row.properties['Skill name']) }));
   const conflicts = [];
@@ -96,10 +101,11 @@ export async function planSync(api, config, skills, { repair = [] } = {}) {
     if (state && state.phase !== 'complete' && !repairing) {
       conflicts.push(`Incomplete publish for ${skill.name}. Inspect the page, then use --repair ${skill.name}.`); continue;
     }
-    if (state?.phase === 'complete' && state.remote !== current && !repairing) {
+    const imported = receiptBaseMatches(receipts[skill.name], row, skill) && receipts[skill.name].remote === current;
+    if (state?.phase === 'complete' && state.remote !== current && !repairing && !imported) {
       conflicts.push(`Managed content for ${skill.name} was edited in Notion. Preserve the edit in Git before using --repair ${skill.name}.`); continue;
     }
-    const kind = !state ? 'adopt' : repairing ? 'repair' : state.source === skill.hash ? 'skip' : 'update';
+    const kind = !state ? 'adopt' : repairing ? 'repair' : state.source === skill.hash && state.remote === current ? 'skip' : 'update';
     actions.push({ kind, skill, pageId: row.id, snapshot: current, guard: revisionGuard(row) });
   }
   return { actions, conflicts, ignored: indexed.filter(item => !item.state && !names.has(item.name)).length };
@@ -151,7 +157,7 @@ export async function applyPlan(api, config, plan, { revision } = {}) {
       if (!id) throw new Error(`No page ID returned for ${skill.name}; re-plan before retrying.`);
     }
     const sourceUrl = `https://github.com/${config.repository}/blob/${revision}/${skill.sourcePath}/SKILL.md`;
-    const body = `${skill.body}\n\n---\n\nPublished from [the original skill in Git](${sourceUrl}). Propose changes in the repository.\n`;
+    const body = `${skill.body}\n\n---\n\nPublished from [the original skill in Git](${sourceUrl}). Edits here sync back through a validated GitHub change.\n`;
     // Retain Notion's own normalized write result instead of guessing Markdown equivalence.
     const written = await settle(api, await api.request('PATCH', `/pages/${id}/markdown`, { type: 'replace_content', replace_content: { new_str: body }, allow_async: false }));
     if (written?.object !== 'page_markdown' || !written.markdown?.includes(sourceUrl)) throw new Error(`Notion content verification failed for ${skill.name}: missing write receipt or source revision.`);

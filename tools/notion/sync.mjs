@@ -145,7 +145,8 @@ export async function applyPlan(api, config, plan, { revision } = {}) {
     if (id) {
       await api.request('PATCH', `/pages/${id}`, { properties: { 'Sync state': properties['Sync state'] } });
     } else {
-      const created = await settle(api, await api.request('POST', '/pages', { parent: { data_source_id: config.dataSourceId }, properties, allow_async: false }));
+      // allow_async is valid only with an inline markdown body; omission is synchronous.
+      const created = await settle(api, await api.request('POST', '/pages', { parent: { data_source_id: config.dataSourceId }, properties }));
       id = created?.id;
       if (!id) throw new Error(`No page ID returned for ${skill.name}; re-plan before retrying.`);
     }

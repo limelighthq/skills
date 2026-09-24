@@ -95,6 +95,19 @@ test('create verifies content, commits its marker last, then becomes a no-op', a
   assert.deepEqual(api.writes, []);
 });
 
+test('blank page creation omits the markdown-only async option', async () => {
+  const api = remote();
+  const request = api.request;
+  api.request = async (method, path, data) => {
+    if (method === 'POST' && path === '/pages' && Object.hasOwn(data, 'allow_async') && !Object.hasOwn(data, 'markdown')) {
+      throw new Error('allow_async is only supported when markdown is provided');
+    }
+    return request(method, path, data);
+  };
+  await applyPlan(api, config, await planSync(api, config, [skill]), { revision: 'rev' });
+  assert.equal((await planSync(api, config, [skill])).actions[0].kind, 'skip');
+});
+
 test('human changes stop the entire plan even when another skill is new', async () => {
   const api = remote();
   await applyPlan(api, config, await planSync(api, config, [skill]), { revision: 'rev' });

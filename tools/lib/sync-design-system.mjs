@@ -1,8 +1,9 @@
-import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from 'node:fs';
-import { basename, dirname, extname, join, relative, resolve, sep } from 'node:path';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, renameSync, rmSync, statSync, writeFileSync } from 'node:fs';
+import { basename, dirname, extname, isAbsolute, join, relative, resolve, sep } from 'node:path';
 
 import { addContents, rewriteLinks, splitReadme } from './design-system-markdown.mjs';
 import { compileTokensCss } from './design-system-tokens.mjs';
+import { parseSkillFile } from './frontmatter.mjs';
 
 export const MAX_FILE_BYTES = 1024 * 1024; // the validator's file-too-large limit
 
@@ -18,11 +19,15 @@ const BLOB = /\/_blob\/([0-9a-f]{32})/g;
 /**
  * Rebuilds a design system skill's generated copy from a design system downloaded from claude.ai.
  * `source` holds project/ (the published files) and blobs/ (each asset, read by its blob id).
- * The skill's references/ and assets/kit/ are deleted and rewritten. Nothing else in it changes.
- * Every file is prepared in memory first, so a run that fails leaves the previous copy in place.
+ * The skill's references/ and assets/kit/ are replaced. Nothing else in it changes.
+ * It refuses a folder whose copy came from another artifact, and a run that would remove files
+ * the previous copy had, unless allowRemovals is set: a partial download looks the same.
+ * Every file is prepared in memory and written to a staging folder before the swap, so a run
+ * that fails leaves the previous copy in place.
  */
-export function syncDesignSystem({ source, skill, artifact, version, title, rootClass }) {
+export function syncDesignSystem({ source, skill, artifact, version, title, rootClass, allowRemovals = false }) {
   checkSkillFolder(skill);
+  checkOwnership(skill, artifact);
   if (rootClass !== undefined && !/^[A-Za-z0-9_-]+$/.test(rootClass)) throw new Error(`--root-class "${rootClass}" is not a CSS class name`);
 
   const project = join(source, 'project');
@@ -73,7 +78,8 @@ export function syncDesignSystem({ source, skill, artifact, version, title, root
   }
   for (const image of images) files.set(`assets/kit/${image.path}`, readFileSync(image.from));
   for (const font of tokens.type?.fonts ?? []) {
-    const from = join(project, font.file.includes('/') ? font.file : join('fonts', font.file));
+    const from = resolve(project, font.file.includes('/') ? font.file : join('fonts', font.file));
+    if (!isInside(resolve(project), from)) throw new Error(`font ${font.file} points outside the downloaded project/ folder`);
     checkSize(from, `font ${font.file}`);
     files.set(`assets/kit/fonts/${basename(from)}`, readFileSync(from));
   }
@@ -84,13 +90,9 @@ export function syncDesignSystem({ source, skill, artifact, version, title, root
     }
   }
 
-  rmSync(join(skill, 'references'), { recursive: true, force: true });
-  rmSync(join(skill, 'assets', 'kit'), { recursive: true, force: true });
-  for (const path of [...files.keys()].sort()) {
-    const target = join(skill, ...path.split('/'));
-    mkdirSync(dirname(target), { recursive: true });
-    writeFileSync(target, files.get(path));
-  }
+  rejectCaseCollisions(files);
+  if (!allowRemovals) rejectRemovals(skill, files);
+  writeStagedCopy(skill, files);
   return { files: files.size, images: images.length, components: components.length };
 }
 
@@ -102,13 +104,104 @@ function checkSkillFolder(skill) {
   }
 }
 
+// The tool replaces only its own output: a copy with a source note for this artifact, or none yet.
+function checkOwnership(skill, artifact) {
+  const skillFile = join(skill, 'SKILL.md');
+  if (existsSync(skillFile)) {
+    const parsed = parseSkillFile(readFileSync(skillFile, 'utf8'));
+    const declared = parsed.ok ? parsed.data?.metadata?.source : undefined;
+    if (declared && declared !== artifact) {
+      throw new Error(`${skillFile} names ${declared} in metadata.source, not ${artifact}; check that --skill and --artifact belong to the same design system`);
+    }
+  }
+  if (!existsSync(join(skill, 'references')) && !existsSync(join(skill, 'assets', 'kit'))) return;
+  const note = join(skill, 'references', 'source.md');
+  if (!existsSync(note)) {
+    throw new Error(`${skill} has references/ or assets/kit/ but no references/source.md, so they are not a generated copy; the sync tool replaces only its own output`);
+  }
+  const recorded = /^- Artifact: (.+)$/m.exec(readFileSync(note, 'utf8'))?.[1]?.trim();
+  if (recorded !== artifact) {
+    throw new Error(`${skill} was generated from ${recorded ?? 'an unknown artifact'}, not ${artifact}; check that --skill and --artifact belong to the same design system`);
+  }
+}
+
+function isSafeSegment(segment) {
+  return SAFE_SEGMENT.test(segment) && segment !== '.' && segment !== '..';
+}
+
+function isInside(parent, child) {
+  const path = relative(parent, child);
+  return path !== '' && !path.startsWith('..') && !isAbsolute(path);
+}
+
+// macOS and Windows file systems ignore letter case, so two such paths would overwrite each other.
+function rejectCaseCollisions(files) {
+  const seen = new Map();
+  for (const path of [...files.keys()].sort()) {
+    const key = path.toLowerCase();
+    if (seen.has(key)) throw new Error(`${seen.get(key)} and ${path} differ only in letter case, which collides on macOS and Windows; rename one in the design system`);
+    seen.set(key, path);
+  }
+}
+
+// A partial download looks the same as a design system that removed files, so removals need consent.
+function rejectRemovals(skill, files) {
+  const removed = ['references', 'assets/kit']
+    .flatMap((folder) => walk(join(skill, ...folder.split('/'))))
+    .map((file) => relative(skill, file).split(sep).join('/'))
+    .filter((path) => !files.has(path))
+    .sort();
+  if (removed.length === 0) return;
+  const shown = removed.slice(0, 10).join(', ') + (removed.length > 10 ? `, and ${removed.length - 10} more` : '');
+  throw new Error(`the new copy would remove ${removed.length} file(s) that the previous copy has: ${shown}. An incomplete download causes this. If the design system really removed or renamed them, run again with --allow-removals`);
+}
+
+// Writes the new copy into a staging folder, then swaps both folders in. A failure restores the old ones.
+function writeStagedCopy(skill, files) {
+  mkdirSync(skill, { recursive: true });
+  const staging = mkdtempSync(join(skill, '.sync-'));
+  const folders = [['references'], ['assets', 'kit']];
+  const movedAside = [];
+  const placed = [];
+  try {
+    for (const path of [...files.keys()].sort()) {
+      const target = join(staging, 'next', ...path.split('/'));
+      if (!isInside(join(staging, 'next'), target)) throw new Error(`${path} would be written outside the skill folder`);
+      mkdirSync(dirname(target), { recursive: true });
+      writeFileSync(target, files.get(path));
+    }
+    for (const segments of folders) {
+      const live = join(skill, ...segments);
+      if (!existsSync(live)) continue;
+      const aside = join(staging, 'previous', ...segments);
+      mkdirSync(dirname(aside), { recursive: true });
+      renameSync(live, aside);
+      movedAside.push([aside, live]);
+    }
+    for (const segments of folders) {
+      const next = join(staging, 'next', ...segments);
+      if (!existsSync(next)) continue;
+      const live = join(skill, ...segments);
+      mkdirSync(dirname(live), { recursive: true });
+      renameSync(next, live);
+      placed.push(live);
+    }
+  } catch (cause) {
+    for (const live of placed) rmSync(live, { recursive: true, force: true });
+    for (const [aside, live] of movedAside) renameSync(aside, live);
+    throw cause;
+  } finally {
+    rmSync(staging, { recursive: true, force: true });
+  }
+}
+
 function collectImages(index, blobs) {
   const available = existsSync(blobs) ? readdirSync(blobs).sort() : [];
   const images = [];
   for (const group of Object.keys(index.assetGroups ?? {}).sort()) {
     const records = Object.values(index.assetGroups[group].files ?? {}).sort((a, b) => a.name.localeCompare(b.name));
     for (const record of records) {
-      if (![group, ...record.name.split('/')].every((segment) => SAFE_SEGMENT.test(segment))) {
+      if (![group, ...record.name.split('/')].every(isSafeSegment)) {
         throw new Error(`asset ${group}/${record.name} has a name that is unsafe in a URL; use letters, digits, dots, hyphens, and underscores`);
       }
       const keepsWebp = extname(record.name).toLowerCase() === '.webp';
@@ -138,7 +231,7 @@ function componentNames(project) {
   return readdirSync(folder, { withFileTypes: true })
     .filter((entry) => entry.isDirectory() && !['lib', 'src'].includes(entry.name))
     .map((entry) => {
-      if (!SAFE_SEGMENT.test(entry.name)) throw new Error(`component folder "${entry.name}" has a name that is unsafe as a file name`);
+      if (!isSafeSegment(entry.name)) throw new Error(`component folder "${entry.name}" has a name that is unsafe as a file name`);
       return entry.name;
     })
     .sort();

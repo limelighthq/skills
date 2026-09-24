@@ -1,5 +1,5 @@
 import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from 'node:fs';
-import { basename, dirname, extname, join, posix, relative, resolve, sep } from 'node:path';
+import { basename, dirname, extname, join, relative, resolve, sep } from 'node:path';
 
 import { addContents, rewriteLinks, splitReadme } from './design-system-markdown.mjs';
 import { compileTokensCss } from './design-system-tokens.mjs';
@@ -40,9 +40,10 @@ export function syncDesignSystem({ source, skill, artifact, version, title, root
   const name = title ?? index.title ?? basename(skill);
   const files = new Map();
 
+  // Links point at the copy relative to the Markdown file. Any other blob URL in the text is
+  // a value to paste into the kit page, such as an AgentFace src, so it gets the kit path.
   const copyMarkdown = (text, from, to) => {
-    const prefix = `${posix.relative(posix.dirname(to), 'assets/kit')}/`;
-    files.set(to, addContents(rewriteBlobs(rewriteLinks(text, { from, to, paths }), imagePaths, prefix, from)));
+    files.set(to, addContents(rewriteBlobs(rewriteLinks(text, { from, to, paths }), imagePaths, '', from)));
   };
 
   files.set('references/source.md', sourceNote({ name, artifact, version, lastChange: index.lastChange ?? {} }));

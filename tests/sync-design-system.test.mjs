@@ -103,6 +103,12 @@ test('rewrites every blob URL to an image inside the kit', () => {
   assert.equal(read(skill, 'assets/kit/images/Logos/logo.svg'), '<svg/>');
 });
 
+test('writes a blob URL in guide text as the kit path a page uses', () => {
+  const source = fixture({ 'project/components/Badge/README.md': `# Badge\n\nPass \`src="/_blob/${LOGO}"\` for the logo.\n` });
+  const { skill } = run(source);
+  assert.equal(read(skill, 'references/components/Badge.md'), '# Badge\n\nPass `src="images/Logos/logo.svg"` for the logo.\n');
+});
+
 test('builds the kit page, tokens.css, and fonts', () => {
   const { skill } = run(fixture(), { rootClass: 'lla' });
   const page = read(skill, 'assets/kit/index.html');

@@ -65,6 +65,27 @@ export class NotionClient {
     return { name, type: 'file_upload', file_upload: { id: upload.id } };
   }
 
+  async downloadFile(file, limit = 20 * 1024 * 1024) {
+    let url;
+    try { url = new URL(file.file?.url); } catch { throw new Error('Missing Notion storage URL.'); }
+    if (url.protocol !== 'https:' || url.username || url.password || url.port ||
+        !(/(^|\.)amazonaws\.com$/.test(url.hostname) || /(^|\.)notion\.so$/.test(url.hostname))) {
+      throw new Error('Unsupported Notion storage URL. No download attempted.');
+    }
+    try {
+      const response = await this.fetch(url, { redirect: 'error', signal: AbortSignal.timeout(30000) });
+      if (!response.ok || !response.body) throw new Error();
+      const chunks = [];
+      let size = 0;
+      for await (const chunk of response.body) {
+        size += chunk.length;
+        if (size > limit) throw new Error();
+        chunks.push(chunk);
+      }
+      return Buffer.concat(chunks);
+    } catch { throw new Error('Notion file download failed or exceeded its size limit.'); }
+  }
+
   async verifyFile(file, expected) {
     let url;
     try { url = new URL(file.file?.url); } catch { throw new Error('Missing Notion storage URL for archive verification.'); }

@@ -1,0 +1,119 @@
+name: Sync skills with Notion
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '7,22,37,52 * * * *'
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: Inspect imports or run the complete two-way sync
+        type: choice
+        options: [plan, sync]
+        default: plan
+
+permissions:
+  contents: read
+
+concurrency:
+  group: notion-skills-publishing
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    if: github.repository == 'limelighthq/skills' && github.ref == 'refs/heads/main' && (github.event_name == 'workflow_dispatch' || vars.NOTION_BIDIRECTIONAL_ENABLED == 'true')
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+      pull-requests: write
+    outputs:
+      sha: ${{ steps.import.outputs.sha }}
+      pr: ${{ steps.import.outputs.pr }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.12'
+      - run: npm ci
+      - name: Prepare imports using trusted main code
+        id: import
+        env:
+          NOTION_API_TOKEN: ${{ secrets.NOTION_API_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
+          REQUESTED_MODE: ${{ inputs.mode }}
+        run: |
+          if [ "$REQUESTED_MODE" = plan ]; then
+            node tools/notion-import.mjs plan
+          else
+            node tools/notion-import.mjs prepare
+          fi
+
+  checks:
+    needs: prepare
+    if: needs.prepare.outputs.sha != ''
+    permissions:
+      contents: read
+    uses: ./.github/workflows/validate.yml
+    with:
+      revision: ${{ needs.prepare.outputs.sha }}
+
+  publish:
+    needs: [prepare, checks]
+    if: always() && needs.prepare.result == 'success' && (needs.checks.result == 'success' || needs.checks.result == 'skipped') && inputs.mode != 'plan'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+      pull-requests: write
+      statuses: write
+      actions: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.12'
+      - run: npm ci
+      - name: Recheck and merge the validated candidate
+        id: merge
+        if: needs.prepare.outputs.sha != ''
+        env:
+          NOTION_API_TOKEN: ${{ secrets.NOTION_API_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
+          IMPORT_SHA: ${{ needs.prepare.outputs.sha }}
+          IMPORT_PR: ${{ needs.prepare.outputs.pr }}
+          NOTION_IMPORT_AUTO_MERGE: ${{ vars.NOTION_IMPORT_AUTO_MERGE }}
+        run: node tools/notion-import.mjs finish
+      - name: Check out the released revision
+        if: needs.prepare.outputs.sha == '' || steps.merge.outputs.publish == 'true'
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          persist-credentials: false
+      - name: Validate the released skills
+        if: needs.prepare.outputs.sha == '' || steps.merge.outputs.publish == 'true'
+        run: |
+          npm ci
+          npm run validate
+          npm test
+      - name: Publish and verify Notion
+        if: needs.prepare.outputs.sha == '' || steps.merge.outputs.publish == 'true'
+        env:
+          NOTION_API_TOKEN: ${{ secrets.NOTION_API_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
+        run: npm run notion:publish -- --apply

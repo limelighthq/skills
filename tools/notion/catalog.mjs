@@ -7,6 +7,7 @@ import { parseSkillFile } from '../lib/frontmatter.mjs';
 import { checkRepo } from '../lib/check-repo.mjs';
 
 export const digest = value => createHash('sha256').update(value).digest('hex');
+export const skillHash = ({ sourcePath, origin, files }) => digest(JSON.stringify({ format: 1, sourcePath, origin, files }));
 
 export function buildCatalog(root, config) {
   const validation = checkRepo(root);
@@ -32,7 +33,7 @@ export function buildCatalog(root, config) {
     if (!parsed.ok) throw new Error(`Invalid skill: ${sourcePath}`);
     const { name, description } = parsed.data;
     const origin = config.origins?.[name] ?? config.repository;
-    const hash = digest(JSON.stringify({ format: 1, sourcePath, origin, files }));
+    const hash = skillHash({ sourcePath, origin, files });
     return { name, description, body: parsed.body.trim(), plugin: sourcePath.split('/')[1], sourcePath, origin, hash, files };
   });
 }

@@ -3,7 +3,7 @@ import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { parseSkillFile } from '../lib/frontmatter.mjs';
 import { skillHash } from './catalog.mjs';
-import { stateOf, propertyText, remoteSnapshot, revisionGuard, receiptBaseMatches } from './sync.mjs';
+import { stateOf, propertyText, remoteSnapshot, revisionGuard, receiptBaseMatches, receiptContextMatches } from './sync.mjs';
 
 export function unpackSkill(bytes) {
   return JSON.parse(execFileSync(process.env.PYTHON ?? 'python3', [fileURLToPath(new URL('./unpack.py', import.meta.url))], {
@@ -40,11 +40,12 @@ export async function planImports(api, config, skills, receipts = {}) {
       if (row.parent?.data_source_id && row.parent.data_source_id.replaceAll('-', '') !== config.dataSourceId.replaceAll('-', '')) throw new Error('Page moved outside the configured database.');
       const content = await api.request('GET', `/pages/${row.id}/markdown`);
       const remote = remoteSnapshot(row, content);
-      if (remote === state.remote) continue;
+      const previous = receipts[skill.name];
+      const effectiveRemote = receiptContextMatches(previous, row) ? previous.remote : state.remote;
+      if (remote === effectiveRemote) continue;
       for (const [property, expected] of [['Skill name', skill.name], ['Origin', skill.origin], ['Source path', skill.sourcePath]]) {
         if (propertyText(row.properties[property]) !== expected) throw new Error(`Changed ${property}; resolve identity or ownership explicitly.`);
       }
-      const previous = receipts[skill.name];
       const acknowledged = receiptBaseMatches(previous, row, skill);
       if (acknowledged && previous.remote === remote) continue;
       if (state.source !== skill.hash && !acknowledged) throw new Error('Both Git and Notion changed; preserve both versions and resolve the conflict.');
@@ -66,7 +67,8 @@ export async function planImports(api, config, skills, receipts = {}) {
         source = parsed.document.toString({ lineWidth: 0 }).trimEnd();
       }
       const markdown = `---\n${source}\n---\n${body === skill.body ? parsed.body : `\n${body}\n`}`;
-      files = files.map(file => file.path === 'SKILL.md' ? { ...original, data: Buffer.from(markdown).toString('base64') } : file)
+      files = files.map(file => file.path === 'SKILL.md' ? { ...original, data: Buffer.from(markdown).toString('base64') }
+        : { ...file, mode: file.mode ?? skill.files.find(old => old.path === file.path)?.mode ?? 0o644 })
         .sort((a, b) => a.path < b.path ? -1 : a.path > b.path ? 1 : 0);
       const incoming = { ...skill, description, body, files };
       incoming.hash = skillHash(incoming);

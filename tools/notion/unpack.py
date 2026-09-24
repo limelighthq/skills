@@ -40,7 +40,8 @@ def unpack(data):
             if entry.file_size > 1024 * 1024 or total > LIMIT:
                 raise ValueError("Expanded archive exceeds limits")
             content = archive.read(entry)
-            files.append({"path": name, "mode": 0o755 if mode & 0o111 else 0o644,
+            permissions = (0o755 if mode & 0o111 else 0o644) if entry.create_system == 3 and mode else None
+            files.append({"path": name, "mode": permissions,
                           "data": base64.b64encode(content).decode("ascii")})
     paths = {f["path"] for f in files}
     if any("/".join(f["path"].split("/")[:i]) in paths

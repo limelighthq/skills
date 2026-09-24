@@ -61,14 +61,15 @@ All activation steps can run using the GitHub secret; no local token copy is nee
 - **Add or edit:** use the normal reviewed PR flow. Publishing detects changes in scripts and assets as well as `SKILL.md`.
 - **Move between plugins:** keep the skill name; the existing Notion row is updated with its new source path.
 - **Rename or remove:** the sync reports the old managed row. Review its dependencies, retire it explicitly in Notion, remove a stale adoption mapping, and rerun. No remote row is deleted automatically.
-- **Edit a Notion copy accidentally:** the next run fails before publishing. Copy the useful changes into a Git PR, merge, then repair that skill explicitly. Comments and unrelated row properties do not count as edits to managed content.
-- **Author skills in Notion:** use a separate database and the official Notion-to-GitHub starter kit with a separate marketplace. Do not point its output at this repo. Every skill should have one editing home.
+- **Edit in Notion:** managed instructions, Description, and complete supporting ZIPs return through the coordinated import flow. Comments and unrelated properties do not count as skill edits. Until two-way activation, the original publisher stops on these edits and requires preserving them in Git before repair.
+- **Create a new skill:** use the GitHub request or authoring flow to assign a team plugin. Once published, it participates in both directions automatically. Unmanaged Notion-only rows remain untouched.
 
 ## Commands
 
 | Command | Effect |
 | --- | --- |
 | `npm run notion:catalog` | Offline inventory and source hashes. |
+| `npm run notion:import-plan` | Read-only Notion-to-Git import and conflict plan. |
 | `npm run notion:schema` | Read-only schema plan. |
 | `npm run notion:schema -- --apply` | Add missing publisher fields on latest clean main. |
 | `npm run notion:plan` | Read every remote row and show changes/conflicts without writing. |
@@ -95,7 +96,7 @@ Notion does not provide a transaction covering the whole database or an atomic c
 
 For 401 or 403, check the dedicated connection and database sharing. For 404, verify the database and data source IDs and workspace. Do not replace them with a similarly named database. Rotate a token in GitHub Secrets, rerun a plan, and verify a publish. No code change is needed.
 
-To pause automatic publication, set `NOTION_SYNC_ENABLED` to `false`. Manual operations remain available to maintainers for diagnosis, setup, and recovery. Disable the workflow in GitHub Actions if every run must stop. The Git marketplace keeps working. To roll back skill content, revert its Git change through a PR and let the next publish apply it; do not edit the Notion copy as a rollback.
+To pause all automatic synchronization, set both `NOTION_BIDIRECTIONAL_ENABLED` and `NOTION_SYNC_ENABLED` to `false`. Manual operations remain available to maintainers for diagnosis, setup, and recovery. Disable both workflows in GitHub Actions if every run must stop. The Git marketplace keeps working. To roll back a released skill, revert its Git change through a PR and let the next publish apply it, resolving any subsequent Notion edits first.
 
 ## Verification
 

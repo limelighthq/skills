@@ -160,3 +160,24 @@ test('normalization-only Notion edits are acknowledged once instead of generatin
   await applyPlan(api, config, plan, { revision: 'b'.repeat(40) });
   assert.equal((await importer.planImports(api, config, [incoming], { hello: receipt })).candidates.length, 0);
 });
+
+test('an explicit Notion undo after import merge is imported instead of overwritten by the old receipt', async () => {
+  const { api, original } = await published();
+  const before = api.bodies.get('page');
+  api.bodies.set('page', before.replace('Do the work.', 'First edit.'));
+  const [{ skill: incoming, receipt }] = (await importer.planImports(api, config, [original])).candidates;
+  api.bodies.set('page', before);
+  const receipts = { hello: receipt };
+  assert.ok((await planSync(api, config, [incoming], { receipts })).conflicts.length);
+  const undone = await importer.planImports(api, config, [incoming], receipts);
+  assert.deepEqual(undone.conflicts, []);
+  assert.equal(undone.candidates[0].skill.body, original.body);
+});
+
+test('Windows ZIP replacement retains executable modes on existing scripts', async () => {
+  const { api, original } = await published();
+  const archive = execFileSync(process.env.PYTHON ?? 'python3', ['-c', 'import io,zipfile,sys,json,base64\nb=io.BytesIO()\nz=zipfile.ZipFile(b,"w")\nfor f in json.load(sys.stdin):\n e=zipfile.ZipInfo(f["path"]);e.create_system=0;e.external_attr=0;z.writestr(e,base64.b64decode(f["data"]))\nz.close();sys.stdout.buffer.write(b.getvalue())'], { input: JSON.stringify(original.files) });
+  api.pages.get('page').properties.Files.files = [await api.upload('hello.zip', archive)];
+  const [{ skill: incoming }] = (await importer.planImports(api, config, [original])).candidates;
+  assert.deepEqual(incoming.files.find(f => f.path === 'scripts/run.py'), original.files.find(f => f.path === 'scripts/run.py'));
+});

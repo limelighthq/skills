@@ -59,9 +59,13 @@ export function revisionGuard(row) {
   return digest(JSON.stringify({ state: propertyText(row.properties['Sync state']), parent: row.parent }));
 }
 
-export function receiptBaseMatches(receipt, row, skill) {
-  return receipt?.format === 1 && receipt.pageId === row.id && receipt.source === skill.hash &&
+export function receiptContextMatches(receipt, row) {
+  return receipt?.format === 1 && receipt.pageId === row.id &&
     receipt.guard === revisionGuard(row) && JSON.stringify(receipt.baseline) === JSON.stringify(stateOf(row));
+}
+
+export function receiptBaseMatches(receipt, row, skill) {
+  return receiptContextMatches(receipt, row) && receipt.source === skill.hash;
 }
 
 export async function planSync(api, config, skills, { repair = [], receipts = {} } = {}) {
@@ -102,7 +106,8 @@ export async function planSync(api, config, skills, { repair = [], receipts = {}
       conflicts.push(`Incomplete publish for ${skill.name}. Inspect the page, then use --repair ${skill.name}.`); continue;
     }
     const imported = receiptBaseMatches(receipts[skill.name], row, skill) && receipts[skill.name].remote === current;
-    if (state?.phase === 'complete' && state.remote !== current && !repairing && !imported) {
+    const pendingImportChanged = receiptContextMatches(receipts[skill.name], row) && receipts[skill.name].remote !== current;
+    if (state?.phase === 'complete' && !repairing && ((state.remote !== current && !imported) || pendingImportChanged)) {
       conflicts.push(`Managed content for ${skill.name} was edited in Notion. Preserve the edit in Git before using --repair ${skill.name}.`); continue;
     }
     const kind = !state ? 'adopt' : repairing ? 'repair' : state.source === skill.hash && state.remote === current ? 'skip' : 'update';

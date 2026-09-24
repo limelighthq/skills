@@ -1,10 +1,12 @@
 # Publishing skills to Notion
 
-Git is the source of truth for this repository's skills. Notion is the team's searchable copy. Add a skill, open a pull request, and merge after review. Once activated, GitHub Actions publishes new and changed skills and checks for drift daily. New teammates and new skills do not need new infrastructure.
+Git is the source of truth for this repository's skills. Notion is the team's searchable copy. Add a skill, open a pull request, and merge after review. GitHub Actions publishes new and changed skills on every merge to `main` and checks for drift daily at 09:23 UTC. New teammates and new skills do not need new sync infrastructure.
 
-**Rollout status:** the infrastructure is merged. Automatic runs are gated by `NOTION_SYNC_ENABLED`, currently `false`. Manual plans, schema setup, and the initial publish work while automatic runs are paused. Publishing is not live until the steps below have been completed and a real publish has been verified.
+**Rollout status:** activated on September 23, 2026, with `NOTION_SYNC_ENABLED=true`. The [first successful publish](https://github.com/limelighthq/skills/actions/runs/35950818191) verified all ten skills and their exact ZIP bytes. The [follow-up plan](https://github.com/limelighthq/skills/actions/runs/35951019523) skipped all ten unchanged skills without conflicts and left seven unrelated rows alone. The dedicated **Limelight Skills Publisher** connection has only read, insert, and update content capabilities, scoped to this Skills database. Workspace owners can always manage the connection, and the GitHub repository has multiple administrators.
 
-The dedicated connection and GitHub secret passed the live schema check on September 23, 2026, and the missing `Sync state` property was added and verified. The complete API inventory found nine matching pages, one new skill (`decide`), and seven unrelated pages. The adoption mappings in `notion-sync.json` refer to those nine reviewed pages. Their bodies are older repo versions, with no unique edits to carry into Git. Eight have no attachments. The `design-change-log` reference folder contains `example-entry.md`, whose preview matches the bundled reference. Initial publication replaces its Files entry with the complete repo ZIP; the publisher does not delete the old folder. Native agent access to ZIP contents remains part of the live verification below.
+The initial migration adopted nine reviewed pages in place and created `decide`. Those pages contained older repo versions, with no unique edits to carry into Git. Eight had no attachments. The `design-change-log` reference folder contained `example-entry.md`, whose preview matched the bundled reference. Publication replaced its Files entry with the complete repo ZIP; the publisher did not delete the old folder.
+
+In the team's [native Notion AI acceptance test](https://app.notion.com/chat?t=3e51109380998035be1600a91a506eff), the agent loaded and used `recap`, extracted the `annotate-ui-screenshots` ZIP, and ran all 13 bundled tests successfully with Python 3.13.14 and Pillow 12.3.0. It also loaded and extracted `md-render`, but could not render HTML because that runtime lacked the Markdown package and could not reach the Python package index. This is a runtime dependency limit: the files arrived, but a skill cannot supply package-network access. Use a host with the documented dependencies for that renderer. ZIP access was verified in this Notion agent, not every possible client.
 
 ## What gets published
 
@@ -23,6 +25,8 @@ The target IDs and imported skills' original repositories live in `notion-sync.j
 5. Run mode `plan` again, then mode `publish`. Confirm all intended rows and ZIPs in Notion. Test at least one plain skill and one skill with scripts/assets with the team's actual Notion agents. Run `plan` again: every skill should say `skip` and there should be no conflicts.
 6. Set the repository Actions variable `NOTION_SYNC_ENABLED` to `true`. Run **Publish skills to Notion** with mode `plan`, then mode `publish`. Verify the Actions summary and a second unchanged run before treating activation as complete.
 7. At least two maintainers should enable GitHub notifications for failed runs of this workflow. Successful runs stay in Actions; the publisher does not post messages or open recurring issues.
+
+Notification preferences are per person and were not verified during activation. Each maintainer should confirm their own failed-run notifications.
 
 The code can be reviewed and tested without a token using `npm run notion:catalog` and `npm test`. The current Codex Notion connector is a separate connection; changing its workspace does not configure the CI secret.
 

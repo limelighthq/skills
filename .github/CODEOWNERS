@@ -1,4 +1,5 @@
-# Every change needs one review from an owner of the path it touches.
+# GitHub-authored changes request review from the owner of each changed path.
+# Managed Notion imports use validated automatic merge unless review mode is enabled.
 # Add a team's lead as the owner of that team's plugin when the plugin is created.
 
 *                       @glisom

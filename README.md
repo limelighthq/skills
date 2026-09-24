@@ -131,7 +131,7 @@ docs/                               authoring guide, conventions, migration reco
 
 1. A pull request changes a skill.
 2. CI runs validation, tool tests, installation checks, and bundled script tests. Any error blocks the merge.
-3. An owner from [CODEOWNERS](.github/CODEOWNERS) reviews the change.
+3. GitHub-authored changes receive review from [CODEOWNERS](.github/CODEOWNERS). Managed Notion imports merge automatically after checks and fresh conflict verification, unless maintainers enable review mode.
 4. The merge to `main` is the release. There is no version to bump.
 5. The **Sync skills with Notion** workflow coordinates both directions: GitHub merges publish immediately, and Notion edits are checked every 15 minutes on a best-effort schedule. New Git skills are discovered automatically. Follow [the sync runbook](docs/notion-publishing.md) for activation, ownership conflicts, and recovery. The original **Publish skills to Notion** workflow remains available for manual repair and as a fallback when two-way sync is disabled.
 

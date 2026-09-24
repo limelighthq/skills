@@ -1,0 +1,14 @@
+<!-- @dsCard group="Form controls" height=420 width=960 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Textarea</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="padding:16px 24px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+ReactDOM.createRoot(document.getElementById('root')).render(h('div',{style:{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:28,alignItems:'start'}},
+ h(L.Textarea,{label:'Reply',hideLabel:true,placeholder:'Write a reply, or review Ivy’s draft above…'}),
+ h('div',{className:'lla-overlay'},h(L.Textarea,{variant:'targeting',label:'Targeting','aria-label':'Campaign targeting',defaultValue:'Reach technical founders and senior engineers evaluating developer tooling. Prioritise creators with engaged audiences over raw follower count.'})),
+ h('div',{style:{color:'var(--ink-strong)'}},h(L.Textarea,{variant:'voice',label:'Custom instructions',maxLength:3000,showCount:true,defaultValue:'Direct, confident, contrarian-but-warm founder voice. Short sentences, frequent line breaks, and one-liners. Prioritize clarity, emotional resonance, and relatability over polish.'})),
+ h(L.Textarea,{label:'Reply',hideLabel:true,placeholder:'Write a reply, or review Ivy’s draft above…',disabled:true,disabledReason:'Unhide this conversation to reply.'}),
+ h(L.Textarea,{variant:'portal',label:'Notes (optional)','aria-label':'Creator note',rows:4})));
+</script></body></html>

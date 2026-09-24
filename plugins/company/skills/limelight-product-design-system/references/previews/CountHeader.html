@@ -1,0 +1,18 @@
+<!-- @dsCard group="Team operations" height=420 width=898 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>CountHeader</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="padding:24px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+function search(){return L.TextInput?h("div",{style:{width:160}},h(L.TextInput,{label:"Search work",hideLabel:true,placeholder:"Search work…"})):null;}
+function sel(label,options){return L.Select?h("div",{style:{flex:"1 1 125px",minWidth:125}},h(L.Select,{label:label,size:"md",block:true,options:options,defaultValue:options[0]})):null;}
+function tabs(){return L.Tabs?h(L.Tabs,{variant:"pill",label:"Decision status",defaultValue:"Pending",tabs:[{id:"Pending",label:"Pending"},{id:"Approved",label:"Approved"},{id:"Rejected",label:"Rejected"}]}):null;}
+ReactDOM.createRoot(document.getElementById('root')).render(h(React.Fragment,null,
+  h(L.CountHeader,{title:"Approvals",description:"The decisions your agents need from you.",count:6,
+    toolbar:[h(React.Fragment,{key:"s"},search()),h(React.Fragment,{key:"a"},sel("Filter by agent",["All agents","Ivy","Elliot"])),h(React.Fragment,{key:"t"},sel("Approval type",["All types","Rate negotiation","Creator reply","Content approval"])),h(React.Fragment,{key:"o"},sel("Work order",["Newest first","Oldest first"])),h(React.Fragment,{key:"p"},tabs())]}),
+  h("div",{style:{height:1,background:"var(--line)",margin:"22px 0 24px"}}),
+  h(L.CountHeader,{title:"Activity",description:"A record of work across your agents.",
+    toolbar:[h(React.Fragment,{key:"s"},search()),h(React.Fragment,{key:"a"},sel("Filter by agent",["All agents","Ivy","Elliot"])),h(React.Fragment,{key:"o"},sel("Work order",["Newest first","Oldest first"]))]})
+));
+</script></body></html>

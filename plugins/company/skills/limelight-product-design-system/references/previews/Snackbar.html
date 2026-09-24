@@ -1,0 +1,20 @@
+<!-- @dsCard group="Feedback" height=330 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Snackbar</title>
+<style>.lla-snackbar.toast.pv-top{bottom:auto;top:84px}</style></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="padding:16px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+function Demo(){
+  var a=React.useState(true),pay=a[0],setPay=a[1];
+  var b=React.useState(true),toast=b[0],setToast=b[1];
+  return h('div',{style:{display:'flex',gap:8}},
+    h(L.Button,{variant:'secondary',onClick:function(){setPay(true);}},'Confirm simulated payment'),
+    h(L.Button,{variant:'secondary',onClick:function(){setToast(true);}},'Save sequence'),
+    h(L.Snackbar,{open:toast,variant:'toast',className:'pv-top',title:'Sequence saved.',message:'5 steps · stop-on-reply off · saved to your Sequences list.',duration:0,onClose:function(){setToast(false);},dismissLabel:false}),
+    h(L.Snackbar,{open:pay,title:'Payment complete · $2,800 to Alex Rivera',message:'Payments and Approvals updated. Simulation only.',
+      actions:[{label:'View payments'},{label:'View approvals'}],onClose:function(){setPay(false);},closeLabel:'Dismiss payment confirmation'}));
+}
+ReactDOM.createRoot(document.getElementById('root')).render(h(Demo));
+</script></body></html>

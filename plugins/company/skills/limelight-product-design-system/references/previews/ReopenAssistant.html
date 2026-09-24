@@ -1,0 +1,14 @@
+<!-- @dsCard group="Shell" height=128 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>ReopenAssistant</title></head>
+<body style="margin:0;background:var(--surface-header)">
+<div id="root" class="lla" style="padding:20px 24px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+function Row(p){return h('div',{style:{display:'flex',alignItems:'center',gap:24,marginBottom:14}},p.children);}
+function Cap(p){return h('span',{style:{fontSize:12,lineHeight:'18px',color:'var(--muted)'}},p.children);}
+ReactDOM.createRoot(document.getElementById('root')).render(h('div',null,
+ h(Row,null,h(L.ReopenAssistant,{agent:'ivy'}),h(L.ReopenAssistant,{agent:'elliot'}),h(Cap,null,'138 x 40 and 152 x 40. Same mint for both agents.')),
+ h(Row,null,h(Cap,null,'Accessible name: "Chat with Ivy, show assistant". Pressing it shows the panel, and AppShell moves focus into it. Hiding the panel moves focus back to the pill.'))));
+</script>
+</body></html>

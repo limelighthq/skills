@@ -1,0 +1,17 @@
+<!-- @dsCard group="Chat" height=560 width=960 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>ConversationHistory</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="padding:16px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+var seed=[{id:'c3-seed-1',title:'Find creators that match our ICP',pinned:true},{id:'new',title:'New chat'},{id:'c3-seed-2',title:'Who hasn’t posted lately?'},{id:'c3-seed-3',title:'Counter-offer from Alex Rivera'}];
+function Demo(){
+  var s=React.useState(seed),chats=s[0],set=s[1];var c=React.useState('new'),cur=c[0],setCur=c[1];
+  var body=h(L.ConversationHistory,{chats:chats,currentId:cur,onSelect:function(id){setCur(id);},onOpenFull:function(){},
+    onNewChat:function(){},onTogglePin:function(id,p){set(chats.map(function(x){return x.id===id?Object.assign({},x,{pinned:p}):x;}));}});
+  if(!L.Dialog)return h('div',{className:'lla-chat-missing'},'ConversationHistory renders inside Dialog (group D), which is not built yet.');
+  return h(L.Dialog,{open:true,onClose:function(){},title:'Conversation history'},body);
+}
+ReactDOM.createRoot(document.getElementById('root')).render(h(Demo));
+</script></body></html>

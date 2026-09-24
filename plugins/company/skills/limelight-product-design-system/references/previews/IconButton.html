@@ -1,0 +1,18 @@
+<!-- @dsCard group="Actions" height=230 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>IconButton</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="padding:16px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+function Row(p){return h('div',{style:Object.assign({display:'flex',flexWrap:'wrap',gap:12,alignItems:'center',marginBottom:12},p.style)},p.children);}
+function Cap(t){return h('div',{style:{fontSize:11,lineHeight:'16.5px',color:'var(--muted)',marginBottom:6}},t);}
+ReactDOM.createRoot(document.getElementById('root')).render(h('div',null,
+ Cap('Rail tools (36px, 20px glyph)'),h(Row,null,h(L.IconButton,{icon:'plus',label:'Add agent'}),h(L.IconButton,{icon:'menu',label:'Hide navigation'}),h(L.IconButton,{icon:'settings',label:'Settings'}),h(L.IconButton,{icon:'circle-help',label:'Help'})),
+ Cap('Panel toolbar (26x36) · row actions (28px, hover tints) · Send'),
+ h(Row,null,h('div',{style:{display:'flex',gap:6,background:'var(--surface-bar)',padding:'0 6px',borderRadius:6}},h(L.IconButton,{size:'toolbar',icon:'plus',label:'New conversation'}),h(L.IconButton,{size:'toolbar',icon:'clock',label:'History'}),h(L.IconButton,{size:'toolbar',icon:'panel-left',label:'Open full view'}),h(L.IconButton,{size:'toolbar',icon:'chevron-right',label:'Hide assistant'})),
+  h(L.IconButton,{size:'sm',variant:'outline',tone:'accept',icon:'check',label:'Accept Eli Garrison'}),h(L.IconButton,{size:'sm',variant:'outline',tone:'reject',icon:'x',label:'Reject Eli Garrison'}),h(L.IconButton,{size:'sm',variant:'outline',icon:'message-circle',label:'Message Mei Lin'}),h(L.IconButton,{variant:'solid',icon:'send',label:'Send message'})),
+ Cap('Disabled: the reason sits in opaque muted text tied with aria-describedby (ENG-3773)'),
+ h(Row,null,h(L.IconButton,{variant:'solid',icon:'send',label:'Send message',disabled:true,'aria-describedby':'why-send'}),h('span',{id:'why-send',style:{fontSize:12,color:'var(--muted)'}},'Type a message to send it.'))));
+</script>
+</body></html>

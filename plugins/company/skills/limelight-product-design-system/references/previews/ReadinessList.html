@@ -1,0 +1,27 @@
+<!-- @dsCard group="Readiness" height=615 width=760 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>ReadinessList</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="padding:20px 24px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+function cap(t,f){return h("p",{style:{margin:"0 0 6px",font:"500 12px/18px var("+(f||"--font-system")+")",color:"var(--muted-overlay)"}},t);}
+var ok=[{label:"Business verification complete",ok:true},{label:"Creator payout account ready",ok:true},{label:"Funding available for this payment",ok:true}];
+var kyb=[{label:"Complete business verification (KYB)",ok:false},{label:"Creator payout account ready",ok:true},{label:"Funding available for this payment",ok:true}];
+ReactDOM.createRoot(document.getElementById('root')).render(h("div",{style:{display:"flex",gap:40,alignItems:"flex-start"}},
+  h("div",{style:{width:462}},
+    cap("Pay Maya Chen · Payment readiness · ready"),
+    h(L.ReadinessList,{items:ok}),
+    h("div",{style:{height:26}}),
+    cap("Pay Alex Rivera · Business verification required"),
+    h(L.ReadinessList,{items:kyb,noticeId:"pay-blocked",blocked:{title:"Payment is blocked",body:["An account administrator must finish provider verification before paying.","Use Review payment states on the wallet to simulate a resolved blocker."]}}),
+    h("div",{style:{height:14}}),
+    h(L.Button,{block:true,disabled:true,"aria-describedby":"pay-blocked"},"Review payment")),
+  h("div",{style:{width:175}},
+    cap("Brief · Content complete","--font-sans"),
+    h(L.ReadinessList,{variant:"brief",items:[]}),
+    h("div",{style:{height:20}}),
+    cap("Brief · Needs review","--font-sans"),
+    h(L.ReadinessList,{variant:"brief",items:["Time zone is missing","resource must use HTTPS","Dates must run from response deadline through publication in order"]}))
+));
+</script></body></html>

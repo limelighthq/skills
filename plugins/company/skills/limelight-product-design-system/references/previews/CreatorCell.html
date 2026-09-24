@@ -1,0 +1,13 @@
+<!-- @dsCard group="Data table" height=290 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>CreatorCell</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="padding:20px 24px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+var ROWS=[
+ {name:'Eli Garrison Alexandra Santiago Victoria',shortName:'Eli Garrison',status:'New',role:'VP Marketing · series-B SaaS',added:'Added 14 Sept',variant:1},
+ {name:'Mei Lin Alexandra Morgan Taylor Reynolds',shortName:'Mei Lin',status:'Accepted',role:'Founder · writes Mei Lin Reads',added:'Added 13 Sept',variant:2},
+ {name:'Owen Chen Alexandra Santiago Rose Taylor',shortName:'Owen Chen',status:'Rejected',role:'Engineering manager · advisor',added:'Added 12 Sept',variant:3}];
+ReactDOM.createRoot(document.getElementById('root')).render(h('div',{style:{display:'grid',gap:20,width:328}},ROWS.map(function(r,i){return h(L.CreatorCell,Object.assign({key:i,onOpen:function(){}},r));})));
+</script></body></html>

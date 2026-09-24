@@ -1,0 +1,17 @@
+<!-- @dsCard group="Actions" height=200 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Icon</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="padding:16px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+function Row(p){return h('div',{style:Object.assign({display:'flex',flexWrap:'wrap',gap:12,alignItems:'center',marginBottom:12},p.style)},p.children);}
+function Cap(t){return h('div',{style:{fontSize:11,lineHeight:'16.5px',color:'var(--muted)',marginBottom:6}},t);}
+var D=['arrow-left','arrow-right','chart-no-axes-combined','check','chevron-down','chevron-left','chevron-right','chevron-up','circle-help','clock','credit-card','ellipsis-vertical','external-link','eye-off','grip-horizontal','heart','inbox','key-round','lightbulb','megaphone','menu','message-circle','message-square','minus','notebook-pen','panel-left','pencil','pin','play','plus','search','send','settings','sparkles','target','thumbs-up','trash-2','x'];
+ReactDOM.createRoot(document.getElementById('root')).render(h('div',null,
+ Cap('D\'s 38 lucide glyphs, 16px indicator size in the 24px box'),
+ h(Row,{style:{gap:6,color:'var(--ink)'}},D.map(function(n){return h(L.Icon,{key:n,name:n,label:n});})),
+ Cap('Action size (20px): rail tools'),
+ h(Row,{style:{color:'var(--icon-rail)'}},['menu','settings','circle-help','plus'].map(function(n){return h(L.Icon,{key:n,name:n,size:'action',label:n});}))));
+</script>
+</body></html>

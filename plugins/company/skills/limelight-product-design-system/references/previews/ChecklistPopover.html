@@ -1,0 +1,22 @@
+<!-- @dsCard group="Onboarding" height=380 width=960 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>ChecklistPopover</title></head>
+<body style="margin:0;background:var(--surface-nav)">
+<div id="root" class="lla"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+var LABELS=['Connect your accounts','Select your creators','Create your first outreach sequence','Invite your team to create content','Schedule content to publish'];
+var HINTS=['LinkedIn, email and payments — so the agents can act, not just draft.','Run discovery against a campaign brief, then save the ones worth approaching.','Start from a template — Ivy personalises each step per creator.','Each person gets a voice profile Elliot writes against.','Put approved posts on the calendar and Elliot handles the rest.'];
+function steps(nDone){return LABELS.map(function(l,i){return {label:l,hint:HINTS[i],state:i<nDone?'done':'todo'};});}
+function Card(p){
+  var s=React.useState(p.done),done=s[0],set=s[1];
+  var v=React.useState(true),shown=v[0],setShown=v[1];
+  if(!shown)return null;
+  return h(L.ChecklistPopover,{floating:true,defaultPosition:p.pos,defaultMinimized:p.min,steps:steps(done),
+    onStep:function(i){set(Math.max(done,i+1));},onClose:function(){setShown(false);}});
+}
+ReactDOM.createRoot(document.getElementById('root')).render(h(React.Fragment,null,
+  h(Card,{done:1,pos:{x:16,y:16}}),
+  h(Card,{done:1,min:true,pos:{x:328,y:16}}),
+  h(Card,{done:5,pos:{x:640,y:16}})));
+</script></body></html>

@@ -1,0 +1,25 @@
+<!-- @dsCard group="Overlays" height=720 width=1200 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Sheet</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="padding:16px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+function Demo(){
+  var s=React.useState(true),open=s[0],set=s[1];
+  var t=React.useState(false),toast=t[0],setToast=t[1];
+  // D: Save shows the toast, then closes the sheet 900ms later.
+  function save(){setToast(true);setTimeout(function(){set(false);},900);}
+  return h('div',null,
+    h(L.Button,{onClick:function(){set(true);}},'New sequence'),
+    h(L.Sheet,{open:open,dirty:true,title:'Create sequence',onClose:function(){set(false);},
+      actions:h(L.Button,{onClick:save},'Save')},
+      h('div',{style:{display:'flex',alignItems:'center',justifyContent:'space-between',gap:12,padding:'16px 28px',borderBottom:'1px solid var(--seq-line)'}},
+        h('span',{style:{fontSize:16,lineHeight:'24px',fontWeight:550,letterSpacing:'-0.4px'}},'Outreach Sequence — Limelight'),
+        h('span',{style:{fontSize:11,lineHeight:'16.5px',color:'var(--seq-ink-3)'}},'Created by David Walsh · Jun 8, 2026'))),
+    h(L.Snackbar,{open:toast,variant:'toast',title:'Sequence saved.',message:'4 steps · stop-on-reply on · saved to your Sequences list.',onClose:function(){setToast(false);},dismissLabel:false}));
+}
+ReactDOM.createRoot(document.getElementById('root')).render(h(Demo));
+// Show the discard confirm, as D does on the first Escape in the editor.
+setTimeout(function(){document.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape',bubbles:true}));},250);
+</script></body></html>

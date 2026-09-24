@@ -1,0 +1,17 @@
+<!-- @dsCard group="Navigation" height=200 width=898 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>SegmentedControl</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="padding:24px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+function Cap(p){return h('p',{style:{margin:'0 0 10px',fontSize:11,lineHeight:'16.5px',color:'var(--muted)'}},p.children);}
+function Cell(p){return h('div',null,h(Cap,null,p.cap),p.children);}
+ReactDOM.createRoot(document.getElementById('root')).render(h('div',null,
+ h('div',{style:{display:'flex',gap:32,alignItems:'flex-start',marginBottom:26}},
+  h(Cell,{cap:'size="sm": Creators filter bar'},h(L.SegmentedControl,{label:'Creators view',options:['List','Kanban']})),
+  h(Cell,{cap:'size="md": Elliot Content'},h(L.SegmentedControl,{size:'md',label:'Content view',options:['Kanban','List']})),
+  h(Cell,{cap:'size="md": Elliot Calendar'},h(L.SegmentedControl,{size:'md',label:'Calendar view',options:['Month','Week','List']}))),
+ h(Cell,{cap:'size="md": Analytics range (This month is the default). Arrow keys move and select.'},h(L.SegmentedControl,{size:'md',label:'Date range',defaultValue:'This month',options:['This week','This month','Last 90 days']}))));
+</script>
+</body></html>

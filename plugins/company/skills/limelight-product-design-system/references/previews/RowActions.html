@@ -1,0 +1,17 @@
+<!-- @dsCard group="Data table" height=120 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>RowActions</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="padding:20px 24px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+var cap={display:'block',marginBottom:8,fontSize:10,lineHeight:'15px',color:'var(--muted)'};
+function Live(){var s=React.useState('pending');return h(L.RowActions,{name:'Eli Garrison',state:s[0],onAccept:function(){s[1]('accepted');},onReject:function(){s[1]('rejected');},onMessage:function(){s[1]('pending');}});}
+function cell(label,el){return h('div',{style:{width:128}},h('span',{style:cap},label),el);}
+ReactDOM.createRoot(document.getElementById('root')).render(h('div',{style:{display:'flex',gap:16,alignItems:'flex-start'}},
+  cell('New (try it)',h(Live)),
+  cell('Accepted',h(L.RowActions,{name:'Mei Lin',state:'accepted'})),
+  cell('Rejected',h(L.RowActions,{name:'Owen Chen',state:'rejected'})),
+  cell('From discovery',h(L.RowActions,{name:'Priya Nair',state:'proposal'})),
+  cell('Added in chat',h(L.RowActions,{name:'Marcus Chen',state:'added'}))));
+</script></body></html>

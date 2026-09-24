@@ -1,0 +1,22 @@
+<!-- @dsCard group="Overlays" height=480 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>AlertDialog</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="padding:16px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+function Demo(){
+  var s=React.useState(true),open=s[0],set=s[1];
+  var n=React.useState(''),note=n[0],setNote=n[1];
+  return h('div',{style:{display:'flex',alignItems:'center',gap:12}},
+    h(L.Button,{variant:'secondary',onClick:function(){set(true);}},'Delete thread'),
+    note?h('span',{role:'status'},note):null,
+    h(L.AlertDialog,{open:open,danger:true,title:'Delete thread from Limelight?',
+      description:[h(React.Fragment,{key:1},'Remove the conversation with ',h('strong',null,'Leo Park'),' from Limelight’s inbox, including its hidden view.'),
+        'This does not delete emails from your or the creator’s email account. No message is sent. You can undo this removal in the prototype.'],
+      confirmLabel:'Delete from Limelight',
+      onCancel:function(){set(false);},
+      onConfirm:function(){set(false);setNote('Thread deleted from Limelight only. Emails are unchanged.');}}));
+}
+ReactDOM.createRoot(document.getElementById('root')).render(h(Demo));
+</script></body></html>

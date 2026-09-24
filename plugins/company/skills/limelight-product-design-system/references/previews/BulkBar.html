@@ -1,0 +1,11 @@
+<!-- @dsCard group="Filters" height=160 width=898 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>BulkBar</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="padding:16px 24px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+ReactDOM.createRoot(document.getElementById('root')).render(h('div',null,
+ h(L.BulkBar,{reviewCount:20,selectedCount:0,sortOptions:['Relevancy','Newest added','Oldest added']}),
+ h(L.BulkBar,{reviewCount:20,reviewActive:true,selectedCount:1,sortOptions:['Relevancy','Newest added','Oldest added'],defaultSort:'Newest added'})));
+</script></body></html>

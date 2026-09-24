@@ -1,0 +1,28 @@
+<!-- @dsCard group="Navigation" height=470 width=898 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Tabs</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="padding:24px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+function Cap(p){return h('p',{style:{margin:'0 0 10px',fontSize:11,lineHeight:'16.5px',color:'var(--muted)'}},p.children);}
+function Gap(){return h('div',{style:{height:26}});}
+function tabs(a){return a.map(function(x){return {id:x,label:x};});}
+ReactDOM.createRoot(document.getElementById('root')).render(h('div',null,
+ h(Cap,null,'variant="underline": campaign detail (arrow keys move and select, Home / End)'),
+ h(L.Tabs,{label:'Campaign sections',tabs:tabs(['Creators','Brief','Calendar','Performance'])}),
+ h(Gap),
+ h(Cap,null,'variant="pill": Inbox'),
+ h(L.Tabs,{variant:'pill',label:'Inbox views',tabs:tabs(['All messages','Creator responses','Reply approvals','Sequences'])}),
+ h(Gap),
+ h(Cap,null,'Payments (Transactions is the default tab)'),
+ h(L.Tabs,{variant:'pill',label:'Payments',defaultValue:'Transactions',tabs:tabs(['Proposals','Transactions','Payment methods'])}),
+ h(Gap),
+ h('div',{style:{display:'flex',gap:24,flexWrap:'wrap'}},
+  h('div',null,h(Cap,null,'Approvals'),h(L.Tabs,{variant:'pill',label:'Approval status',tabs:tabs(['Pending','Approved','Rejected'])})),
+  h('div',null,h(Cap,null,'Knowledge'),h(L.Tabs,{variant:'pill',label:'Knowledge',tabs:tabs(['Overview','Content sources','Brand voice','ICP'])}))),
+ h(Gap),
+ h(Cap,null,'Analytics'),
+ h(L.Tabs,{variant:'pill',label:'Analytics views',tabs:tabs(['Overview','By campaign','By employee','Saved reports'])})));
+</script>
+</body></html>

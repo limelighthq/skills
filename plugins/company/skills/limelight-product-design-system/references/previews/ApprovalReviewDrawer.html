@@ -1,0 +1,26 @@
+<!-- @dsCard group="Team operations" height=900 width=1440 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>ApprovalReviewDrawer</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="padding:24px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+var items=[
+  {id:"maya",agent:"Ivy",kind:"Rate negotiation",title:"Reply to Maya Chen",context:"Q2 SaaS Growth",body:"Thanks Maya — $3,200 works for a single sponsored video. Can we lock the first week of May?"},
+  {id:"leo",agent:"Ivy",kind:"Creator reply",title:"Reply to Leo Park",context:"Q2 SaaS Growth",body:"Happy to send the product early so you can film with it. What address should I use?"},
+  {id:"pay",agent:"Ivy",kind:"Payment approval",status:"Approved",title:"Payment to Alex Rivera",context:"Q2 SaaS Growth — Alex Rivera",body:"Approved 2800 USD via Stripe. Simulation only. Reference: 61f7721e-0daf-4724-ad8b-17bc71f23ab5"},
+  {id:"rec",agent:"Ivy",kind:"Activity record",status:"Recorded",title:"Discovery completed",context:"Ivy · 9/23/2026, 7:18:07 PM",body:"Q2 SaaS Growth: 12 creators matched the brief. Five shortlisted for review."}
+];
+function Demo(){
+  var s=React.useState(0),i=s[0],set=s[1];
+  var o=React.useState(true),open=o[0],setOpen=o[1];
+  var t=React.useState(""),text=t[0],setText=t[1];
+  function pick(k){set(k);setText(items[k].body);setOpen(true);}
+  function next(){pick((i+1)%items.length);}
+  return h(React.Fragment,null,
+    h("div",{style:{maxWidth:850,display:"grid",gap:8}},items.slice(0,3).map(function(it,k){return h(L.ApprovalRow,{key:k,agent:it.agent,kind:it.kind,status:it.status,title:it.title,context:it.context,body:it.body,onReview:function(){pick(k);}});}),
+      h(L.ActivityItem,{agent:"Ivy",example:true,time:"07:18 PM",title:"Discovery completed",detail:items[3].body,onView:function(){pick(3);}})),
+    h(L.ApprovalReviewDrawer,{open:open,onClose:function(){setOpen(false);},item:items[i],value:text,onChange:setText,onApprove:next,onReject:next}));
+}
+ReactDOM.createRoot(document.getElementById('root')).render(h(Demo));
+</script></body></html>

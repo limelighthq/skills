@@ -1,0 +1,12 @@
+<!-- @dsCard group="Agent panel" height=170 width=620 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>PanelNote</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="display:flex;gap:24px;align-items:stretch;min-height:100vh"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+function col(el){return h("div",{style:{width:298,flex:"none",boxSizing:"border-box",padding:"20px 16px",alignSelf:"stretch",backgroundColor:"var(--surface-panel)",backgroundImage:"var(--gradient-panel-veil), var(--lla-panel-image)",backgroundSize:"100% 100%, auto 1454px",backgroundPosition:"center, left 0 top -727px",backgroundRepeat:"no-repeat"}},el);}
+ReactDOM.createRoot(document.getElementById("root")).render(h(React.Fragment,null,
+ col(h(L.PanelNote,null,"I opened the Brief tab.")),
+ col(h(L.PanelNote,{inset:true},"I opened the Calendar tab."))));
+</script></body></html>

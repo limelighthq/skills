@@ -1,0 +1,12 @@
+<!-- @dsCard group="Form controls" height=150 width=960 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>RadioCard</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="padding:16px 24px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+ReactDOM.createRoot(document.getElementById('root')).render(h('div',{className:'lla-overlay',style:{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:20,alignItems:'start'}},
+ h(L.RadioCard,{name:'r1',title:'Member',description:'Can use agents and run campaigns.',defaultChecked:true}),
+ h(L.RadioCard,{name:'r2',title:'Admin',description:'Can manage members, billing, and agents.'}),
+ h(L.RadioCard,{name:'r3',title:'Admin',description:'Can manage members, billing, and agents.',disabled:true,disabledReason:'Only the workspace owner can invite admins.'})));
+</script></body></html>

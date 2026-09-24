@@ -1,0 +1,23 @@
+<!-- @dsCard group="Disclosure" height=600 width=900 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Disclosure</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="padding:24px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+var cap={margin:'0 0 10px',fontSize:11,lineHeight:'16.5px',color:'var(--muted)'};
+var take={width:542,padding:16,border:'1px solid var(--line-card)',borderRadius:12,background:'var(--surface)',fontFamily:'var(--font-arial)',color:'var(--disclosure-value)'};
+ReactDOM.createRoot(document.getElementById('root')).render(h('div',{style:{width:850}},
+  h('p',{style:cap},'Card · closed (brief editor, before publishing)'),
+  h(L.Disclosure,{summary:'Sharing settings',status:'Available after publishing',note:'Prototype only: links use data saved in this browser. No email is sent.'},
+    h('p',null,'Review and publish the brief to enable sharing. Internal budgets and individual creator rates are never part of the public brief.')),
+  h('p',{style:Object.assign({},cap,{marginTop:20})},'Card · open'),
+  h(L.Disclosure,{summary:'Sharing settings',status:'Available after publishing',defaultOpen:true,note:'Prototype only: links use data saved in this browser. No email is sent.'},
+    h('p',null,'Review and publish the brief to enable sharing. Internal budgets and individual creator rates are never part of the public brief.')),
+  h('p',{style:Object.assign({},cap,{marginTop:20})},'Inline · open (creator review drawer, IVY’S TAKE card)'),
+  h('div',{style:take},
+    h('p',{style:{margin:0,fontSize:14,lineHeight:'21px'}},'Audience is exactly your highest-converting segment.'),
+    h(L.Disclosure,{variant:'inline',summary:'View fit details',defaultOpen:true,
+      items:[{label:'Topics',value:'Marketing, SaaS, B2B'},{label:'Engagement window',value:'Last 10 posts'},{label:'Relationship history',value:'Not available'},{label:'Rate',value:'Not confirmed'}],
+      note:'Confirm audience fit and availability before outreach. A fit score is not a performance guarantee.'}))));
+</script></body></html>

@@ -1,0 +1,26 @@
+<!-- @dsCard group="Agent panel" height=560 width=1280 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>InsightCard</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="display:flex;gap:24px;align-items:stretch;min-height:100vh"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+function col(el){return h("div",{style:{width:298,flex:"none",boxSizing:"border-box",padding:"20px 16px",alignSelf:"stretch",backgroundColor:"var(--surface-panel)",backgroundImage:"var(--gradient-panel-veil), var(--lla-panel-image)",backgroundSize:"100% 100%, auto 1454px",backgroundPosition:"center, left 0 top -727px",backgroundRepeat:"no-repeat"}},el);}
+ReactDOM.createRoot(document.getElementById("root")).render(h(React.Fragment,null,
+ col(h(L.InsightCard,{title:"25 of the 42 on Q2 SaaS Growth have never been contacted.",
+   body:"DevTools is a third the size and further through its list, so the thing holding Q2 back is outreach, not discovery. Running more matching adds to a pile nobody has worked yet.",
+   stats:[{label:"Shortlisted",value:"67"},{label:"Contacted",value:"27"},{label:"Signed",value:"4"},{label:"Never approached",value:"40"}],
+   tags:["Q2 is the backlog","Customer story still a draft"],actionLayout:"stack",actions:[{label:"Q2 SaaS Growth"},{label:"DevTools LinkedIn"}]})),
+ col(h(L.InsightCard,{eyebrow:"IVY’S READ ON THE WALLET",badge:"Payment review",title:"Review accepted proposals before paying.",
+   body:"Choose a provider, resolve readiness blockers and confirm the amount. Recording an external payment is a separate action.",
+   stats:[{label:"Accepted",value:"1"},{label:"Providers",value:"2"},{label:"Mode",value:"Demo"}],
+   actions:[{label:"Proposals"},{label:"Transactions"}]},h(L.Badge,null,"Review required"))),
+ col(h(L.InsightCard,{eyebrow:"ELLIOT’S READ ON THE WEEK",badge:"Wed and Fri open",title:"Six posts scheduled, and the two gaps are both midweek.",
+   body:"Wednesday and Friday have nothing against them. The ideas backlog has drafts that fit either day, so the gaps are a scheduling job rather than a writing one.",
+   stats:[{label:"Scheduled",value:"6"},{label:"Empty days",value:"2"},{label:"Profiles posting",value:"5"},{label:"Backlog ready",value:"4"}],
+   actions:[{label:"Drafts"},{label:"Inspiration"},{label:"Open the week"}]})),
+ col(h("div",{style:{display:"flex",flexDirection:"column",gap:16}},
+   h(L.InsightCard,{eyebrow:"IVY · INBOX",title:"Keep every partnership moving.",body:"Review the recommendation, then approve or edit the next reply."}),
+   h(L.InsightCard,{title:"Shared knowledge for every agent",body:"Manage content sources, brand voice, and the ideal customer profile your agents use."})))
+));
+</script></body></html>

@@ -1,0 +1,24 @@
+<!-- @dsCard group="Creator portal" height=2800 width=1440 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>PortalShell</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+var BASE={context:'Limelight demo brand / Creator opportunity',
+ banner:'Sample creator experience · works without a published campaign · responses stay in this demo',
+ eyebrow:'Q2 SaaS Growth · Published v1',title:'Q2 SaaS Growth — share your perspective',
+ lead:'Help engineering leaders evaluate our product through an honest hands-on LinkedIn story.',
+ glance:[{label:'Deliverables',value:'One original LinkedIn post with an original image or short native video.'},{label:'Compensation',value:'Paid partnership. Submit your pricing; scope and fee are agreed individually.'},{label:'Respond by',value:'2026-10-02 · America/Los_Angeles'}],
+ asideTitle:'Interested in the opportunity?',asideIntro:'No Limelight account needed. A response is not an agreement.',
+ actions:[{label:'Interested — share pricing',primary:true},{label:'Express interest without rates'},{label:'Ask a question'},{label:'Not this time'}]};
+var SECTIONS=[
+ {title:'Campaign story',fields:[{label:'Audience and core message',value:'Technical founders and engineering leaders. Show a practical product experience, not an unsupported performance claim.'},{label:'Product website',value:'https://limelighthq.com',href:'https://limelighthq.com'}]},
+ {title:'Scope & terms',fields:[{label:'Deliverables and channel',value:'One original LinkedIn post with an original image or short native video.'},{label:'Public compensation approach',value:'Paid partnership. Submit your pricing; scope and fee are agreed individually.'},{label:'Usage rights and exclusivity',value:'Organic publication on your own channel. Paid usage, exclusivity and additional rights require a separate agreement.'}]}];
+var cap={margin:0,padding:'10px 16px',fontFamily:'var(--font-sans)',fontSize:11,lineHeight:'16.5px',color:'var(--muted)',background:'var(--surface-nav)',borderTop:'1px solid var(--line)',borderBottom:'1px solid var(--line)'};
+ReactDOM.createRoot(document.getElementById('root')).render(h('div',null,
+  h('p',{style:cap},'1440 · two columns, sticky response aside'),
+  h(L.PortalShell,Object.assign({sections:SECTIONS},BASE)),
+  h('p',{style:cap},'390 · one column, the aside moves above the brief · a disabled Review response with its reason'),
+  h('div',{style:{width:390,borderRight:'1px solid var(--line)'}},h(L.PortalShell,Object.assign({},BASE,{sections:SECTIONS.slice(0,1),aside:h('p',{id:'rate-why',style:{margin:'16px 0 0'}},'Enter a positive post rate or bundled price, using at most two decimal places.'),actions:[{label:'Review response',primary:true,disabled:true,describedBy:'rate-why'}]})))));
+</script></body></html>

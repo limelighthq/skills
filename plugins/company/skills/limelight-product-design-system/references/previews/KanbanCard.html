@@ -1,0 +1,12 @@
+<!-- @dsCard group="Kanban" height=240 width=720 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>KanbanCard</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="padding:24px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+var K=[{name:'Taylor Wong',platforms:['linkedin','x'],meta:'48.2K followers',detail:'B2B Growth Strategist · ex-Loom',score:89},
+ {name:'Morgan Lee',platforms:['instagram','tiktok','youtube'],meta:'124.5K followers',detail:'Lifestyle & wellness creator',score:62},
+ {name:'Casey Diaz',platforms:['linkedin'],meta:'18.4K followers',detail:'$1,800',score:78}];
+ReactDOM.createRoot(document.getElementById('root')).render(h('div',{style:{display:'grid',gridTemplateColumns:'repeat(3,210px)',gap:12,alignItems:'start'}},K.map(function(k,i){return h(L.KanbanCard,Object.assign({key:i,onOpen:function(){}},k));})));
+</script></body></html>

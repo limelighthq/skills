@@ -1,0 +1,12 @@
+<!-- @dsCard group="People" height=80 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Avatar</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="padding:16px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+function Row(p){return h('div',{style:Object.assign({display:'flex',flexWrap:'wrap',gap:12,alignItems:'center',marginBottom:12},p.style)},p.children);}
+function Cap(t){return h('div',{style:{fontSize:11,lineHeight:'16.5px',color:'var(--muted)',marginBottom:6}},t);}
+ReactDOM.createRoot(document.getElementById('root')).render(h(Row,null,h(L.Avatar,{initials:'EG',variant:1}),h(L.Avatar,{initials:'ML',variant:2}),h(L.Avatar,{initials:'OC',variant:3}),h(L.Avatar,{initials:'YH',variant:1,size:'card'}),h(L.Avatar,{initials:'PN',variant:2,size:'card'}),h(L.Avatar,{initials:'MC',variant:3,size:'card',label:'Marcus Chen'})));
+</script>
+</body></html>

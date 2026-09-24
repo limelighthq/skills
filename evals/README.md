@@ -25,5 +25,9 @@ Load the complete skill and needed bundled references in a fresh evaluation cont
 | `limelight-work` | Explicit docs-update request; repository access, PR tools, checks and required reviews available | Complete edit, PR, and merge without asking for the authorization again. Honor a narrower user request or repository restriction. |
 | `deep-module-scan` | Target path supplied but no repository or source access | Report missing source access, not zero findings. |
 | `md-render` | EPUB requested with only the bundled scripts available | Explain that another converter is needed; do not invent scripts, flags, or an EPUB artifact. |
+| `limelight-product-design-system` | Warning badge token lookup | Names `warning-fill` and `warning-text` and the file that states them. Invents no token. |
+| `limelight-product-design-system` | Approvals page prototype; no browser | Copies the kit, builds with `AppShell` and `ApprovalRow`, styles with token variables, and says nobody viewed it. |
+| `limelight-product-design-system` | Screen markup with a gradient button, an emoji icon, a sentence-case primary action, no focus ring, and a 12px glyph | Finds each break, cites its rule file, and invents no rule. |
+| `limelight-product-design-system` | CampaignCard in a repo whose rules and tokens conflict with the system | Follows the repo, uses its token layer, copies nothing from the kit, and reports each conflict with both values. |
 
 An independent evaluator should also flag contradictory instructions that could change the outcome even if one run happened to pass.

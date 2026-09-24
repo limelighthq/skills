@@ -1,0 +1,15 @@
+<!-- @dsCard group="Data table" height=110 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>PlatformIcons</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="padding:20px 24px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+var cap={display:'block',marginBottom:6,fontSize:10,lineHeight:'15px',color:'var(--muted)'};
+function cell(label,el){return h('div',null,h('span',{style:cap},label),el);}
+ReactDOM.createRoot(document.getElementById('root')).render(h('div',{style:{display:'flex',gap:40,alignItems:'flex-start'}},
+  cell('LinkedIn, X',h(L.PlatformIcons,{platforms:['linkedin','x']})),
+  cell('X',h(L.PlatformIcons,{platforms:['x']})),
+  cell('LinkedIn, YouTube',h(L.PlatformIcons,{platforms:['linkedin','youtube']})),
+  cell('Inline on a Kanban card',h('span',{style:{fontSize:11,lineHeight:'16.5px',fontWeight:450,color:'var(--muted)'}},h(L.PlatformIcons,{platforms:['instagram','tiktok','youtube'],tone:'inline'}),' · 124.5K followers'))));
+</script></body></html>

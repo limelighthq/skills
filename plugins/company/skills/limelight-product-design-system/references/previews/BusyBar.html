@@ -1,0 +1,13 @@
+<!-- @dsCard group="Chat" height=150 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>BusyBar</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="padding:16px;display:flex;gap:20px;align-items:flex-start"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+function col(kids,w){return h('div',{className:'lla-panel-body',style:{width:w||298,flex:'none',boxSizing:'border-box',padding:'20px 16px',display:'flex',flexDirection:'column',gap:16,backgroundColor:'var(--surface-panel)',backgroundImage:'var(--gradient-panel-veil), var(--lla-panel-image)',backgroundSize:'100% 100%, auto 1454px',backgroundPosition:'center, left bottom',backgroundRepeat:'no-repeat'}},kids);}
+ReactDOM.createRoot(document.getElementById('root')).render(h(React.Fragment,null,
+  col([h(L.BusyBar,{key:1,label:'Adding creators'})]),
+  col([h(L.BusyBar,{key:1,label:'Working with Elliot'})])
+));
+</script></body></html>

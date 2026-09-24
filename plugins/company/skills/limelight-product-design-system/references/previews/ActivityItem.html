@@ -1,0 +1,17 @@
+<!-- @dsCard group="Team operations" height=640 width=898 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>ActivityItem</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="padding:24px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+var recs=[
+  {agent:"Ivy",time:"07:53 PM",dateTime:"2026-09-23T19:53",title:"Collect campaign results",detail:"Held for one minute. Cancel from Activity to veto."},
+  {agent:"Ivy",example:true,time:"07:18 PM",title:"Discovery completed",detail:"Q2 SaaS Growth: 12 creators matched the brief. Five shortlisted for review."},
+  {agent:"Elliot",example:true,time:"06:46 PM",title:"Draft ready for Sarah",detail:"An educational post about onboarding is waiting for author approval."},
+  {agent:"Ivy",example:true,time:"06:14 PM",title:"Counter-offer needs review",detail:"Alex Rivera proposed $2,800. Ivy prepared a recommendation in Approvals."}
+];
+ReactDOM.createRoot(document.getElementById('root')).render(
+  h("div",null,recs.map(function(r,i){return h(L.ActivityItem,Object.assign({key:i,onView:function(){}},r));}))
+);
+</script></body></html>

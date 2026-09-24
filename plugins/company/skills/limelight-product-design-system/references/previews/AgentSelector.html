@@ -1,0 +1,14 @@
+<!-- @dsCard group="Agent panel" height=330 width=640 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>AgentSelector</title></head>
+<body style="margin:0;background:var(--surface-nav)">
+<div id="root" class="lla" style="position:relative;height:330px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+var IVY_MENU=[{id:"brief",icon:"pencil",label:"Create campaign brief",description:"Draft with Ivy, review in the campaign panel"},{id:"discovery",icon:"target",label:"Run a new creator discovery",description:"Find creators that match a campaign brief"},{id:"negotiations",icon:"message-circle",label:"Monitor negotiations",description:"Where every open deal stands right now"}];
+var ELLIOT_MENU=[{id:"draft",icon:"notebook-pen",label:"Draft content",description:"A post in one of your team’s voices"},{id:"inspiration",icon:"lightbulb",label:"Browse content inspiration",description:"High-performing posts worth modelling"},{separator:true},{section:"Quick actions"},{id:"q1",icon:"pencil",label:"Draft a new post",description:"Pick who it is for, Elliot writes in their voice"},{id:"q2",icon:"sparkles",label:"Create an educational post",description:"Explain something your buyers keep getting wrong"},{id:"q3",icon:"heart",label:"Turn a customer win into a post",description:"A result, told as a story rather than a case study"},{id:"q4",icon:"sparkles",label:"Brainstorm angles first",description:"Five angles to react to before anything is written"}];
+function row(style,kids){return h("div",{style:Object.assign({position:"absolute",bottom:24,width:270,display:"flex",gap:6,padding:14,boxSizing:"content-box",background:"var(--surface-bar)",borderTop:"1px solid var(--line-bar)"},style)},kids);}
+ReactDOM.createRoot(document.getElementById("root")).render(h(React.Fragment,null,
+ row({left:16},[h(L.AgentSelector,{key:"i",agent:"ivy",items:IVY_MENU}),h(L.AgentSelector,{key:"e",agent:"elliot",items:ELLIOT_MENU})]),
+ row({right:16},[h(L.AgentSelector,{key:"i",agent:"ivy",items:IVY_MENU,defaultMenuOpen:true}),h(L.AgentSelector,{key:"e",agent:"elliot",items:ELLIOT_MENU})])));
+</script></body></html>

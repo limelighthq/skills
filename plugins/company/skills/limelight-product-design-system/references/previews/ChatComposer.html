@@ -1,0 +1,13 @@
+<!-- @dsCard group="Agent panel" height=130 width=660 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>ChatComposer</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="display:flex;gap:24px;padding:10px 16px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+function foot(el){return h("div",{style:{width:270,padding:14,boxSizing:"content-box",background:"var(--surface-bar)",border:"1px solid var(--line-bar)"}},el);}
+function sel(){return [h(L.AgentSelector,{key:"i",agent:"ivy"}),h(L.AgentSelector,{key:"e",agent:"elliot"})];}
+ReactDOM.createRoot(document.getElementById("root")).render(h(React.Fragment,null,
+ foot(h(L.ChatComposer,{selectors:sel()})),
+ foot(h(L.ChatComposer,{selectors:sel(),defaultValue:"Who hasn’t posted lately?"}))));
+</script></body></html>

@@ -1,0 +1,10 @@
+<!-- @dsCard group="Settings" height=206 width=900 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>SettingsHeader</title></head>
+<body style="margin:0;background:var(--settings-ground)">
+<div id="root" class="lla" style="padding:32px 0 0"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+ReactDOM.createRoot(document.getElementById('root')).render(h('div',{style:{maxWidth:720,margin:'0 auto',padding:'0 20px'}},
+  h(L.SettingsHeader,{eyebrow:'TEAM',mark:'A',title:"Agus's Studio",code:'team_demo_limelight',codeLabel:'Permanent team identifier'},h(L.Button,{variant:'secondary'},'Reset prototype'))));
+</script></body></html>

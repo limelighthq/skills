@@ -24,6 +24,7 @@ Keep shared frontmatter spec-only. Put trigger phrases in `description` and work
 | `design-change-log` | Private GitHub evidence; Notion and Slack for publication | Draft from available evidence and label verification or publication blockers. Preserve the approval gate. |
 | `annotate-ui-screenshots` | Python 3.10+, Pillow, image files; viewer for visual verification | Supplied images need no capture tool. Without execution, return a proposed manifest. Without viewing, mark inspection incomplete. |
 | `md-render` | Python 3.10+, Markdown, Pygments; WeasyPrint and native libraries for PDF; watchdog for preview | Explain missing dependencies. Offer source or an available host renderer, labeled accurately. Unsupported formats need separate tooling. |
+| `limelight-product-design-system` | File access to the copy. A browser and network access for prototypes. Read access to the target code for implement and review. | Without a browser, deliver the page and say nobody viewed it. Without network, say React could not load. Without code access, ask for it. Never report a clean review of unread code. |
 
 Resolve bundled resources from the actual loaded skill location. Use an available interpreter, quote paths, and keep outputs in the user's working project or chosen destination. Use the same Python environment for package installation and execution. A host running on Windows may expose `python` or `py -3` instead of `python3`.
 

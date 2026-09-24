@@ -1,0 +1,40 @@
+<!-- @dsCard height=320 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Cover</title>
+<style>
+html,body{margin:0;height:100%;background:var(--surface)}
+.cv{position:relative;width:960px;height:320px;overflow:hidden;background:var(--surface)}
+.cv svg{position:absolute;left:0;top:0}
+.b-primary{fill:var(--primary)}.b-panel{fill:var(--surface-panel)}.b-mint{fill:var(--mint-fill)}.b-pos{fill:var(--positive-fill)}.b-nav{fill:var(--surface-nav)}
+.e-mint{fill:none;stroke:var(--mint-border);stroke-width:1}.e-line{fill:none;stroke:var(--line-card);stroke-width:1}
+.r-card{rx:var(--radius-card)}.r-panel{rx:var(--radius-panel)}.r-md{rx:var(--radius-md)}
+.ring{fill:none;stroke-width:3}.dot{fill:var(--surface-portrait)}
+.name{position:absolute;left:32px;bottom:64px;margin:0;width:440px;font-family:var(--font-sans);font-weight:500;font-size:80px;line-height:.95;letter-spacing:-.045em;color:var(--ink)}
+.tag{position:absolute;left:32px;bottom:32px;margin:0;width:440px;font-family:var(--font-sans);font-size:14px;line-height:21px;letter-spacing:-.012em;color:var(--muted)}
+</style></head>
+<body>
+<div class="cv">
+<svg width="960" height="320" viewBox="0 0 960 320" aria-hidden="true">
+<!-- blocks: primary (#1E1C22) 176x272 slab · surface-panel 240x128 · mint-fill 136x44 pill · positive-fill 96x44 · surface-nav 240x88
+     arrangement: one tall dark slab with satellites, set like D's shell: rail-dark slab left, panel-blue field top right, chips below
+     pattern: geometric, modular, dense UI -> campaign-card tiles cut at radius-card (10) and radius-panel (16), plus two rail discs with the agent ring (gradient-agent-ring)
+     steps/radii: space-12, space-14, space-24; radius-md 6, radius-card 10, radius-panel 16, radius-pill 22 (pill rx = 22) -->
+<defs><linearGradient id="ring" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--ring-1)"/><stop offset=".35" stop-color="var(--ring-2)"/><stop offset=".65" stop-color="var(--ring-3)"/><stop offset="1" stop-color="var(--ring-4)"/></linearGradient></defs>
+<rect class="b-primary r-card" x="504" y="24" width="176" height="272"/>
+<rect class="b-panel r-panel" x="694" y="24" width="242" height="128"/>
+<rect class="b-nav r-card" x="694" y="164" width="242" height="88"/>
+<rect class="e-line r-card" x="694.5" y="164.5" width="241" height="87"/>
+<rect class="b-mint" rx="22" x="694" y="264" width="136" height="44"/>
+<rect class="e-mint" rx="21.5" x="694.5" y="264.5" width="135" height="43"/>
+<rect class="b-pos r-md" x="840" y="264" width="96" height="44"/>
+<!-- tiles on the panel field (campaign cards, 3 across, 12 x 14 gaps) -->
+<rect class="b-nav r-card" x="708" y="40" width="64" height="44"/><rect class="b-nav r-card" x="786" y="40" width="64" height="44"/><rect class="b-nav r-card" x="864" y="40" width="58" height="44"/>
+<rect class="b-nav r-card" x="708" y="96" width="142" height="40"/>
+<!-- rail discs on the dark slab: the selected one carries the agent ring -->
+<circle class="dot" cx="540" cy="60" r="17"/><circle class="ring" stroke="url(#ring)" cx="540" cy="60" r="23.5"/>
+<circle class="dot" cx="540" cy="112" r="17"/>
+</svg>
+<h1 class="name">Limelight Product</h1>
+<p class="tag">The product app as live Proposal D renders it.</p>
+</div>
+</body></html>

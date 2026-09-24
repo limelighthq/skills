@@ -45,6 +45,15 @@
     "negative": "Build a pricing section for the limelighthq.com homepage."
   },
   {
+    "skill": "limelight-marketing-design-system",
+    "positive": [
+      "Mock up a new hero section for limelighthq.com.",
+      "Review this LinkedIn banner against the Limelight brand.",
+      "Which gradient goes with Cooper on the website?"
+    ],
+    "negative": "Mock up the Approvals screen in the Limelight app."
+  },
+  {
     "skill": "annotate-ui-screenshots",
     "positive": [
       "Annotate these screenshots as proof of the UI change.",

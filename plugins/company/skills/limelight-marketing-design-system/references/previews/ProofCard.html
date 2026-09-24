@@ -1,0 +1,12 @@
+<!-- @dsCard group="Agents" height=140 -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>ProofCard</title></head>
+<body style="margin:0;background:linear-gradient(180deg,#ffffff 0%,#ffe1f7 100%)">
+<div id="root" style="display:flex;gap:48px;justify-content:center;padding:44px 16px 24px"></div>
+<script>
+  var L=window.Limelight,h=React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h(React.Fragment,null,
+    h(L.ProofCard,{tag:'Ivy recommendation',title:'Justin Gage',meta:'Founder & Writer'}),
+    h(L.ProofCard,{tag:'Top performing campaign',title:'The GTM Newsletter',meta:h('span',null,'Subscribers: ',h('b',null,'120,864'),' Open rate: ',h('b',null,'72%'))})));
+</script>
+</body></html>

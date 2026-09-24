@@ -1,0 +1,12 @@
+<!-- @dsCard group="Agents" height=240 -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>AgentCard</title></head>
+<body style="margin:0;background:var(--surface-150)">
+<div id="root" style="display:flex;gap:24px;justify-content:center;padding:24px 16px"></div>
+<script>
+  var L=window.Limelight,h=React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h(React.Fragment,null,
+    h(L.AgentCard,{name:'Cooper',role:'Customer Advocacy Manager'},'Turns customer moments into reviews, referrals, and case studies.'),
+    h(L.AgentCard,{name:'In training',role:'Training'},'Everyone is joining the connected intelligence.')));
+</script>
+</body></html>

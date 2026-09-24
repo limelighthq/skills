@@ -1,0 +1,15 @@
+<!-- @dsCard group="Navigation" height=420 width=1100 -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Footer</title></head>
+<body style="margin:0;background:var(--surface-150)">
+<div id="root" style="padding:0 40px"></div>
+<script>
+  var L=window.Limelight,h=React.createElement;
+  function ls(a){return a.map(function(x){return {label:x,href:'#'};});}
+  ReactDOM.createRoot(document.getElementById('root')).render(
+    h(L.Footer,{logo:'images/Logos/limelight-logo-black.svg',
+      columns:[{title:'Agents',links:ls(['Ivy','Lana','Elliot','Cooper'])},{title:'Company',links:ls(['About','Careers','Demo'])},{title:'Resources',links:ls(['Blog','Podcast','Guide'])},{title:'Social',links:ls(['LinkedIn','YouTube'])}],
+      aside:h(L.NewsletterForm,null),
+      legal:[{label:'©2026 Limelighthq Inc.'},{label:'Privacy policy',href:'#'},{label:'Terms of use',href:'#'}]}));
+</script>
+</body></html>

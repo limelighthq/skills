@@ -1,0 +1,13 @@
+<!-- @dsCard group="Content" height=280 -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>FeatureCard</title></head>
+<body style="margin:0;background:var(--surface-150)">
+<div id="root" style="display:grid;grid-template-columns:repeat(3,1fr);padding:16px"></div>
+<script>
+  var L=window.Limelight,h=React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h(React.Fragment,null,
+    h(L.FeatureCard,{icon:'images/Icons/icon-robot.svg',lead:'Replace manual creator'},'sourcing, outreach, and campaign coordination with an AI employee.'),
+    h(L.FeatureCard,{icon:'images/Icons/icon-heart.svg',lead:'Turn customer love'},'into reviews, referrals, and case studies, without paying a full-time salary for it.'),
+    h(L.FeatureCard,{icon:'images/Icons/icon-share-network.svg',lead:'Activate employee LinkedIn audiences'},'and scale advocacy programs with Limelight.')));
+</script>
+</body></html>

@@ -1,0 +1,19 @@
+<!-- @dsCard group="Content" height=260 -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>AgentTabs</title></head>
+<body style="margin:0;background:var(--surface-150)">
+<div id="root" style="padding:16px"></div>
+<script>
+  var L=window.Limelight,h=React.createElement;
+  function panel(role,title,body,agent,cta){return h('div',{style:{display:'flex',justifyContent:'space-between',alignItems:'flex-start',gap:24}},
+    h('div',{style:{display:'flex',flexDirection:'column',gap:12}},h('div',null,h(L.AgentTag,null,role)),
+      h('h3',{style:{margin:0,fontFamily:'var(--font-display)',fontWeight:400,fontSize:24,lineHeight:1.17,letterSpacing:'-.03em',color:'var(--text-600)'}},title),
+      h('p',{style:{margin:0,fontFamily:'var(--font-sans)',fontSize:16,lineHeight:1.37,letterSpacing:'-.03em',color:'var(--text-500)'}},body)),
+    h(L.AgentButton,{agent:agent},cta));}
+  ReactDOM.createRoot(document.getElementById('root')).render(h(L.AgentTabs,{defaultIndex:3,tabs:[
+    {label:'Ivy',icon:'images/Agent-marks/ivy-mark.svg',content:panel('Influencer Manager','Creator programs that tie to revenue','Finds, vets and manages B2B creators end to end.','ivy','Meet Ivy')},
+    {label:'Cooper',icon:'images/Agent-marks/cooper-mark.svg',content:panel('Customer Advocacy Manager','Customer love, turned into pipeline','Turns customer moments into reviews, referrals and case studies.','cooper','Meet Cooper')},
+    {label:'Elliot',icon:'images/Agent-marks/elliot-mark.svg',content:panel('Employee Social Manager','Your team’s reach, working for you','Drafts voice-matched posts for every employee.','elliot','Meet Elliot')},
+    {label:'Lana',icon:'images/Agent-marks/lana-mark.svg',content:panel('Social Intelligence Manager','Signal monitoring across 20+ channels','Turns social mentions into intent-scored, CRM-enriched leads and routes them in real time.','lana','Meet Lana')}]}));
+</script>
+</body></html>

@@ -1,0 +1,10 @@
+<!-- @dsCard group="Content pages" height=260 -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>TableOfContents</title></head>
+<body style="margin:0;background:var(--surface-150)">
+<div id="root" style="max-width:380px;padding:24px 0"></div>
+<script>
+  var L=window.Limelight,h=React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h(L.TableOfContents,{items:[{label:'Introduction',href:'#',current:true},{label:'Guest bio',href:'#'},{label:'What we cover',href:'#'},{label:'Resources mentioned',href:'#'}]}));
+</script>
+</body></html>

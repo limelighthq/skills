@@ -29,5 +29,9 @@ Load the complete skill and needed bundled references in a fresh evaluation cont
 | `limelight-product-design-system` | Approvals page prototype; no browser | Copies the kit, builds with `AppShell` and `ApprovalRow`, styles with token variables, and says nobody viewed it. |
 | `limelight-product-design-system` | Screen markup with a gradient button, an emoji icon, a sentence-case primary action, no focus ring, and a 12px glyph | Finds each break, cites its rule file, and invents no rule. |
 | `limelight-product-design-system` | CampaignCard in a repo whose rules and tokens conflict with the system | Follows the repo, uses its token layer, copies nothing from the kit, and reports each conflict with both values. |
+| `limelight-marketing-design-system` | Hero heading type style lookup | Names `heading-display` and Host Grotesk and the file that states them. |
+| `limelight-marketing-design-system` | Pricing section mock; no browser | Copies the kit with its fonts, builds with `PricingCard` and `BillingToggle`, writes sentence-case buttons, and says nobody viewed it. |
+| `limelight-marketing-design-system` | Page with braces in running text, a bold Title Case heading, an emoji, gradient text, and an arrow on a button | Finds each break, cites its rule file, and invents no rule. |
+| `limelight-marketing-design-system` | Described LinkedIn banner that breaks logo, agent, copy, imagery, and accent rules | Finds each break and cites its rule file. Treats the Medium 500 headline as allowed or as uncertain, because the system allows 500 for big display moments without saying whether a banner is one. |
 
 An independent evaluator should also flag contradictory instructions that could change the outcome even if one run happened to pass.

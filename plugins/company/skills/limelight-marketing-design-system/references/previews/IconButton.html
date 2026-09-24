@@ -1,0 +1,12 @@
+<!-- @dsCard group="Actions" height=72 -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>IconButton</title></head>
+<body style="margin:0;background:var(--surface-150)">
+<div id="root" class="ll-row"></div>
+<script>
+  var L=window.Limelight,h=React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h(React.Fragment,null,
+    h(L.IconButton,{icon:'images/Icons/icon-caret-double-left.svg',label:'Previous'}),
+    h(L.IconButton,{icon:'images/Icons/icon-caret-double-right.svg',label:'Next'})));
+</script>
+</body></html>

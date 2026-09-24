@@ -1,0 +1,11 @@
+<!-- @dsCard group="Content pages" height=420 -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>RichText</title></head>
+<body style="margin:0;background:var(--surface-100)">
+<div id="root" style="padding:8px 40px 24px"></div>
+<script>
+  var L=window.Limelight,h=React.createElement;
+  var html='<h2>Introduction</h2><p>Traditional bottom-of-funnel paid ads are becoming expensive, and standard SEO strategies are losing their impact. Budgets are tightening, yet the pressure to deliver growth has never been higher.</p><h2>What we cover</h2><ul><li>The decline of traditional channels: paid ads and programmatic SEO show diminishing returns.</li><li>Flipping the testing script: learn from public data instead of guessing internally.</li><li>Why "Learn more" kills conversions: specific calls to action set clear expectations.</li></ul><p>Read the full notes on <a href="#">the episode page</a>.</p>';
+  ReactDOM.createRoot(document.getElementById('root')).render(h(L.RichText,{html:html}));
+</script>
+</body></html>

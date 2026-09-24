@@ -1,0 +1,15 @@
+<!-- @dsCard group="Actions" height=80 -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Button</title></head>
+<body style="margin:0;background:var(--surface-100)">
+<div id="root" class="ll-row"></div>
+<script>
+  var L=window.Limelight,h=React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h(React.Fragment,null,
+    h(L.Button,{variant:'tertiary'},'Sign in'),
+    h(L.Button,null,'Get started'),
+    h(L.Button,{variant:'secondary'},'Load more'),
+    h('span',{style:{width:16}}),
+    h(L.Button,{variant:'link',href:'#'},'See customer results →')));
+</script>
+</body></html>

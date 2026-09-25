@@ -1,0 +1,23 @@
+<!-- @dsCard group="Elliot content" height=449 width=900 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>PostCard</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="padding:20px 24px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+function cap(t){return h("p",{style:{margin:"0 0 8px",font:"500 12px/18px var(--font-sans)",color:"var(--muted)"}},t);}
+function col(kids){return h("div",{style:{width:181,display:"flex",flexDirection:"column",gap:12}},kids);}
+ReactDOM.createRoot(document.getElementById('root')).render(h("div",null,
+  cap("variant=\"card\" · Content › Kanban (Draft with image and CTA, Draft without image, Pending approval)"),
+  h("div",{style:{display:"flex",gap:24,alignItems:"flex-start"}},
+    col([h(L.PostCard,{key:1,initials:"JL",name:"Jordan Lee",date:"2026-09-03",image:true,body:"Most teams treat onboarding as paperwork. We treated it as the product.",action:{label:"Send to Jordan for approval"}})]),
+    col([h(L.PostCard,{key:1,initials:"SC",name:"Sarah Chen",score:89,date:"2026-09-04",body:"Reflecting on Q3 — three lessons from shipping the new onboarding flow that I didn't see coming.",action:{label:"Send to Sarah"}})]),
+    col([h(L.PostCard,{key:1,initials:"MP",name:"Michael Park",score:87,date:"2026-09-02",image:true,body:"Engineering culture isn't ping pong tables. It's how you handle the third re-review of the same PR."})]),
+    h("div",{style:{width:330}},
+      cap("variant=\"row\" · Content › List, POST cell"),
+      h("div",{style:{display:"flex",flexDirection:"column",gap:22}},
+        h(L.PostCard,{variant:"row",title:"5 hard-won lessons from scaling our support team",label:"Tips"}),
+        h(L.PostCard,{variant:"row",title:"Introducing scheduled reports for every desk",label:"Feature Launch"}),
+        h(L.PostCard,{variant:"row",title:"Limelight has a new home on the web.",label:"Feature Launch",steps:2}))))
+));
+</script></body></html>

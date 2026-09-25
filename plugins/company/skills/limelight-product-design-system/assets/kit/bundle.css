@@ -1,0 +1,1374 @@
+/* Limelight Product: the live Proposal D visual layer. Values are D's rendered values (getComputedStyle at 1440x900);
+   the only departures are the CLAUDE.md fixes listed in the README's D exceptions table. */
+:root{--lla-panel-image:url("images/Agent-references/elliot-reference.webp")}
+.lla,.lla *{box-sizing:border-box}
+.lla{font-family:var(--font-sans);font-size:14px;line-height:21px;letter-spacing:-.168px;color:var(--ink)}
+/* D sets -0.012em once at 14px, so every element inherits -0.168px; form controls inherit it too (Tailwind preflight). */
+:where(.lla) :where(button,input,select,textarea){font-family:inherit;letter-spacing:inherit;color:inherit}
+.lla-sr{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.lla-num{font-variant-numeric:tabular-nums}
+/* One focus ring for every interactive element (EXCEPTION: D's ring is 1.86:1 and missing on portraits). */
+.lla:focus-visible,.lla :focus-visible{outline:2px solid var(--focus-ring);outline-offset:3px}
+.lla-panel-body :focus-visible{outline-color:var(--focus-ring-panel)}
+
+/* ---------- Icon: every glyph in the 24px house box; 20px action, 16px indicator ---------- */
+.lla-ibox{display:inline-grid;place-items:center;flex:none;width:var(--icon-box);height:var(--icon-box);line-height:0}
+.lla-ibox>.lla-icon{display:block;width:var(--icon-glyph-indicator);height:var(--icon-glyph-indicator)}
+.lla-ibox.action>.lla-icon{width:var(--icon-glyph);height:var(--icon-glyph)}
+
+/* ---------- Button ---------- */
+.lla-btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--space-8);height:var(--control-height);padding:8px 16px;border:0;border-radius:var(--radius-md);background:transparent;font-family:var(--font-sans);font-size:14px;line-height:20px;font-weight:450;white-space:nowrap;text-decoration:none;cursor:pointer;transition:background-color .15s,border-color .15s}
+/* The 24px icon box overlaps the button padding by 4px so the glyph and label sit where D puts them. */
+.lla-btn .lla-ibox{margin:-4px}
+.lla-btn.toolbar,.lla-btn.panel,.lla-btn.sm{font-size:12px;line-height:17.14px}
+.lla-btn.panel{height:var(--control-height-panel)}
+.lla-btn.sm{height:var(--control-height-sm)}
+.lla-btn.block{display:flex;width:100%}
+.lla-btn.primary{background:var(--primary);color:var(--on-primary)}
+.lla-btn.primary:hover{background:color-mix(in srgb,var(--primary) 90%,transparent)}
+.lla-btn.secondary,.lla-btn.danger{background:var(--surface);color:inherit;border:1px solid var(--control-border)}
+/* D's outlined buttons take the text colour of their context (ink on pages, ink-strong inside cards). */
+.lla-btn.secondary:hover,.lla-btn.danger:hover{background:var(--surface-hover);color:var(--ink-hover)}
+.lla-btn.danger,.lla-btn.danger:hover{color:var(--danger-ink)}
+.lla-btn.ghost{height:auto;min-height:26px;padding:0;color:var(--muted)}
+.lla-btn:disabled,.lla-btn[aria-disabled="true"]{opacity:var(--opacity-disabled);pointer-events:none}
+.lla-btn .lla-chip{margin:-4px 0}
+
+/* ---------- IconButton ---------- */
+.lla-ibtn{display:inline-grid;place-items:center;flex:none;width:var(--icon-button);height:var(--icon-button);padding:0;border:1px solid transparent;border-radius:var(--radius-md);background:transparent;color:var(--icon-rail);cursor:pointer;transition:background-color .15s,border-color .15s}
+.lla-ibtn.toolbar{width:var(--toolbar-button-width);height:var(--control-height);color:var(--icon-toolbar)}
+.lla-ibtn.sm{width:var(--icon-button-sm);height:var(--icon-button-sm);color:var(--icon-row)}
+.lla-ibtn.outline{background:var(--surface);border-color:var(--control-border)}
+.lla-ibtn.accept:hover{background:var(--accept-hover-fill);color:var(--accept-hover-ink);border-color:var(--accept-hover-border)}
+.lla-ibtn.reject:hover{background:var(--reject-hover-fill);color:var(--reject-hover-ink);border-color:var(--reject-hover-border)}
+.lla-ibtn.solid{width:var(--send-button-width);height:34px;background:var(--primary);color:var(--on-primary)}
+.lla-ibtn.solid:hover{background:color-mix(in srgb,var(--primary) 90%,transparent)}
+.lla-ibtn:disabled{opacity:var(--opacity-disabled);pointer-events:none}
+
+/* ---------- Badges and chips ---------- */
+.lla-badge{display:inline-flex;align-items:center;gap:var(--space-4);padding:2px 6px;border-radius:var(--radius-sm);font-family:var(--font-sans);font-size:10px;line-height:13.5px;font-weight:450;white-space:nowrap;vertical-align:middle;background:var(--neutral-fill);color:var(--neutral-text)}
+.lla-badge.positive{background:var(--positive-fill);color:var(--positive-text)}
+.lla-badge.warning{background:var(--warning-fill);color:var(--warning-text)}
+.lla-badge.block{display:flex;width:100%;white-space:normal}
+.lla-chip{display:inline-flex;align-items:center;justify-content:center;padding:4px 7px;border-radius:var(--radius-chip);font-family:var(--font-sans);font-size:12px;line-height:16.2px;font-weight:500;font-variant-numeric:tabular-nums;background:var(--positive-fill);color:var(--score-text)}
+.lla-chip.neutral{background:var(--neutral-fill);color:var(--neutral-text)}
+.lla-agent-label{display:inline-flex;align-items:center;padding:3px 17px;border:1px solid var(--glass-border);border-radius:var(--radius-label);background:var(--glass-fill);font-family:var(--font-sans);font-size:14px;line-height:21px;font-weight:400;letter-spacing:-.04em;color:var(--ink);white-space:nowrap}
+
+/* ---------- Avatars and portraits ---------- */
+.lla-avatar{display:inline-grid;place-items:center;flex:none;width:var(--avatar-row);height:var(--avatar-row);border-radius:50%;font-family:var(--font-sans);font-size:9px;line-height:12.86px;font-weight:400;letter-spacing:normal}
+.lla-avatar.card{width:var(--avatar-card);height:var(--avatar-card);font-size:11px;line-height:16.5px;font-weight:450}
+.lla-avatar.v1{background:var(--avatar-1-fill);color:var(--avatar-1-ink)}
+.lla-avatar.v2{background:var(--avatar-2-fill);color:var(--avatar-2-ink)}
+.lla-avatar.v3{background:var(--avatar-3-fill);color:var(--avatar-3-ink)}
+.lla-face{display:inline-block;flex:none;border-radius:50%;background-color:var(--surface-portrait);background-repeat:no-repeat;box-shadow:var(--shadow-portrait)}
+
+@media (prefers-reduced-motion:reduce){.lla,.lla *{transition:none!important}}
+
+/* ===== A-shell ===== */
+/* ---------- AppShell: D grid rail 56 | nav 186 | main minmax(620px,1fr) | panel var(--chat-width,300px) ---------- */
+/* Letter-spacing: D sets -0.012em once on its root (14px), so every descendant inherits -0.168px. Rows, tabs and pills here inherit it from the .lla root (buttons need letter-spacing:inherit) rather than re-computing -0.012em at their own size. */
+/* EXCEPTION (D defect): D's min-width assumes a 260px chat and clips the panel's right 40px below 1162px.
+   The DS min-width adds the live chat width, so the page scrolls sideways and nothing clips. */
+.lla-shell{--chat-width:var(--panel-width);display:grid;grid-template-columns:var(--rail-width) var(--nav-width) minmax(var(--main-min-width),1fr) var(--chat-width);grid-template-rows:minmax(0,1fr);
+  min-width:calc(var(--rail-width) + var(--nav-width) + var(--main-min-width) + var(--chat-width));height:100vh;overflow:hidden;background:var(--surface)}
+.lla-shell.nav-hidden{grid-template-columns:var(--rail-width) minmax(var(--main-min-width),1fr) var(--chat-width);min-width:calc(var(--rail-width) + var(--main-min-width) + var(--chat-width))}
+.lla-shell.panel-hidden{grid-template-columns:var(--rail-width) var(--nav-width) minmax(var(--main-min-width),1fr);min-width:calc(var(--rail-width) + var(--nav-width) + var(--main-min-width))}
+.lla-shell.nav-hidden.panel-hidden{grid-template-columns:var(--rail-width) minmax(var(--main-min-width),1fr);min-width:calc(var(--rail-width) + var(--main-min-width))}
+.lla-shell>*{min-width:0;min-height:0}
+.lla-shell-panel{display:contents}
+/* D's DOM order is rail, nav, panel, main; main and panel are placed by column. */
+.lla-shell-main{grid-row:1;grid-column:3;min-width:0;overflow:auto;background:var(--surface)}
+.lla-shell-panel>*{grid-row:1;grid-column:4}
+.lla-shell.nav-hidden .lla-shell-main{grid-column:2}
+.lla-shell.nav-hidden .lla-shell-panel>*{grid-column:3}
+.lla-shell-content{padding:24px}
+@media (min-width:1501px){.lla-shell-content{padding:28px 30px}}
+
+/* ---------- AgentRail ---------- */
+.lla-rail{display:flex;flex-direction:column;justify-content:space-between;align-items:center;width:var(--rail-width);height:100%;padding:20px 8px;background:var(--surface);border-right:1px solid var(--line)}
+.lla-rail-top{display:flex;flex-direction:column;align-items:center;gap:12px}
+.lla-rail-bottom{display:flex;flex-direction:column;align-items:center;gap:14px}
+.lla-rail-agent{position:relative;isolation:isolate;display:grid;place-items:center;justify-content:center;flex:none;width:40px;height:40px;padding:4px;border:0;border-radius:50%;background:transparent;cursor:pointer}
+.lla-rail-agent[aria-pressed="true"]{background:var(--surface)}
+/* D's selected-agent ring: 3px gradient, 5px outside the 40px button (the gradient is the 3:1 exception in base). */
+.lla-rail-agent[aria-pressed="true"]::before{content:"";position:absolute;inset:-5px;border-radius:50%;padding:3px;background:var(--gradient-agent-ring);
+  -webkit-mask:linear-gradient(var(--ink) 0 0) content-box,linear-gradient(var(--ink) 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;z-index:-1}
+.lla-rail .lla-rail-add{width:40px}
+.lla-rail-ws{display:grid;place-items:center;flex:none;width:var(--icon-button);height:var(--icon-button);padding:4px;border:0;border-radius:var(--radius-card);background:var(--primary-workspace);cursor:pointer}
+.lla-rail-ws img{display:block;width:20px;height:auto}
+/* D .brand-mark, drawn in CSS: 20x20, corner brackets 8x8 with 3px strokes (top-left, bottom-right), 6px dot at 7,7 */
+.lla-rail-mark{position:relative;display:block;width:20px;height:20px;color:var(--rail-mark)}
+.lla-rail-mark::before,.lla-rail-mark::after{content:"";box-sizing:border-box;position:absolute;width:8px;height:8px;border-color:currentColor;border-style:solid;border-width:0}
+.lla-rail-mark::before{left:0;top:0;border-left-width:3px;border-top-width:3px}
+.lla-rail-mark::after{right:0;bottom:0;border-right-width:3px;border-bottom-width:3px}
+.lla-rail-mark i{position:absolute;left:7px;top:7px;width:6px;height:6px;border-radius:50%;background:currentColor}
+/* EXCEPTION (visible focus): the global ring at 3px would sit on the 2-5px selection ring; portraits take it at 6px, clear of it. */
+.lla-rail-agent:focus-visible{outline-offset:6px}
+
+/* ---------- Sidebar (nav column) ---------- */
+.lla-side{display:flex;flex-direction:column;gap:4px;width:var(--nav-width);height:100%;padding:24px 12px;overflow-y:auto;background:var(--surface-nav);border-right:1px solid var(--line)}
+.lla-side-id{flex:none;margin:0 4px 4px;padding-top:2px}
+.lla-side-name{margin:0 0 6px;font-family:var(--font-sans);font-size:22px;line-height:27.5px;font-weight:500;letter-spacing:-.035em;color:var(--ink)}
+.lla-side-role{margin:0;max-width:140px;font-size:11px;line-height:16.5px;color:var(--muted)}
+.lla-side-label{flex:none;margin:18px 8px 10px;font-size:10px;line-height:15px;font-weight:400;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+/* Row: 36px, radius 6, 7px 10px, 13px/450 ink-nav. D lets rows shrink to 34px when the column overflows. */
+.lla-nav{letter-spacing:inherit;display:flex;align-items:center;gap:8px;width:100%;height:var(--control-height);min-height:34px;padding:7px 10px;border:0;border-radius:var(--radius-md);background:transparent;
+  color:var(--ink-nav);font-family:var(--font-sans);font-size:13px;line-height:18.57px;font-weight:450;text-align:left;text-decoration:none;white-space:nowrap;cursor:pointer;transition:background-color .15s,border-color .15s}
+.lla-nav[aria-current="page"]{background:var(--surface-nav-current);color:var(--ink-nav-current-top);font-weight:550}
+/* Hover (D exactly): only group toggles, indented children (current included), the Team row and tree rows tint.
+   Top-level rows and member rows never change on hover: D's reset of direct nav children cancels it. */
+.lla-nav.toggle:hover,.lla-nav.inline:hover,.lla-nav.child:hover,.lla-nav.tree:not([aria-current="page"]):hover{background:var(--surface-nav-hover);color:var(--ink-nav-hover)}
+.lla-nav-label{min-width:0;overflow:hidden;text-overflow:ellipsis}
+.lla-nav-count{margin-left:auto;color:var(--muted)}
+/* The 24px icon box overlaps the row padding by 4px so the glyph sits where D's text glyph sat. */
+.lla-nav .lla-ibox{margin:-4px}
+.lla-nav .lla-avatar{flex:none}
+.lla-nav.toggle{justify-content:space-between}
+.lla-nav.toggle .lla-nav-chev{margin-left:auto}
+/* Group with its toggle and indented children (Ivy's Campaigns) */
+.lla-nav-group{display:flex;flex-direction:column;gap:4px;flex:none}
+.lla-nav-indent{display:flex;flex-direction:column;gap:4px;margin:0 0 10px;padding-left:12px}
+.lla-nav.child{font-size:12px;line-height:17.14px;padding:7px 9px}
+.lla-nav.child[aria-current="page"]{color:var(--ink-nav-current);font-weight:600}
+/* D's legacy .campaign-nav button:last-child rule: the last indented row is always ink-nav-last, flush left and 6px lower. */
+.lla-nav-indent>.lla-nav:last-child{margin-top:6px;justify-content:flex-start;color:var(--ink-nav-last)}
+.lla-nav.child:hover,.lla-nav-indent>.lla-nav.child:last-child:hover{color:var(--ink-nav-hover)}
+/* Group header with actions (Elliot's Team: label + chevron, Search team, Add member) */
+.lla-nav-split{display:flex;align-items:center;justify-content:space-between;gap:16px;flex:none}
+.lla-nav.inline{width:auto;gap:4px}
+.lla-nav-act{letter-spacing:inherit;display:grid;place-items:center;flex:none;width:var(--icon-button-sm);height:var(--control-height);padding:0;border:0;border-radius:var(--radius-md);background:transparent;color:var(--ink-nav);cursor:pointer;transition:background-color .15s}
+.lla-nav-act:hover{background:var(--surface-nav-hover);color:var(--ink-nav-hover)}
+/* Third-level tree (a member's Posts, Sources, ...): 1px rule, 11px rows centred (D) */
+.lla-nav-tree{display:flex;flex-direction:column;flex:none;margin-left:18px;padding-left:8px;border-left:1px solid var(--line-nav-tree)}
+.lla-nav.tree{flex:none;justify-content:center;font-size:11px;line-height:15.71px}
+.lla-nav.tree[aria-current="page"]{background:var(--surface-nav-tree-current);color:var(--ink-nav-tree-current);font-weight:450}
+.lla-nav-note{flex:none;margin:0;font-size:14px;line-height:21px;font-style:italic;color:var(--muted)}
+
+/* ---------- PageHeader ---------- */
+.lla-header{position:sticky;top:0;z-index:var(--z-header);display:flex;align-items:center;gap:12px;height:var(--header-height);padding:0 24px;background:var(--surface-header);border-top:2px solid var(--line-header-accent);border-bottom:1px solid var(--line)}
+.lla-header-title{flex:0 1 auto;min-width:0;margin:0;font-family:var(--font-sans);font-size:15px;line-height:22.5px;font-weight:400;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lla-header-actions{display:flex;align-items:center;gap:12px;flex:none;margin-left:auto}
+.lla-header-actions .lla-reopen{margin-left:12px}
+
+/* ---------- ReopenAssistant ('Chat with {agent}') ---------- */
+.lla-reopen{letter-spacing:inherit;display:inline-flex;align-items:center;gap:8px;flex:none;min-height:var(--pill-height);padding:8px 14px;border:1px solid var(--mint-border);border-radius:var(--radius-pill);background:var(--mint-fill);
+  color:var(--ink);font-family:var(--font-sans);font-size:14px;line-height:20px;font-weight:600;white-space:nowrap;cursor:pointer;transition:background-color .15s,border-color .15s}
+.lla-reopen .lla-ibox{margin:-4px}
+@media (hover:hover){.lla-reopen:hover{color:var(--ink-hover)}}
+
+/* ---------- SectionHeading ---------- */
+.lla-heading{display:flex;flex-wrap:wrap;align-items:center}
+.lla-heading-title{margin:0;font-family:var(--font-sans);font-weight:500;letter-spacing:-.045em;color:var(--ink)}
+/* detail: campaign detail h1 + one action + a tabs row under it */
+.lla-heading.detail{gap:14px;margin-bottom:18px}
+.lla-heading.detail .lla-heading-title{margin-right:auto;font-size:22px;line-height:27.5px}
+.lla-heading-row{flex-basis:100%;width:100%;min-width:0}
+/* page: optional eyebrow, page title, muted subtitle; actions on the right */
+.lla-heading.page{gap:24px 20px;justify-content:space-between}
+.lla-heading.page .lla-heading-title{font-size:26px;line-height:32.5px}
+.lla-heading-text{flex:1 1 auto;min-width:0}
+.lla-heading-eyebrow{display:block;height:21px;font-size:10px;line-height:21px;font-weight:400;letter-spacing:.15em;text-transform:uppercase;color:var(--ink)}
+.lla-heading-eyebrow+.lla-heading-title{margin-top:8px}
+.lla-heading-desc{margin:0;font-size:14px;line-height:22.4px;color:var(--muted)}
+.lla-heading-eyebrow~.lla-heading-desc{margin-top:8px}
+.lla-heading.team .lla-heading-eyebrow{font-weight:500;letter-spacing:.1em;color:var(--heading-kicker)}
+.lla-heading.team .lla-heading-desc{margin-top:6px;line-height:21px}
+.lla-heading-actions{display:flex;align-items:center;gap:8px;flex:none}
+@media (min-width:1501px){.lla-heading.page .lla-heading-title{font-size:30px;line-height:37.5px}}
+
+/* ---------- Tabs ---------- */
+.lla-tabs{display:inline-flex;align-items:center;max-width:100%}
+.lla-tab{letter-spacing:inherit;display:inline-flex;align-items:center;justify-content:center;gap:6px;flex:none;border:0;background:transparent;font-family:var(--font-sans);font-size:14px;line-height:20px;font-weight:450;white-space:nowrap;cursor:pointer;transition:background-color .15s,color .15s}
+.lla-tab-count{color:var(--muted);font-variant-numeric:tabular-nums}
+/* underline: campaign detail tabs (list 38px, gap 26, 1px line; 2px underline on the active tab) */
+.lla-tabs.underline{gap:26px;height:38px;border-bottom:1px solid var(--line)}
+.lla-tabs.underline .lla-tab{height:38px;padding:8px 0;border-bottom:2px solid transparent;color:var(--ink-tab)}
+.lla-tabs.underline .lla-tab[aria-selected="true"]{color:var(--ink-tab-current);border-bottom-color:var(--ink-tab-current)}
+/* pill: D's page tab lists (Inbox, Payments, Approvals, Knowledge, Analytics); the SegmentedControl md look */
+.lla-tabs.pill,.lla-seg{display:inline-flex;align-items:center;flex:none;height:var(--segmented-height-md);padding:4px;border-radius:var(--radius-lg);background:var(--surface-subtle)}
+.lla-tabs.pill .lla-tab,.lla-seg-item{height:28px;padding:4px 12px;border:0;border-radius:var(--radius-md);background:transparent;color:var(--muted)}
+.lla-tabs.pill .lla-tab[aria-selected="true"],.lla-seg-item[aria-selected="true"]{background:var(--surface);color:var(--ink)}
+.lla-tabpanel{outline-offset:3px}
+
+/* ---------- SegmentedControl ---------- */
+.lla-seg-item{letter-spacing:inherit;display:inline-flex;align-items:center;justify-content:center;flex:none;font-family:var(--font-sans);font-size:14px;line-height:20px;font-weight:450;white-space:nowrap;cursor:pointer;transition:background-color .15s,color .15s}
+/* sm: filter-bar view switch (List / Kanban): 34px track, 25px items, 12px */
+.lla-seg.sm{height:var(--segmented-height)}
+.lla-seg.sm .lla-seg-item{height:auto;font-size:12px;line-height:17.14px}
+/* D's header 'Approvals [n]': the count chip keeps the full 16px right padding (core pulls it 8px in). */
+.lla-header .lla-header-approvals .lla-chip{margin-right:0}
+
+/* ===== B-panel ===== */
+/* ===== B-panel: DropdownMenu, AgentPanel and its cards. Values are D's computed styles at 1440x900. ===== */
+
+/* ---------- DropdownMenu (D .build-menu: Radix DropdownMenu content, portaled outside .brand, so letter-spacing is normal) ---------- */
+.lla-dd{display:contents}
+.lla-dd-menu{position:fixed;top:0;left:0;z-index:var(--z-menu);box-sizing:border-box;min-width:270px;max-width:340px;overflow-y:auto;padding:6px;background:var(--surface);border:1px solid var(--line-menu);border-radius:var(--radius-card);box-shadow:var(--shadow-menu);font-family:var(--font-sans);font-size:13px;line-height:19.5px;font-weight:400;letter-spacing:normal;color:var(--menu-ink);text-align:left}
+.lla-dd-item{display:flex;flex-direction:row;align-items:flex-start;gap:12px;padding:12px 14px;border-radius:var(--radius-md);cursor:pointer;color:var(--menu-ink);user-select:none}
+.lla-dd-item[data-highlighted]{background:var(--menu-hover)}
+.lla-dd-item.tone-ivy[data-highlighted]{background:var(--menu-hover-ivy)}
+.lla-dd-item.tone-elliot[data-highlighted]{background:var(--menu-hover-elliot)}
+/* 16px glyph in the 24px box; the box overlaps the padding so the glyph sits where D's 16px svg sits (margin-top 3px) */
+.lla-dd-item>.lla-ibox{margin:-1px -4px 0 -4px;color:var(--menu-icon-ivy)}
+.lla-dd-item.tone-elliot>.lla-ibox{color:var(--menu-icon-elliot)}
+.lla-dd-text{display:flex;flex-direction:column;gap:3px;min-width:0}
+.lla-dd-title{font-weight:400}
+strong.lla-dd-title{font-weight:600}
+.lla-dd-title .lla-ibox{margin:-4px -4px -4px 0;vertical-align:middle}
+.lla-dd-desc{font-size:12px;line-height:18px;font-weight:400;color:var(--menu-desc)}
+.lla-dd-item.danger,.lla-dd-item.danger>.lla-ibox{color:var(--danger-ink)}
+.lla-dd-item.disabled{cursor:default}
+.lla-dd-item.disabled .lla-dd-title,.lla-dd-item.disabled>.lla-ibox{opacity:var(--opacity-disabled)}
+.lla-dd-label{padding:8px 10px 2px;font-size:10px;line-height:15px;font-weight:400;text-transform:uppercase;color:var(--menu-label)}
+.lla-dd-sep{height:1px;margin:5px;background:var(--menu-rule)}
+
+/* ---------- AgentPanel (D aside.agent.hybrid-chat) ---------- */
+.lla-panel{position:relative;display:flex;flex-direction:column;flex:none;height:100%;min-height:0;background:var(--surface-panel);border:1px solid var(--line-panel);border-radius:var(--radius-panel) 0 0 var(--radius-panel);box-shadow:var(--shadow-panel)}
+.lla-panel-resize{position:absolute;top:0;bottom:0;left:-5px;z-index:var(--z-resize);display:flex;align-items:center;justify-content:center;width:var(--resize-handle-width);cursor:col-resize;touch-action:none}
+.lla-panel-resize:hover,.lla-panel-resize:focus-visible{background:var(--resize-hover)}
+.lla-panel-grip{display:block;width:3px;height:44px;border-radius:var(--radius-xs);background:var(--resize-grip)}
+/* EXCEPTION: the grip darkens on the hover ground so it keeps 3:1 (D keeps its 1.4:1 grip) */
+.lla-panel-resize:hover .lla-panel-grip,.lla-panel-resize:focus-visible .lla-panel-grip,.lla-panel-resize:active .lla-panel-grip{background:var(--resize-grip-hover)}
+.lla-panel-bar{display:flex;align-items:center;gap:var(--space-6);flex:none;height:var(--header-height);padding:10px 14px;background:var(--surface-bar);border-bottom:1px solid var(--line-bar)}
+.lla-panel-bar-label{flex:1;min-width:0;font-size:11px;line-height:16.5px;color:var(--ink)}
+.lla-panel-body{display:flex;flex-direction:column;gap:var(--space-16);flex:1;min-height:0;overflow:auto;padding:20px 16px;background-color:var(--surface-panel);background-image:var(--gradient-panel-veil),var(--lla-panel-image);background-size:100% 100%,auto 200%;background-position:center,left bottom;background-repeat:no-repeat}
+.lla-panel-foot{flex:none;padding:14px;background:var(--surface-bar);border-top:1px solid var(--line-bar)}
+/* fallback switch (used only while group E's Toggle is absent): D's Radix switch, 36x20, 16px thumb */
+.lla-b-switch{position:relative;display:inline-flex;align-items:center;flex:none;width:var(--switch-width);height:20px;padding:0;border:2px solid transparent;border-radius:var(--radius-full);background:var(--control-border);cursor:pointer}
+.lla-b-switch.on{background:var(--primary)}
+.lla-b-switch-thumb{display:block;width:16px;height:16px;border-radius:var(--radius-full);background:var(--surface);box-shadow:var(--shadow-lg);transition:transform .15s}
+.lla-b-switch.on .lla-b-switch-thumb{transform:translateX(16px)}
+
+/* ---------- AgentSignature ---------- */
+.lla-sig{position:relative;display:flex;flex-direction:column;align-items:center;gap:var(--space-8);flex:none;padding:10px 0 12px}
+.lla-sig::before{content:"";position:absolute;top:-5px;left:50%;width:140px;height:140px;margin-left:-70px;border:1px solid var(--glass-border);border-radius:50%;pointer-events:none}
+.lla-sig .lla-face{position:relative;box-shadow:var(--shadow-signature)}
+.lla-sig .lla-agent-label{position:relative}
+.lla-sig-role{position:relative;width:100%;font-size:10px;line-height:15px;color:var(--muted);text-align:center}
+
+/* ---------- InsightCard + StatGrid (D .insight card in the panel) ---------- */
+.lla-insight{display:block;flex:none;padding:16px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-card);box-shadow:var(--shadow-card);color:var(--ink-strong)}
+.lla-insight-head{display:flex;align-items:center;justify-content:space-between;gap:var(--space-16)}
+/* D's badge wraps beside a long eyebrow ("2 need your / nod"); both shrink */
+.lla-insight-head .lla-badge{white-space:normal}
+.lla-insight-eyebrow{font-size:11.2px;line-height:16.8px;font-weight:400;color:var(--ink-strong)}
+.lla-insight-eyebrow.muted{color:var(--muted)}
+.lla-insight-title{margin:0;font-size:16px;line-height:23.2px;font-weight:500;letter-spacing:-.4px;color:var(--ink-strong)}
+.lla-insight-body{margin:10px 0 18px;font-size:12px;line-height:19.8px;color:var(--muted-panel)}
+.lla-insight-stack{display:flex;flex-direction:column;align-items:stretch;gap:var(--space-10)}
+.lla-insight-actions{display:flex;flex-wrap:wrap;gap:var(--space-8);margin-top:14px}
+.lla-statgrid{display:grid;grid-template-columns:1fr 1fr;margin:18px 0 14px;overflow:hidden;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-md);color:var(--ink-strong)}
+.lla-statgrid-cell{padding:10px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.lla-statgrid-label{font-size:11px;line-height:16.5px;color:var(--muted)}
+.lla-statgrid-value{display:block;margin-top:6px;font-size:20px;line-height:30px;font-weight:500;color:var(--ink-strong)}
+
+/* ---------- AgentSelector + ChatComposer ---------- */
+.lla-agentsel{display:inline-flex;align-items:center;justify-content:center;gap:var(--space-4);flex:1;min-width:0;height:var(--control-height-sm);padding:6px;border:1px solid var(--control-border);border-radius:var(--radius-md);background:var(--surface);font-family:var(--font-sans);font-size:10px;line-height:14.29px;font-weight:450;color:var(--ink);white-space:nowrap;cursor:pointer;transition:background-color .15s}
+.lla-agentsel:hover{background:var(--surface-hover);color:var(--ink-hover)}
+.lla-agentsel .lla-face{flex:none}
+.lla-agentsel-label{overflow:hidden;text-overflow:ellipsis}
+.lla-agentsel .lla-ibox{margin:-4px}
+.lla-composer-row{display:flex;flex-wrap:wrap;gap:var(--space-6);margin-bottom:12px}
+.lla-composer-form{display:flex;align-items:center;gap:var(--space-6)}
+.lla-composer-input{flex:1;min-width:0;height:var(--control-height);padding:4px 12px;border:1px solid var(--control-border);border-radius:var(--radius-md);background:transparent;box-shadow:var(--shadow-sm);font-family:var(--font-sans);font-size:12px;line-height:17.14px;color:var(--ink)}
+.lla-composer-input::placeholder{color:var(--muted);opacity:1}
+
+/* ---------- PanelNote ("FROM THE PANEL") ---------- */
+.lla-note{display:block;flex:none;padding:16px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-card)}
+.lla-note-label{font-size:11.2px;line-height:16.8px;color:var(--muted)}
+.lla-note-text{margin:10px 0 18px;font-size:12px;line-height:19.8px;color:var(--muted-panel);white-space:pre-line}
+/* EXCEPTION: D keeps the card-body grey on the inset (4.23:1); panel-muted clears 4.5:1 */
+.lla-note-text.inset{padding:12px;border-radius:var(--radius-lg);background:var(--surface-note);color:var(--panel-muted)}
+
+/* ---------- PanelGreeting (Elliot "What should we work on today?") ---------- */
+.lla-greeting{flex:none}
+.lla-greeting-title{margin:0;font-size:14px;line-height:21px;font-weight:400;color:var(--ink)}
+.lla-greeting-sub{margin:26px 0 18px;font-size:12px;line-height:19.8px;color:var(--panel-muted)}
+
+/* ---------- TaskCard (D .assistant-task in a card) ---------- */
+.lla-task{display:block;flex:none;padding:40px;background:var(--surface);border:1px solid var(--line-card);border-radius:var(--radius-xl);box-shadow:var(--shadow-sm);color:var(--ink-strong)}
+.lla-task-row{display:flex;align-items:flex-start;gap:14px}
+.lla-task-row>.lla-ibox{margin:4px -2px 0 -2px;color:var(--task-icon)}
+.lla-task-text{min-width:0}
+.lla-task-title{margin:0;font-size:16px;line-height:23.2px;font-weight:500;letter-spacing:-.4px;color:var(--ink-strong)}
+.lla-task-desc{margin:4px 0 12px;font-size:12px;line-height:19.8px;color:var(--muted-panel)}
+.lla-task-link{display:inline-flex;align-items:center;gap:var(--space-8);height:26px;padding:0;border:0;border-radius:var(--radius-md);background:transparent;font-family:var(--font-sans);font-size:11px;line-height:15.71px;font-weight:450;color:var(--task-link);cursor:pointer}
+.lla-task-link:hover{background:var(--surface-hover)}
+.lla-task-link .lla-ibox{margin:-4px;color:var(--task-arrow)}
+
+/* ===== C-chat ===== */
+/* ---------- ChatMessage (D .hybrid-bubble in the agent panel) ---------- */
+.lla-chatmsg{display:block;margin:0;padding:14px;border:1px solid var(--line-insight);border-radius:var(--radius-card);background:var(--surface);box-shadow:var(--shadow-card);overflow-wrap:anywhere;font-family:var(--font-sans);font-size:14px;line-height:21px;letter-spacing:-.012em;color:var(--ink)}
+.lla-chatmsg.user{margin-left:26px}
+.lla-chatmsg-author{display:block;margin:0 0 8px;font-size:11.2px;line-height:16.8px;font-weight:400;color:var(--muted-overlay)}
+.lla-chatmsg-text{margin:0;white-space:pre-wrap;font-size:12px;line-height:19.8px;color:var(--muted-panel)}
+.lla-chatmsg-rich{font-size:14px;line-height:21px;color:var(--ink)}
+.lla-chatmsg-rich b,.lla-chatmsg-rich strong{font-weight:700}
+
+/* ---------- StatusBubble (D l3 inside a bubble) ---------- */
+.lla-status-title{display:block;font-weight:700}
+.lla-status-stats{display:grid;grid-template-columns:1fr 1fr;margin:18px 0 14px;border:1px solid var(--line);border-radius:var(--radius-md);background:var(--surface);overflow:hidden}
+.lla-status-stat{padding:10px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.lla-status .lla-status-value{display:block;margin-top:6px;font-size:20px;line-height:30px;font-weight:500;color:var(--ink)}
+.lla-status-label{display:block;font-size:11px;line-height:21px;color:var(--ink)}
+.lla-status-links{display:grid;gap:8px}
+.lla-status-links .lla-btn,.lla-flow-stack .lla-btn{height:auto;min-height:var(--control-height);white-space:normal;text-align:left;justify-content:flex-start}
+
+/* ---------- FlowStepCard (D .rounded-xl card in the panel, and the in-message .c3-flow step) ---------- */
+.lla-flowcard{display:block;padding:16px;border:1px solid var(--line);border-radius:var(--radius-card);background:var(--surface);font-family:var(--font-sans);font-size:14px;line-height:21px;letter-spacing:-.012em;color:var(--ink-strong)}
+.lla-flowcard.bare{padding:0;border:0;border-radius:0;background:none;color:var(--ink)}
+.lla-flow-fs{min-width:0;margin:0;padding:0;border:0}
+.lla-flow-eyebrow{display:block;font-size:11.2px;line-height:21px;font-weight:400;color:var(--ink-strong)}
+.lla-flow-title{margin:0;font-size:16px;line-height:23.2px;font-weight:500;letter-spacing:-.025em;color:var(--ink-strong)}
+.lla-flow-head{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.lla-flow-desc{margin:10px 0 18px;font-size:12px;line-height:19.8px;color:var(--muted-panel);white-space:pre-wrap}
+.lla-flow-fields{margin:16px 0}
+.lla-flow-fields dt{margin:10px 0 0;font-size:10px;line-height:15px;font-weight:400;color:var(--muted-overlay)}
+.lla-flow-fields dd{margin:4px 0;font-size:14px;line-height:21px;color:var(--ink-strong)}
+.lla-flow-note{display:block;font-size:11.2px;line-height:21px;color:var(--muted)}
+.lla-flowcard.bare .lla-flow-note{margin-top:12px;font-size:11px;color:var(--muted-overlay)}
+.lla-flow-stack{display:grid;gap:8px;margin-top:14px}
+.lla-flow-choice.two .lla-btn-label{display:flex;flex-direction:column;align-items:flex-start;gap:8px}
+.lla-flow-choice-desc{color:var(--muted)}
+.lla-flow-inline{display:block}
+.lla-flow-lead b,.lla-flow-prompt b{font-weight:700}
+.lla-flow-picker{display:block;width:100%;height:auto;margin:10px 0;padding:8px;border:1px solid var(--chat-flow-border);border-radius:var(--radius-md);background:var(--surface);font:inherit;letter-spacing:inherit;color:var(--chat-option-ink)}
+.lla-flow-prompt{margin-top:12px}
+.lla-flow-options{display:grid;gap:8px;margin-top:12px}
+.lla-flow-option,.lla-flow-chip,.lla-flow-send,.lla-flow-input{border:1px solid var(--chat-flow-border);border-radius:var(--radius-md);background:var(--surface);font:inherit;letter-spacing:inherit;color:var(--chat-option-ink)}
+.lla-flow-option{display:flex;gap:10px;width:100%;padding:8px;font-weight:450;text-align:left;cursor:pointer}
+.lla-flow-letter{min-width:14px;color:var(--muted-overlay)}
+.lla-flow-answer{display:flex;align-items:center;gap:6px}
+.lla-flow-answer>.lla-flow-letter{font-weight:400}
+.lla-flow-letter-icon.lla-ibox{margin:0 -5px;color:var(--muted-overlay)}
+.lla-flow-input{flex:1;min-width:0;padding:8px}
+.lla-flow-input::placeholder{color:var(--chat-flow-placeholder);opacity:1}
+.lla-flow-send{display:inline-grid;place-items:center;align-self:stretch;padding:8px;cursor:pointer}
+.lla-flow-send .lla-ibox,.lla-flow-chip .lla-ibox{margin:-4px}
+.lla-flow-chips{margin-top:12px}
+.lla-flow-chip{display:inline-flex;align-items:center;gap:2px;margin:8px 4px 0 0;padding:8px;font-weight:450;cursor:pointer}
+.lla-flow-fs:disabled .lla-flow-option,.lla-flow-fs:disabled .lla-flow-chip,.lla-flow-fs:disabled .lla-flow-send,.lla-flow-fs:disabled .lla-flow-picker{opacity:var(--chat-opacity-answered);cursor:default}
+.lla-flow-why{margin:12px 0 0;font-size:12px;line-height:18px;color:var(--muted)}
+
+/* ---------- RunCard ---------- */
+.lla-run-mirror{margin:10px 0 18px;font-size:12px;line-height:19.8px;color:var(--muted-panel)}
+.lla-run-steps{display:grid;gap:10px;margin:18px 0;padding:0;list-style:none;font-size:12px;line-height:18px}
+.lla-run-step{display:flex;align-items:flex-start;gap:4px;color:var(--chat-step-pending)}
+.lla-run-step .lla-ibox{margin:-3px -4px}
+.lla-run-step.done{color:var(--chat-step-done)}
+.lla-run-step.now{color:var(--chat-step-now)}
+.lla-run-question{display:block;font-size:14px;line-height:21px;font-weight:700;color:var(--ink-strong)}
+.lla-run-question+.lla-flow-stack{margin-top:16px}
+.lla-run-offer.lla-btn{border-color:var(--chat-busy-border)}
+
+/* ---------- BusyBar (D .chat-busy) ---------- */
+.lla-busy{display:flex;align-items:center;justify-content:space-between;gap:8px;font-family:var(--font-sans);font-size:12px;line-height:18px;letter-spacing:-.168px;color:var(--ink)}
+.lla-busy .lla-busy-btn{height:28px;padding:8px 16px;border-color:var(--chat-busy-border);font-size:11px;line-height:15.71px;letter-spacing:-.168px}
+
+/* ---------- ConversationHistory (D .chat-history-list; portaled: the .lla-overlay scope sets font, ink and button look) ---------- */
+.lla-chathist{display:grid;gap:12px;align-content:start;font-family:inherit;color:inherit;letter-spacing:inherit}
+/* Scroll columns: 5px inner padding with an equal negative margin keeps D's positions and leaves room for the 2px ring at 3px offset. */
+.lla-chathist.column{min-height:0;overflow:auto;margin:-5px 0 -5px -5px;padding:5px 16px 5px 5px;scroll-padding:5px;border-right:1px solid var(--chat-full-divider)}
+.lla-chathist-top{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.lla-chathist-search,.lla-chatfull-input{width:100%;height:var(--control-height);padding:4px 12px;border:1px solid var(--control-border-overlay);border-radius:var(--radius-md);background:var(--surface);box-shadow:var(--shadow-sm);font-family:inherit;font-size:14px;line-height:20px;letter-spacing:inherit;color:inherit;-webkit-appearance:none;appearance:none}
+.lla-chathist-search::placeholder,.lla-chatfull-input::placeholder{color:var(--muted-overlay)}
+.lla-chathist-row{display:flex;gap:4px}
+.lla-chathist .lla-chathist-open{flex:1;min-width:0;height:auto;min-height:var(--control-height);padding:10px;white-space:normal;text-align:left;justify-content:flex-start}
+.lla-chathist-open .lla-btn-label{display:flex;flex-direction:column;align-items:flex-start;gap:8px}
+.lla-chathist .lla-btn.lla-chathist-open[aria-current="page"],.lla-chathist .lla-btn.lla-chathist-open[aria-current="page"]:hover{background:var(--chat-history-current)}
+.lla-chathist-meta{font-size:10px;line-height:14.29px;font-weight:500;color:var(--chat-history-meta)}
+.lla-chathist .lla-chathist-pin{flex:none;width:34px;padding:6px}
+.lla-chathist-pin.pinned svg{fill:currentColor}
+.lla-chathist-empty{margin:0;font-size:16px;line-height:24px}
+
+/* ---------- FullViewDialog body (D .chat-full-layout inside Dialog size="full") ---------- */
+.lla-chatfull{display:grid;grid-template-columns:var(--chat-history-column) minmax(0,1fr);grid-template-rows:minmax(0,1fr);gap:24px;flex:1 1 auto;min-height:0;height:100%;overflow:visible;font-family:inherit;font-size:inherit;line-height:inherit;letter-spacing:inherit;color:inherit}
+.lla-chatfull-main{display:flex;flex-direction:column;align-items:stretch;gap:14px;min-height:0;overflow:auto;margin:-5px 0 -5px -5px;padding:5px 12px 5px 5px;scroll-padding:5px}
+.lla-chatfull-thread{display:grid;gap:12px}
+.lla-chatfull-form{position:sticky;bottom:0;display:flex;gap:8px;padding:12px 0;background:var(--surface)}
+.lla-chatfull-input{flex:1;min-width:0}
+.lla-chatfull .lla-chatfull-send{flex:none;width:48px;padding:8px 16px}
+.lla-chat-missing{padding:16px;border:1px dashed var(--control-border);border-radius:var(--radius-lg);font-family:var(--font-sans);font-size:12px;color:var(--muted)}
+/* D renders the thread in the portal with shadcn defaults: system face, 16px ink, borderless bubbles, plain cards. */
+.lla-chatfull .lla-chatmsg{border:0;box-shadow:none;font-family:var(--font-system);font-size:16px;line-height:24px;letter-spacing:0;color:var(--ink-overlay)}
+.lla-chatfull .lla-chatmsg.user{background:var(--surface-subtle)}
+.lla-chatfull .lla-chatmsg-author{font-size:12.8px;line-height:19.2px}
+.lla-chatfull .lla-chatmsg.user .lla-chatmsg-author{color:var(--chat-full-user-label)}
+.lla-chatfull .lla-chatmsg-text,.lla-chatfull .lla-chatmsg-rich{font-size:16px;line-height:24px;color:var(--ink-overlay)}
+.lla-chatfull .lla-status-stats{gap:12px;margin:16px 0;border:0;border-radius:0;background:none}
+.lla-chatfull .lla-status-stat{display:flex;flex-direction:column;padding:12px;border:0}
+.lla-chatfull .lla-status .lla-status-value{font-size:19px;line-height:28.5px;font-weight:700;color:var(--ink-overlay)}
+.lla-chatfull .lla-status-label{font-size:16px;line-height:24px;color:var(--ink-overlay)}
+.lla-chatfull .lla-flowcard:not(.bare){padding:24px;border-color:var(--line-overlay);border-radius:var(--radius-xl);box-shadow:var(--shadow-sm)}
+.lla-chatfull .lla-flowcard{font-family:var(--font-system);font-size:16px;line-height:24px;letter-spacing:0}
+.lla-chatfull .lla-flow-eyebrow{font-size:12.8px;line-height:24px}
+.lla-chatfull .lla-flow-title{line-height:24px;font-weight:600;letter-spacing:0}
+.lla-chatfull .lla-flow-desc,.lla-chatfull .lla-run-mirror{margin:0;font-size:16px;line-height:24px;color:var(--ink-strong)}
+.lla-chatfull .lla-run-mirror{margin-bottom:18px}
+.lla-chatfull .lla-flow-fields{margin:0}
+.lla-chatfull .lla-flow-fields dt,.lla-chatfull .lla-flow-fields dd{margin:0;font-size:16px;line-height:24px;color:var(--ink-strong)}
+.lla-chatfull .lla-flowcard:not(.bare) .lla-flow-note{font-size:12.8px;line-height:24px;color:var(--ink-strong)}
+.lla-chatfull .lla-run-question{font-size:16px;line-height:24px}
+.lla-chatfull .lla-run-question+.lla-flow-stack{margin-top:14px}
+.lla-chatfull .lla-flowcard .lla-chip{padding:2px 10px;border:1px solid transparent;border-radius:var(--radius-md);background:var(--surface-subtle);font-family:var(--font-system);font-size:12px;line-height:16px;font-weight:600;letter-spacing:0;color:var(--ink-hover)}
+.lla-chatfull .lla-busy{font-family:var(--font-system);letter-spacing:0;color:var(--ink-overlay)}
+.lla-chatfull .lla-busy .lla-btn.lla-busy-btn,.lla-chatfull .lla-btn.lla-run-offer{border-color:var(--control-border-overlay)}
+.lla-chatfull .lla-chatfull .lla-flow-option,.lla-chatfull .lla-flow-chip,.lla-chatfull .lla-flow-send{font-weight:400}
+
+/* ===== D-overlays ===== */
+/* Overlays and feedback. Values are D's computed styles at 1440x900 (shadcn Dialog / side dialog, .creator-review,
+   .seq-sheet / .seq-confirm / .seq-toast, .inbox-thread-menu, .inbox-snackbar, .ws-notice / .inbox-notice / .cr-undo,
+   .empty / .ops-empty / .inbox-empty / .cr-empty, .getting-started-panel). Departures are listed in exceptions.json. */
+
+/* ---------- Scrim and the .lla-overlay scope ----------
+   D portals dialogs and drawers outside .brand, so they render with shadcn defaults: system face, 16px/24px,
+   black ink, 500-weight buttons with shadow-sm and the dark shadcn primary. Content placed inside inherits this. */
+.lla-scrim{position:fixed;inset:0;z-index:var(--z-overlay);background:var(--scrim)}
+.lla-scrim.sheet{z-index:var(--z-seq-scrim);background:var(--seq-scrim);-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px)}
+.lla-overlay{font-family:var(--font-system);font-size:16px;line-height:24px;font-weight:400;letter-spacing:normal;color:var(--ink-overlay)}
+.lla-overlay .lla{font-family:var(--font-system);letter-spacing:normal}
+.lla-overlay .lla-btn{font-weight:500;letter-spacing:normal;box-shadow:var(--shadow-sm)}
+.lla-overlay .lla-btn.primary{background:var(--primary-overlay);color:var(--on-primary)}
+.lla-overlay .lla-btn.primary:hover{background:color-mix(in srgb,var(--primary-overlay) 90%,transparent)}
+.lla-overlay .lla-btn.secondary{background:var(--surface);border-color:var(--control-border-overlay);color:var(--ink-overlay)}
+.lla-overlay .lla-btn.secondary:hover{background:var(--surface-subtle);color:var(--ink-hover)}
+.lla-overlay .lla-btn.danger{border-color:var(--control-border-overlay)}
+.lla-overlay .lla-btn.ghost{box-shadow:none}
+.lla-overlay .lla-ibtn.outline{border-color:var(--control-border-overlay);box-shadow:var(--shadow-sm)}
+.lla-overlay input::placeholder,.lla-overlay textarea::placeholder{color:var(--muted-overlay)}
+.lla-overlay-title{margin:0;font-family:var(--font-system);font-size:18px;line-height:18px;font-weight:600;letter-spacing:-.025em;color:var(--ink-overlay)}
+.lla-overlay-sub{margin:0;font-size:14px;line-height:20px;color:var(--muted-overlay)}
+/* D's 16px X at 70% in a 24px box (glyph unchanged, hit area raised). */
+.lla-overlay-close{position:absolute;right:12px;top:12px;display:grid;place-items:center;width:var(--icon-box);height:var(--icon-box);padding:0;border:0;border-radius:var(--radius-sm);background:transparent;color:inherit;opacity:var(--opacity-close);cursor:pointer;transition:opacity .15s}
+.lla-overlay-close:hover,.lla-overlay-close:focus-visible{opacity:1}
+.lla-dialog:focus-visible,.lla-drawer:focus-visible,.lla-sheet:focus-visible,.lla-sheet-confirm-card:focus-visible{outline:none}
+
+/* ---------- Dialog ---------- */
+.lla-dialog{position:fixed;left:50%;top:50%;z-index:var(--z-overlay);transform:translate(-50%,-50%);display:grid;gap:16px;width:100%;max-width:var(--dialog-width);max-height:calc(100dvh - 32px);overflow-y:auto;padding:24px;background:var(--surface);border:1px solid var(--line-overlay);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg)}
+.lla-dialog.full{display:flex;flex-direction:column;width:min(var(--full-view-width),95vw);max-width:none;height:90dvh;max-height:none;overflow:hidden}
+.lla-dialog.full>.lla-dialog-body{flex:1;min-height:0}
+.lla-dialog-body,.lla-drawer-body{display:flex;flex-direction:column;gap:16px;min-width:0}
+.lla-dialog-body>p,.lla-drawer-body>p{margin:0}
+.lla-dialog-footer,.lla-drawer-footer{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+
+/* ---------- AlertDialog (D .ivy-flow body) ---------- */
+.lla-alert-flow{font-size:14px;line-height:21.7px;color:var(--flow-ink)}
+.lla-alert-flow p{margin:8px 0 14px;color:var(--flow-muted)}
+.lla-alert-desc{display:flow-root}
+.lla-alert-flow strong{font-weight:700}
+.lla-alert-actions{display:flex;flex-wrap:wrap;gap:8px}
+.lla-overlay.lla-alert .lla-btn.secondary{color:var(--flow-ink)}
+
+/* ---------- Drawer ---------- */
+.lla-drawer{position:fixed;top:0;right:0;z-index:var(--z-overlay);height:100dvh;max-height:100dvh;display:flex;flex-direction:column;gap:16px;padding:24px;overflow-y:auto;background:var(--surface);border:1px solid var(--line-overlay);box-shadow:var(--shadow-lg)}
+/* review: the 600px creator review drawer (Arial, own palette, fixed header and footer) */
+.lla-overlay.lla-drawer.review{gap:0;padding:0;overflow:hidden;font-family:var(--font-arial);color:var(--drawer-ink)}
+.lla-overlay.lla-drawer.review .lla{font-family:var(--font-arial)}
+.lla-drawer-head{flex-shrink:0;padding:22px 28px 0;border-bottom:1px solid var(--drawer-line)}
+.lla-drawer-head.bare{padding-bottom:20px}
+.lla-drawer-eyebrow{display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-right:25px;font-size:10px;line-height:15px;font-weight:600;letter-spacing:.1em;color:var(--drawer-muted)}
+.lla-drawer-eyebrow span+span{padding-left:12px;border-left:1px solid var(--drawer-divider);font-weight:400;letter-spacing:0}
+.lla-drawer-identity{display:flex;align-items:center;gap:13px}
+.lla-drawer-avatar{display:grid;place-items:center;flex:none;width:var(--avatar-drawer);height:var(--avatar-drawer);border-radius:50%;background:var(--drawer-avatar-fill);color:var(--drawer-avatar-ink);font-size:14px;line-height:21px}
+.lla-drawer-name{min-width:0}
+.lla-drawer-title{margin:0;font-size:21px;line-height:27.3px;font-weight:600;letter-spacing:-.5px;color:var(--drawer-ink)}
+.lla-drawer-sub{margin:4px 0 0;font-size:12px;line-height:17.14px;color:var(--drawer-muted)}
+.lla-drawer-scroll{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;padding:22px 28px 28px}
+.lla-drawer-foot{flex-shrink:0;padding:15px 22px;border-top:1px solid var(--drawer-foot-line);background:var(--surface);box-shadow:var(--shadow-drawer-foot)}
+.lla-drawer-foot>.lla-notice{margin-bottom:12px}
+.lla-drawer-actions{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.lla-drawer-group{display:flex;align-items:center;gap:7px}
+.lla-overlay.lla-drawer.review .lla-btn{font-size:11px;line-height:15.71px;font-weight:500;gap:5px}
+.lla-overlay.lla-drawer.review .lla-btn.primary{background:var(--drawer-primary);border-color:var(--drawer-primary)}
+.lla-overlay.lla-drawer.review .lla-btn.primary:hover{background:color-mix(in srgb,var(--drawer-primary) 90%,transparent)}
+.lla-overlay.lla-drawer.review .lla-btn.secondary{color:var(--drawer-ink)}
+.lla-drawer-group+.lla-drawer-group .lla-btn{padding-left:10px;padding-right:10px}
+.lla-drawer-group .lla-btn:not(:has(.lla-btn-label)){width:36px;padding:0}
+.lla-drawer-note{font-size:11px;line-height:16.5px;color:var(--drawer-muted)}
+.lla-drawer-saved{display:flex;align-items:center;gap:7px;font-size:12px;line-height:18px;color:var(--drawer-saved)}
+.lla-drawer-saved.rejected{color:var(--drawer-rejected)}
+
+/* ---------- Sheet (sequence builder) ---------- */
+.lla-sheet{position:fixed;inset:24px;max-width:1440px;margin:auto;z-index:var(--z-seq-sheet);display:flex;flex-direction:column;overflow:hidden;background:var(--surface);border:1px solid var(--seq-sheet-line);border-radius:var(--radius-popover);box-shadow:var(--shadow-toast);font-family:var(--font-inter);font-size:14px;line-height:21px;font-weight:400;letter-spacing:normal;color:var(--seq-ink)}
+.lla-sheet .lla{font-family:var(--font-inter);letter-spacing:normal}
+.lla-sheet-head{flex-shrink:0;display:flex;align-items:center;min-height:70px;padding:16px 28px;background:var(--gradient-seq-head);border-bottom:1px solid var(--seq-line)}
+.lla-sheet-title{margin:0;font-size:18px;line-height:27px;font-weight:550;letter-spacing:-.45px;color:var(--seq-ink)}
+.lla-sheet-spacer{flex:1}
+.lla-overlay-close.lla-sheet-x{position:static;flex:none;width:34px;height:29px;margin-left:4px;border-radius:var(--radius-md);color:var(--seq-icon);opacity:1;transition:background-color .15s,color .15s}
+.lla-overlay-close.lla-sheet-x:hover{background:var(--seq-subtle);color:var(--seq-ink)}
+.lla-sheet-body{flex:1;min-height:0;overflow:auto}
+.lla-sheet-head .lla-btn.primary{min-width:84px}
+@media (max-width:850px){.lla-sheet{inset:10px}}
+.lla-sheet-foot{flex-shrink:0;display:flex;align-items:center;justify-content:flex-end;gap:8px;padding:16px 28px;border-top:1px solid var(--seq-line)}
+/* Buttons inside the sheet and its confirm: D .seq-btn */
+.lla-sheet .lla-btn,.lla-sheet-confirm .lla-btn{height:36px;padding:8px 15px;border-radius:var(--seq-radius-control);font-family:var(--font-inter);font-size:12px;line-height:18px;font-weight:550;letter-spacing:normal}
+.lla-sheet .lla-btn.primary,.lla-sheet-confirm .lla-btn.primary{background:var(--seq-cta);border:1px solid var(--seq-cta);color:var(--on-dark)}
+.lla-sheet .lla-btn.primary:hover,.lla-sheet-confirm .lla-btn.primary:hover{background:var(--seq-cta);border-color:var(--seq-cta);opacity:.85}
+.lla-sheet .lla-btn.secondary,.lla-sheet-confirm .lla-btn.secondary{background:var(--surface);border-color:var(--seq-control-border);color:var(--seq-ink)}
+.lla-sheet .lla-btn.secondary:hover,.lla-sheet-confirm .lla-btn.secondary:hover{background:var(--seq-subtle);color:var(--seq-ink)}
+.lla-sheet .lla-btn:disabled,.lla-sheet-confirm .lla-btn:disabled{opacity:.45}
+.lla-sheet-confirm{position:fixed;inset:0;z-index:var(--z-seq-confirm);display:flex;align-items:center;justify-content:center;padding:24px;background:var(--seq-scrim-confirm);-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);font-family:var(--font-inter);font-size:14px;line-height:21px;letter-spacing:normal;color:var(--seq-ink)}
+.lla-sheet-confirm-card{width:420px;max-width:100%;padding:24px;background:var(--surface);border-radius:var(--radius-xl);box-shadow:var(--shadow-toast)}
+.lla-sheet-confirm-title{margin:0 0 8px;font-size:17px;line-height:25.5px;font-weight:700;color:var(--seq-ink)}
+.lla-sheet-confirm-body{margin:0 0 20px;font-size:12px;line-height:18px;color:var(--seq-ink-2)}
+.lla-sheet-confirm-foot{display:flex;justify-content:flex-end;gap:8px}
+.lla-sheet-confirm .lla-btn.primary.lla-sheet-discard{padding:8px 13px;border:1px solid var(--seq-danger);border-radius:var(--seq-radius-field);background:var(--seq-danger);font-weight:600}
+.lla-sheet-confirm .lla-btn.primary.lla-sheet-discard:hover{background:var(--seq-danger);opacity:.9}
+
+/* ---------- KebabMenu (restyles group B's DropdownMenu to D's .inbox-thread-menu) ---------- */
+.lla-kebab-anchor{display:inline-flex;align-items:flex-start;height:30px;vertical-align:top}
+.lla-kebab{display:inline-grid;place-items:center;flex:none;width:32px;height:32px;padding:0;border:1px solid transparent;border-radius:var(--radius-md);background:transparent;color:var(--ink);cursor:pointer;transition:color .15s}
+.lla-kebab:hover{color:var(--ink-hover)}
+.lla-kebab-menu.lla-dd-menu{min-width:0;max-width:none;margin-top:-2px;padding:5px;border-color:var(--kebab-line);border-radius:var(--radius-card);box-shadow:var(--shadow-kebab);font-family:var(--font-system);font-size:14px;line-height:21px;letter-spacing:normal;color:var(--ink-overlay)}
+.lla-kebab-menu.lla-dd-menu[data-side="top"]{margin-top:2px}
+.lla-kebab-menu.lla-dd-menu:focus-visible{outline:none}
+.lla-kebab-menu .lla-dd-item{align-items:center;gap:10px;padding:10px;border-radius:var(--radius-chip);color:var(--ink-overlay)}
+.lla-kebab-menu .lla-dd-item[data-highlighted],.lla-kebab-menu .lla-dd-item:hover{background:var(--kebab-hover)}
+.lla-kebab-menu .lla-dd-item>.lla-ibox{margin:-4px;color:inherit}
+.lla-kebab-menu .lla-dd-item .lla-dd-title{font-weight:400}
+.lla-kebab-menu .lla-dd-item.danger,.lla-kebab-menu .lla-dd-item.danger>.lla-ibox{color:var(--danger-ink)}
+.lla-kebab-menu .lla-dd-sep{margin:4px;background:var(--kebab-rule)}
+
+/* ---------- Snackbar ---------- */
+.lla-snackbar{position:fixed;left:50%;bottom:24px;z-index:var(--z-snackbar);transform:translateX(-50%);width:540px;max-width:calc(100vw - 32px);padding:14px 18px;border-radius:var(--radius-card);background:var(--snackbar-fill);box-shadow:var(--shadow-snackbar);font-size:14px;line-height:21.7px;color:var(--on-dark)}
+.lla-snackbar-title{display:block;font-weight:700}
+.lla-snackbar-msg strong{font-weight:700}
+.lla-snackbar-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+/* D DEFECT fixed: D's outline buttons inherit the bar's white text on their white fill. The label is ink. */
+.lla-snackbar .lla-btn.secondary{background:var(--surface);border-color:var(--snackbar-action-border);color:var(--ink)}
+.lla-snackbar .lla-btn.secondary:hover{background:var(--surface-hover);color:var(--ink-hover)}
+/* toast: the sequence builder "Sequence saved." toast */
+.lla-snackbar.toast{z-index:var(--z-seq-toast);bottom:28px;display:flex;align-items:center;gap:14px;width:auto;max-width:min(520px,calc(100vw - 32px));background:var(--seq-toast-fill);box-shadow:var(--shadow-toast);font-family:var(--font-inter);line-height:21px;letter-spacing:normal}
+.lla-snackbar.toast .lla-snackbar-msg{margin-top:2px;font-size:12px;line-height:18px;color:var(--seq-toast-muted)}
+.lla-snackbar.toast .lla-snackbar-actions{margin:0 0 0 6px}
+/* D slides the toast up 20px and fades it in over .2s */
+.lla-snackbar.toast{animation:lla-toast-in .2s ease-out}
+@keyframes lla-toast-in{from{opacity:0;transform:translate(-50%,20px)}to{opacity:1;transform:translate(-50%,0)}}
+@media (prefers-reduced-motion:reduce){.lla-snackbar.toast{animation:none}}
+
+/* ---------- Notice ---------- */
+.lla-notice{display:flex;align-items:center;gap:12px;font-family:var(--font-sans);letter-spacing:-.012em;color:var(--ink)}
+.lla-notice-text{display:inline-flex;align-items:center;gap:8px;min-width:0}
+.lla-notice.banner{justify-content:space-between;padding:10px 16px;border-radius:var(--radius-lg);background:var(--notice-fill);font-size:13px;line-height:19.5px;letter-spacing:-.168px}
+.lla-notice.banner.info{background:var(--surface-note)}
+.lla-notice.banner.warning{background:var(--warning-fill)}
+.lla-notice.banner.danger{background:var(--reject-hover-fill)}
+.lla-notice.inline{font-size:14px;line-height:21px}
+.lla-notice.drawer{justify-content:space-between;padding:9px 11px;border-radius:var(--radius-md);background:var(--drawer-undo-fill);font-family:var(--font-arial);font-size:11px;line-height:16.5px;letter-spacing:normal;color:var(--drawer-undo-ink)}
+.lla-notice-link{flex-shrink:0;padding:0;border:0;background:none;font:inherit;color:inherit;text-decoration:underline;cursor:pointer}
+
+/* ---------- EmptyState ---------- */
+.lla-empty{font-family:var(--font-sans);font-size:14px;line-height:21px;letter-spacing:-.012em;color:var(--ink)}
+.lla-empty-title,.lla-empty-body{margin:0}
+.lla-empty-icon{display:flex;justify-content:center;margin-bottom:8px;color:var(--muted)}
+/* center: D .empty (tables, calendar, performance) */
+.lla-empty.center{padding:40px;text-align:center;color:var(--muted)}
+.lla-empty.center .lla-empty-title{font-size:14px;line-height:21px;font-weight:500}
+/* card: D .ops-empty (Approvals, Activity) */
+.lla-empty.card{margin:20px 0;padding:65px 24px;border:1px dashed var(--line-empty);border-radius:var(--radius-card);text-align:center}
+.lla-empty.card .lla-empty-title{margin:14px 0 5px;font-size:19px;line-height:25.65px;font-weight:500;letter-spacing:-.025em;color:var(--ink)}
+.lla-empty.card .lla-empty-body{margin:12px 0 22px;color:var(--muted)}
+.lla-empty.card.compact .lla-empty-body{margin:4px 0;font-size:13px;line-height:19.5px;color:var(--ink)}
+/* inline: D .inbox-empty (thread list) */
+.lla-empty.inline{padding:16px 4px}
+.lla-empty.inline .lla-empty-title{font-size:14px;line-height:21px;font-weight:500}
+.lla-empty.inline .lla-empty-body{line-height:22.4px}
+/* column: Kanban column "Empty" */
+.lla-empty.column{color:var(--muted)}
+/* flow: gated copy in Ivy flows ("No responses yet. …") */
+.lla-empty.flow .lla-empty-body{margin:8px 0 14px;line-height:22.4px;color:var(--flow-muted)}
+/* text: plain line inside an overlay ("No chats match.") */
+.lla-empty.text{font-size:inherit;line-height:inherit;letter-spacing:inherit;color:inherit}
+/* drawer: D .cr-empty in the creator review drawer */
+.lla-empty.drawer{padding:15px;border:1px dashed var(--drawer-empty-line);border-radius:var(--radius-card);background:var(--drawer-empty-fill);font-family:var(--font-arial);font-size:16px;line-height:24px;letter-spacing:normal}
+.lla-empty.drawer .lla-empty-title{display:block;font-size:12px;line-height:24px;font-weight:500;color:var(--drawer-empty-title)}
+.lla-empty.drawer .lla-empty-body{margin-top:5px;font-size:11px;line-height:17.6px;color:var(--drawer-meta)}
+
+/* ---------- ProgressBar ---------- */
+.lla-progress{position:relative;overflow:hidden;height:4px;border-radius:var(--radius-md);background:var(--checklist-track)}
+.lla-progress>i{display:block;height:100%;border-radius:inherit;background:var(--gradient-progress);transition:width .2s}
+.lla-progress.primary{height:8px;border-radius:var(--radius-full);background:var(--progress-track-primary)}
+.lla-progress.primary>i{border-radius:0;background:var(--primary)}
+
+/* ---------- ChecklistPopover ---------- */
+.lla-checklist{width:var(--checklist-width);max-width:calc(100vw - 16px);padding:16px;background:var(--surface);border:1px solid var(--checklist-border);border-radius:var(--radius-popover);box-shadow:var(--shadow-popover);font-family:var(--font-inter);font-size:13px;line-height:19.5px;font-weight:400;letter-spacing:-.168px;color:var(--checklist-ink)}
+.lla-checklist.floating{position:fixed;z-index:var(--z-floating);max-height:calc(100vh - 16px);overflow:auto}
+.lla-checklist-head{display:flex;align-items:flex-start;gap:4px}
+.lla-checklist-drag{position:relative;flex:1;min-width:0;-webkit-user-select:none;user-select:none;touch-action:none}
+.lla-checklist.floating .lla-checklist-drag{cursor:grab}
+.lla-checklist.floating .lla-checklist-drag:active{cursor:grabbing}
+.lla-checklist-meta{font-size:11px;line-height:1.5;font-weight:550;color:var(--checklist-meta)}
+.lla-checklist-title{margin:3px 0 0;font-family:var(--font-serif);font-size:18px;line-height:24.3px;font-weight:600;color:var(--checklist-ink)}
+.lla-checklist-grip{position:absolute;right:1.5px;top:-5.5px;color:var(--checklist-grip)}
+.lla-checklist-tools{display:flex;flex:none;margin:-3px -3px 0 -3px}
+.lla-checklist-tool+.lla-checklist-tool{margin-left:-2px}
+.lla-checklist-tool{display:grid;place-items:center;width:var(--icon-box);height:var(--icon-box);padding:0;border:0;border-radius:var(--radius-sm);background:none;color:var(--checklist-icon);cursor:pointer}
+.lla-checklist-bar{margin:12px 0}
+.lla-step{display:flex;align-items:flex-start;gap:10px;width:100%;padding:9px 5px;border:0;background:none;text-align:left;font-family:inherit;font-size:13px;line-height:18.2px;font-weight:450;letter-spacing:inherit;color:var(--checklist-step);cursor:pointer}
+.lla-step.current{color:var(--checklist-current);font-weight:600}
+.lla-step.done .lla-step-label{text-decoration:line-through}
+.lla-step-label{flex:1;min-width:0}
+.lla-step-mark{display:grid;place-items:center;flex:none;width:var(--checkbox-size);height:var(--checkbox-size);margin-top:1px;border:1px solid var(--checklist-todo-ring);border-radius:50%}
+.lla-step.current .lla-step-mark{border-color:var(--checklist-current-ring)}
+.lla-step.done .lla-step-mark{background:var(--checklist-done);border-color:var(--checklist-done);color:var(--on-dark)}
+.lla-step-mark svg{display:block;width:11px;height:11px}
+.lla-step-go{margin:-4px}
+.lla-step-hint{margin:0 4px 6px 31px;font-size:12px;line-height:19.8px;font-weight:400;color:var(--checklist-hint)}
+
+/* ===== E-forms ===== */
+/* ---------- E-forms. Values are D's rendered values at 1440x900; exceptions are listed in exceptions.json. ---------- */
+
+/* ---------- Field frame (label, control, hint, disabled reason, error) ----------
+   Variants follow the D form each one is measured from:
+   default   = shadcn form dialogs (Invite teammate, Edit Ivy) and page fields
+   toolbar   = filter-bar field (12px text)
+   settings  = Team settings organization details
+   plain     = unstyled dialog forms (Edit ritual, Add a source): 16px/24 labels, no gap
+   targeting = Internal campaign targeting (36px shadcn fields restyled by .ivy-flow)
+   flow      = Record external payment (native 43.7px fields)
+   portal    = creator portal pricing form (Arial, line-height 1.6, 44.4px fields)
+   voice     = Tone of Voice textareas (Textarea only) */
+.lla-field{display:flex;flex-direction:column;gap:var(--space-8);min-width:0}
+.lla-field-label{display:block;margin:0;padding:0;font-size:12px;line-height:18px;font-weight:400;color:var(--ink)}
+.lla-field-hint{margin:0;font-size:12px;line-height:18px;color:var(--muted)}
+.lla-field-error{margin:0;font-size:12px;line-height:18px;color:var(--ink)}
+.lla-field-count{font-size:11.2px;line-height:16.8px;color:var(--ink)}
+.lla-field.settings .lla-field-label{font-size:10px;line-height:15px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-strong)}
+.lla-field.plain{gap:0}
+.lla-field.plain .lla-field-label,.lla-field.plain .lla-field-error{font-size:16px;line-height:24px;letter-spacing:normal;color:var(--ink-overlay)}
+.lla-field.plain .lla-field-hint{font-size:12.8px;line-height:24px;letter-spacing:normal;color:var(--ink-overlay)}
+.lla-field.flow,.lla-field.portal{gap:6px}
+.lla-field.targeting,.lla-field.flow,.lla-field.portal{color:var(--flow-ink)}
+.lla-field.targeting .lla-field-label,.lla-field.flow .lla-field-label,.lla-field.portal .lla-field-label{font-size:14px;line-height:21.7px;font-weight:500;letter-spacing:normal;color:var(--flow-ink)}
+.lla-field.targeting .lla-field-hint,.lla-field.flow .lla-field-hint{font-size:14px;line-height:21.7px;letter-spacing:normal;color:var(--flow-muted)}
+.lla-field.targeting .lla-field-error,.lla-field.flow .lla-field-error,.lla-field.portal .lla-field-error{font-size:14px;line-height:21.7px;letter-spacing:normal;color:var(--flow-ink)}
+/* The creator portal sets Arial at line-height 1.6. Its hint (.muted) renders in the form ink. */
+.lla-field.portal,.lla-field.portal .lla-input,.lla-field.portal .lla-textarea{font-family:var(--font-arial)}
+.lla-field.portal .lla-field-label,.lla-field.portal .lla-field-error,.lla-field.portal .lla-field-hint{line-height:22.4px}
+.lla-field.portal .lla-field-hint{font-size:14px;letter-spacing:normal;color:var(--flow-ink)}
+.lla-field.voice{gap:0}
+.lla-field.voice .lla-field-label{margin-bottom:-2px;font-size:14px;line-height:21px;color:var(--ink-strong)}
+.lla-field.voice .lla-field-count{margin-top:8px;color:var(--ink-strong)}
+
+/* ---------- TextInput / NumberInput / DateInput ---------- */
+.lla-input{display:flex;width:100%;min-width:0;height:var(--control-height);margin:0;padding:4px 12px;border:1px solid var(--control-border);border-radius:var(--radius-md);background:transparent;box-shadow:var(--shadow-sm);font-family:inherit;font-size:14px;line-height:20px;font-weight:400;letter-spacing:inherit;color:var(--ink);transition:box-shadow .15s}
+.lla-input::placeholder,.lla-textarea::placeholder{color:var(--muted);opacity:1}
+.lla-input.toolbar{font-size:12px;line-height:17.14px}
+.lla-input.num{font-variant-numeric:tabular-nums}
+.lla-input[type="date"],.lla-input[type="datetime-local"]{font-variant-numeric:tabular-nums}
+/* D's preflight: the date segments take one line box, so a date field is as tall as a text field. */
+.lla-input::-webkit-date-and-time-value{min-height:1lh;text-align:inherit}
+.lla-input::-webkit-datetime-edit{display:inline-flex;padding:0}
+.lla-input::-webkit-datetime-edit-fields-wrapper{padding:0}
+.lla-field.settings .lla-input{font-size:13px;line-height:18.57px;letter-spacing:normal;color:var(--ink-strong)}
+/* Ivy flow and portal fields: green-gray border, radius 7, white, values at weight 500 (inherited from the 500 label in D). */
+.lla-field.targeting .lla-input,.lla-field.flow .lla-input,.lla-field.portal .lla-input{padding:10px 12px;border-color:var(--control-border-flow);border-radius:var(--radius-flow);background:var(--surface);font-size:14px;font-weight:500;letter-spacing:normal;color:var(--flow-ink)}
+.lla-field.targeting .lla-input{line-height:21.7px}
+.lla-field.flow .lla-input{height:auto;min-height:43.7px;line-height:21.7px;box-shadow:none}
+.lla-field.portal .lla-input{height:auto;min-height:44.4px;line-height:22.4px;box-shadow:none}
+.lla-field.targeting .lla-input::placeholder,.lla-field.flow .lla-input::placeholder,.lla-field.portal .lla-input::placeholder,
+.lla-field.targeting .lla-textarea::placeholder,.lla-field.flow .lla-textarea::placeholder,.lla-field.portal .lla-textarea::placeholder{color:var(--placeholder-flow)}
+.lla-input:disabled,.lla-textarea:disabled{opacity:var(--opacity-disabled);cursor:not-allowed}
+
+/* ---------- Textarea ---------- */
+/* default = Inbox reply composer. */
+.lla-textarea{display:block;width:100%;min-height:var(--textarea-min-height);margin:0;padding:12px;border:1px solid var(--control-border-reply);border-radius:var(--radius-lg);background:var(--surface);font-family:inherit;font-size:14px;line-height:21px;font-weight:400;letter-spacing:inherit;color:var(--ink);resize:vertical}
+.lla-textarea::placeholder{color:var(--placeholder-reply)}
+.lla-field.voice .lla-textarea{min-height:var(--textarea-voice-min-height);padding:14px;border-color:var(--control-border);color:var(--ink-strong)}
+.lla-field.targeting .lla-textarea,.lla-field.flow .lla-textarea,.lla-field.portal .lla-textarea{padding:10px 12px;border-color:var(--control-border-flow);border-radius:var(--radius-flow);font-weight:500;letter-spacing:normal;color:var(--flow-ink)}
+.lla-field.targeting .lla-textarea,.lla-field.flow .lla-textarea{min-height:var(--textarea-flow-min-height);line-height:21.7px}
+.lla-field.portal .lla-textarea{min-height:0;line-height:22.4px}
+.lla-field.settings .lla-textarea,.lla-field.toolbar .lla-textarea{border-color:var(--control-border)}
+
+/* ---------- SearchInput: glyph 10px from the left, text at 34px ---------- */
+.lla-search{position:relative;display:flex;align-items:center;width:100%;min-width:0}
+.lla-search-icon{position:absolute;left:6px;top:50%;margin-top:-12px;z-index:1;color:var(--muted);pointer-events:none}
+.lla-search .lla-input{padding-left:34px}
+.lla-filterbar>.lla-search{flex:1 1 0;width:auto;min-width:var(--search-min-width)}
+@media (min-width:1501px){.lla-filterbar>.lla-search{max-width:var(--search-max-width)}}
+
+/* ---------- Select trigger ---------- */
+.lla-select{display:inline-flex;align-items:center;gap:var(--space-10);min-width:0}
+.lla-select.block,.lla-field>.lla-select{display:flex;width:100%}
+.lla-select-inline{font-size:9px;line-height:13.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+.lla-select-trigger{display:flex;align-items:center;justify-content:space-between;gap:var(--space-8);width:100%;min-width:0;height:var(--control-height);margin:0;padding:8px 12px;border:1px solid var(--control-border);border-radius:var(--radius-md);background:transparent;font-family:inherit;font-size:12px;line-height:17.14px;font-weight:450;letter-spacing:inherit;color:var(--ink);text-align:left;white-space:nowrap;cursor:pointer}
+.lla-select-trigger.sm{height:var(--control-height-sm)}
+.lla-select-trigger.md{font-size:14px;line-height:20px}
+.lla-select-value{min-width:0;overflow:hidden;text-overflow:ellipsis}
+.lla-select-value.placeholder{color:var(--muted)}
+/* D draws the chevron at 50% opacity: 3.3:1 on white, an indicator. The 24px box overlaps the padding so the glyph sits 13px from the edge. */
+.lla-select-trigger .lla-select-chevron{margin:-4px;opacity:.5}
+.lla-select-trigger:disabled{opacity:var(--opacity-disabled);cursor:not-allowed}
+
+/* ---------- Select listbox (portaled, shadcn defaults: system face) ---------- */
+.lla-listbox{position:fixed;z-index:var(--z-overlay);overflow-y:auto;margin:0;padding:4px;border:1px solid var(--line-overlay);border-radius:var(--radius-md);background:var(--surface);box-shadow:var(--shadow-md);font-family:var(--font-system);font-size:14px;line-height:20px;font-weight:400;letter-spacing:normal;color:var(--ink-strong)}
+.lla-option{position:relative;display:flex;align-items:center;height:var(--listbox-option-height);padding:6px 32px 6px 8px;border-radius:var(--radius-sm);white-space:nowrap;cursor:default;user-select:none}
+.lla-option[data-active="true"]{background:var(--surface-subtle);color:var(--ink-hover)}
+.lla-option[aria-disabled="true"]{opacity:var(--opacity-disabled);pointer-events:none}
+/* Check: 16px glyph whose right edge sits 7px inside the option (D span right-2). */
+.lla-option .lla-option-check{position:absolute;right:3px;top:50%;margin-top:-12px}
+
+/* ---------- Toggle (shadcn Switch) ---------- */
+.lla-toggle{display:inline-flex;flex-direction:column;gap:var(--space-4)}
+.lla-toggle-row{display:inline-flex;align-items:center;gap:var(--space-6)}
+.lla-switch{position:relative;display:inline-flex;flex:none;align-items:center;width:var(--switch-width);height:var(--switch-height);margin:0;padding:0;border:2px solid transparent;border-radius:var(--radius-full);background:var(--control-border);cursor:pointer;transition:background-color .15s}
+.lla-switch[aria-checked="true"]{background:var(--primary)}
+.lla-switch-thumb{display:block;width:var(--switch-thumb);height:var(--switch-thumb);border-radius:var(--radius-full);background:var(--surface);box-shadow:var(--shadow-lg);transform:translateX(0);transition:transform .15s;pointer-events:none}
+.lla-switch[aria-checked="true"] .lla-switch-thumb{transform:translateX(16px)}
+.lla-switch:disabled{opacity:var(--opacity-disabled);cursor:not-allowed}
+.lla-toggle-label{font-size:11px;line-height:16.5px;color:var(--ink);cursor:pointer}
+.lla-toggle.disabled .lla-toggle-label{opacity:var(--opacity-disabled);cursor:not-allowed}
+.lla-toggle-why{font-size:12px;line-height:18px;color:var(--muted)}
+
+/* ---------- Checkbox ---------- */
+.lla.lla-check{display:inline-flex;flex-direction:column;gap:var(--space-4);color:inherit}
+/* Page checkboxes (Getting started, Tone of Voice): 14px/21 text in a 22px row, box 3px down, text colour from the context. */
+.lla-check-row{position:relative;display:inline-flex;align-items:flex-start;gap:var(--space-4);min-height:22px;font-size:14px;line-height:21px;color:inherit;cursor:pointer}
+.lla-check-input,.lla-radio-input{position:absolute;left:0;top:3px;width:var(--check-size);height:var(--check-size);margin:0;opacity:0;cursor:inherit}
+.lla-check-box{display:inline-grid;flex:none;place-items:center;width:var(--check-size);height:var(--check-size);margin-top:3px;border:1px solid var(--check-border);border-radius:var(--radius-check);background:var(--surface);color:transparent}
+.lla-check-mark{display:block;width:11px;height:11px}
+.lla-check-row:hover .lla-check-box{border-color:var(--check-border-hover)}
+.lla-check-input:checked+.lla-check-box,.lla-check-input:indeterminate+.lla-check-box{border-color:var(--check-fill);background:var(--check-fill);color:var(--check-mark)}
+.lla-check-row:hover .lla-check-input:checked+.lla-check-box,.lla-check-row:hover .lla-check-input:indeterminate+.lla-check-box{border-color:var(--check-fill-hover);background:var(--check-fill-hover)}
+.lla-check-input:focus-visible{outline:none}
+.lla-check-input:focus-visible+.lla-check-box,.lla-radio-input:focus-visible+.lla-radio-dot{outline:2px solid var(--focus-ring);outline-offset:3px}
+.lla-check-desc{padding-left:17px;font-size:12px;line-height:18px;color:var(--muted)}
+.lla-check.flow .lla-check-row{gap:var(--space-10);font-size:14px;line-height:21.7px;letter-spacing:normal;color:var(--flow-ink)}
+.lla-check.flow .lla-check-box,.lla-check.flow .lla-check-input{margin-top:5px;top:0}
+.lla-check.flow .lla-check-desc{padding-left:23px}
+/* Unstyled dialog checkbox (Add a source): 16px/24 black, box 5px down, description as a plain 16px/24 line. */
+.lla-check.plain .lla-check-row{min-height:0;font-size:16px;line-height:24px;letter-spacing:normal;color:var(--ink-overlay)}
+.lla-check.plain .lla-check-box,.lla-check.plain .lla-check-input{margin-top:5px;top:0}
+.lla-check.plain .lla-check-desc{padding-left:0;font-size:16px;line-height:24px;letter-spacing:normal;color:var(--ink-overlay)}
+.lla-check.plain{gap:16px}
+.lla-check.flow .lla-check-row{min-height:0}
+.lla-check.disabled .lla-check-row{opacity:var(--opacity-disabled);cursor:not-allowed}
+
+/* ---------- RadioCard (D .settings-choice) ---------- */
+.lla-radiocard{position:relative;display:flex;align-items:flex-start;gap:var(--space-10);padding:12px;border:1px solid var(--radiocard-border);border-radius:var(--radius-lg);background:var(--surface);font-size:12px;line-height:18px;color:var(--ink);cursor:pointer}
+.lla-radiocard .lla-radio-input{left:12px;top:12px}
+.lla-radio-dot{flex:none;width:var(--check-size);height:var(--check-size);border:1px solid var(--check-border);border-radius:50%;background:var(--surface)}
+.lla-radiocard:hover .lla-radio-dot{border-color:var(--check-border-hover)}
+.lla-radio-input:checked+.lla-radio-dot{border-color:var(--check-fill);background:var(--check-fill);box-shadow:inset 0 0 0 2px var(--check-mark)}
+.lla-radiocard:hover .lla-radio-input:checked+.lla-radio-dot{border-color:var(--check-fill-hover);background:var(--check-fill-hover)}
+.lla-radio-input:focus-visible{outline:none}
+.lla-radiocard-body{display:block;min-width:0}
+.lla-radiocard-title{display:block;font-weight:700}
+.lla-radiocard-desc{display:block;margin:4px 0}
+.lla-radiocard.disabled{cursor:not-allowed}
+.lla-radiocard.disabled .lla-radio-dot,.lla-radiocard.disabled .lla-radiocard-title,.lla-radiocard.disabled .lla-radiocard-desc{opacity:var(--opacity-disabled)}
+.lla-radiocard-why{display:block;margin:0 0 4px;color:var(--muted)}
+.lla-radiogroup{min-width:0;margin:0;padding:0;border:0}
+.lla-radiogroup>.lla-field-label{margin-bottom:var(--space-8)}
+/* D's settings-form: a 14px grid gap plus 12px block margin on each card, so cards sit 38px apart. */
+.lla-radiogroup-cards{display:grid;gap:14px}
+.lla-radiogroup-cards>.lla-radiocard{margin:12px 0}
+.lla-radiogroup>.lla-field-hint{margin-top:var(--space-4)}
+
+/* ---------- Chip (removable): an outlined Button; only the static variant needs its own look ---------- */
+.lla.lla-rchip.static{display:inline-flex;align-items:center;height:var(--control-height);padding:8px 16px;border:1px solid var(--control-border);border-radius:var(--radius-md);background:var(--surface);font-size:14px;line-height:20px;font-weight:450;color:inherit;white-space:nowrap}
+
+/* ---------- FilterChip (Inbox campaign chips) ---------- */
+.lla-filterchip{display:inline-flex;align-items:center;gap:var(--space-12);margin:0;padding:10px 14px;border:1px solid var(--filterchip-border);border-radius:var(--radius-lg);background:var(--surface);font-family:var(--font-sans);font-size:14px;line-height:21px;font-weight:450;letter-spacing:-.012em;color:var(--filterchip-ink);text-align:left;white-space:nowrap;cursor:pointer}
+.lla-filterchip[aria-pressed="true"]{border-color:var(--filterchip-selected-border);background:var(--filterchip-selected-fill);box-shadow:inset 0 0 0 1px var(--filterchip-selected-border);font-weight:600;color:var(--filterchip-selected-ink)}
+.lla-filterchip-count{min-width:24px;padding:1px 7px;border-radius:var(--radius-chip);background:var(--filterchip-count-fill);font-size:12px;line-height:18px;text-align:center;font-variant-numeric:tabular-nums}
+.lla-filterchip[aria-pressed="true"] .lla-filterchip-count{background:var(--filterchip-selected-count-fill)}
+
+/* ---------- FileDropzone (D .ed-upload) ---------- */
+.lla-dropzone-field{display:flex;flex-direction:column;gap:var(--space-8);min-width:0}
+.lla-dropzone{display:block;padding:9px;border:1px solid var(--dropzone-border);border-radius:var(--radius-md);background:var(--surface);font-size:12px;line-height:18px;color:var(--ink);cursor:pointer}
+.lla-dropzone-title{display:block}
+.lla-dropzone-input{display:block;max-width:180px;margin:0;font-family:inherit;font-size:12px;line-height:18px;color:inherit}
+/* D resets the native button (Tailwind preflight): "Choose File No file chosen" reads as plain text inside the box. */
+.lla-dropzone-input::file-selector-button{margin:0 4px 0 0;padding:0;border:0;border-radius:0;background:transparent;font:inherit;color:inherit;cursor:pointer}
+/* D's small sits inline in an 18px line box, so the box is 74px tall. */
+.lla-dropzone-hint{display:block;font-size:9.6px;line-height:18px}
+.lla-dropzone-field.disabled .lla-dropzone{opacity:var(--opacity-disabled);cursor:not-allowed}
+
+/* ---------- FilterBar / ResultCount / BulkBar ---------- */
+.lla-filterbar{display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-10);padding-bottom:var(--space-18);border-bottom:1px solid var(--line)}
+.lla-filterbar>.lla-select:not(.block) .lla-select-trigger:not([style]){width:var(--select-width-filter)}
+.lla-result-count{font-size:12px;line-height:18px;letter-spacing:-.168px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.lla-bulkbar{display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-12);padding:16px 0;font-size:12px;line-height:18px;letter-spacing:-.168px}
+.lla-bulkbar-count{color:var(--muted)}
+.lla-bulkbar>.lla-bulkbar-sort{margin-left:auto}
+
+/* ---------- Inside portaled dialogs and drawers (D renders them outside .brand: system face, black text) ---------- */
+.lla-overlay .lla-field,.lla-overlay .lla-check,.lla-overlay .lla-radiocard,.lla-overlay .lla-radiogroup,.lla-overlay .lla-dropzone-field,.lla-overlay .lla-select,.lla-overlay .lla-toggle,.lla-overlay .lla-search{font-family:var(--font-system);letter-spacing:normal;color:var(--ink-overlay)}
+.lla-overlay .lla-field-label,.lla-overlay .lla-field-error,.lla-overlay .lla-input,.lla-overlay .lla-textarea,.lla-overlay .lla-select-trigger,.lla-overlay .lla-check-row,.lla-overlay .lla-radiocard,.lla-overlay .lla-dropzone,.lla-overlay .lla-toggle-label{color:var(--ink-overlay)}
+.lla-overlay .lla-field-hint,.lla-overlay .lla-check-desc,.lla-overlay .lla-toggle-why,.lla-overlay .lla-radiocard-why{color:var(--muted-overlay)}
+.lla-overlay .lla-select-trigger{font-weight:400;border-color:var(--control-border-overlay);box-shadow:var(--shadow-sm)}
+.lla-overlay .lla-input,.lla-overlay .lla-textarea{border-color:var(--control-border-overlay)}
+
+/* ===== F-tables ===== */
+/* F: DataTable, CreatorCell, PlatformIcons, RowActions, CampaignCard/Grid, Kanban, ListRow, SettingsSection/Header, Disclosure, SelectableTile, PortalShell.
+   Values are D's computed values at 1440x900; departures are listed in the component READMEs. */
+
+/* ---------- DataTable (shadcn table under D's .brand .creator-table) ---------- */
+.lla-table-wrap{position:relative;width:100%;overflow:auto}
+.lla-table{width:100%;border-collapse:collapse;table-layout:fixed;caption-side:bottom;font-size:14px;line-height:20px}
+.lla-table th{text-align:left;vertical-align:middle;white-space:nowrap}
+.lla-table td{vertical-align:middle}
+.lla-table th.right,.lla-table td.right{text-align:right}
+.lla-table thead tr{border-bottom:1px solid var(--line-card)}
+.lla-table tbody tr{border-bottom:1px solid var(--line-card);transition:background-color .15s}
+.lla-table tbody tr:last-child{border-bottom:0}
+.lla-table tbody tr:hover{background:color-mix(in srgb,var(--surface-subtle) 50%,transparent)}
+.lla-table tbody tr[aria-selected="true"]{background:var(--surface-subtle)}
+/* creator density: 38px UPPERCASE header on surface-nav, 16px 6px cells, SFMono figures */
+.lla-table.creator th{height:var(--table-header-height);padding:10px 6px;border-top:1px solid var(--line);background:var(--surface-nav);font-size:9px;line-height:12.86px;font-weight:500;letter-spacing:.02em;text-transform:uppercase;color:var(--muted)}
+.lla-table.creator td{padding:16px 6px}
+.lla-table.creator .lla-table-num{font-family:var(--font-mono);font-size:12px;line-height:17.14px;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+/* compact density (Payments transactions): 40px Title Case header, 8px cells */
+.lla-table.compact th{height:var(--table-header-height-compact);padding:0 8px;font-size:14px;line-height:20px;font-weight:500;color:var(--muted)}
+.lla-table.compact td{padding:8px}
+.lla-table.compact .lla-table-num{font-variant-numeric:tabular-nums}
+.lla-cell-title{display:block;line-height:21px;font-weight:700;color:var(--ink)}
+.lla-cell-sub{display:block;margin:0;font-size:14px;line-height:22.4px;color:var(--muted)}
+.lla-table.sticky thead th{position:sticky;top:0;z-index:1;background:var(--surface-nav)}
+.lla-table.compact.sticky thead th{background:var(--surface)}
+.lla-table-empty{margin:0;padding:40px;text-align:center;font-size:14px;line-height:21px;color:var(--muted)}
+/* D tints the creator initials by row: rows 1, 4, 7 = variant 1; 2, 5, 8 = variant 2; 3, 6, 9 = variant 3. */
+.lla-table tbody tr:nth-child(3n+1) .lla-person .lla-avatar{background:var(--avatar-1-fill);color:var(--avatar-1-ink)}
+.lla-table tbody tr:nth-child(3n+2) .lla-person .lla-avatar{background:var(--avatar-2-fill);color:var(--avatar-2-ink)}
+.lla-table tbody tr:nth-child(3n+3) .lla-person .lla-avatar{background:var(--avatar-3-fill);color:var(--avatar-3-ink)}
+
+/* ---------- CreatorCell ---------- */
+.lla-person{display:flex;align-items:flex-start;gap:8px;min-width:0}
+.lla-person-text{min-width:0;line-height:20px}
+.lla-person-name{display:inline-block;vertical-align:baseline;max-width:var(--person-name-max);padding:0;border:0;border-radius:var(--radius-xs);background:none;font-size:13px;line-height:19.5px;font-weight:500;color:var(--ink);text-align:left;white-space:normal;overflow-wrap:anywhere;cursor:pointer}
+.lla-person-badge{white-space:nowrap}
+.lla-person-role{margin-top:5px;font-size:10px;line-height:15px;color:var(--muted)}
+.lla-person-date{display:block;margin-top:3px;font-size:9px;line-height:12.86px;color:var(--person-date)}
+
+/* ---------- PlatformIcons: text marks at the 16px floor ---------- */
+.lla-platforms{display:inline;white-space:nowrap;font-size:16px;line-height:20px;font-weight:700;color:var(--primary)}
+.lla-platforms.inline{font-size:inherit;line-height:inherit;font-weight:inherit;color:inherit;white-space:normal}
+.lla-platforms.inline .lla-platform-mark{font-size:16px;line-height:0}
+
+/* ---------- RowActions ---------- */
+.lla-ractions{display:flex;flex-wrap:wrap;align-items:center;gap:4px}
+.lla-ractions .lla-ibtn.outline:not(:hover){border-color:var(--row-action-border)}
+
+/* ---------- CampaignCard + CampaignGrid ---------- */
+.lla-cgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px 14px;margin-bottom:28px;padding-bottom:20px;border-bottom:1px solid var(--line)}
+.lla-cgrid-new{grid-column:1/-1;justify-self:start}
+.lla-ccard{min-width:0;padding:14px;border:1px solid var(--line-card);border-radius:var(--radius-card);background:var(--surface);color:var(--ink-strong)}
+.lla-ccard.selected{border-color:var(--selected-border);background:var(--gradient-selected);box-shadow:var(--shadow-selected)}
+.lla-ccard-head{display:flex;flex-wrap:wrap;align-items:center;gap:5px}
+.lla-ccard-title{display:inline-flex;align-items:center;min-height:24px;padding:0;border:0;border-radius:var(--radius-md);background:none;font-family:var(--font-sans);font-size:13px;line-height:18.57px;font-weight:450;letter-spacing:-.025em;color:var(--ink);text-align:left;white-space:normal;cursor:pointer}
+.lla-ccard-sub{margin:12px 0 16px;font-size:12px;line-height:18px;color:var(--muted)}
+.lla-ccard-stats{display:flex;gap:15px}
+.lla-ccard-stat strong{display:block;font-size:18px;line-height:27px;font-weight:500;color:var(--ink-strong)}
+.lla-ccard-stat small{display:block;margin-top:3px;font-size:11px;line-height:16.5px;color:var(--muted)}
+
+/* ---------- KanbanBoard + KanbanCard ---------- */
+.lla-kanban-summary{margin:0;font-size:14px;line-height:21px;color:var(--muted)}
+.lla-kanban-summary.lanes{margin:0 0 22px;line-height:22.4px;color:var(--ink)}
+.lla-kanban{position:relative;display:grid;grid-auto-flow:column;grid-auto-columns:minmax(var(--lla-kanban-col,var(--kanban-column)),1fr);gap:12px;padding-bottom:18px;overflow-x:auto}
+.lla-kcol{display:flex;flex-direction:column;gap:12px;min-width:0}
+.lla-kcol-head{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.lla-kcol-title{margin:0;font-size:13px;line-height:19.5px;font-weight:500;color:var(--ink)}
+.lla-kcol-list{display:flex;flex-direction:column;gap:12px;margin:0;padding:0;list-style:none}
+.lla-kcol-empty{margin:0;font-size:14px;line-height:21px;color:var(--muted)}
+.lla-kanban.lanes{grid-auto-columns:minmax(var(--lla-kanban-col,var(--kanban-lane)),1fr);padding-bottom:0}
+.lla-kanban.lanes .lla-kcol{padding:12px;border-radius:var(--radius-xl);background:var(--kanban-lane-fill)}
+.lla-kanban.lanes .lla-kcol-head{min-height:36px;gap:8px}
+.lla-kcard{padding:24px;border:1px solid var(--line-card);border-radius:var(--radius-xl);background:var(--surface);box-shadow:var(--shadow-sm);color:var(--ink-strong)}
+.lla-kcard-open{display:block;width:100%;padding:0;border:0;border-radius:var(--radius-xs);background:none;font-size:14px;line-height:21px;font-weight:450;text-align:left;cursor:pointer}
+.lla-kcard-person{display:flex;align-items:flex-start;gap:10px}
+.lla-kcard-person .lla-avatar{font-weight:450}
+.lla-kcard-person strong{min-width:0;overflow-wrap:anywhere;font-size:13px;line-height:19.5px;font-weight:700;color:var(--ink-strong)}
+.lla-kcard-meta{display:block;margin:16px 0;font-size:11px;line-height:16.5px;color:var(--muted)}
+.lla-kcard-foot{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.lla-kcard-foot small{font-size:11.2px;line-height:16.8px;color:var(--ink-strong)}
+
+/* ---------- ListRow ---------- */
+.lla-lrow{display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--settings-divider);font-size:12px;line-height:18px}
+.lla-lrow:last-child{border-bottom:0}
+.lla-lrow.compact{padding:5px 0;border-bottom:0}
+.lla-lrow-grow{flex:1;min-width:0}
+.lla-lrow-title{display:block;font-weight:400;color:var(--ink-strong)}
+.lla-lrow-desc{margin:4px 0;color:var(--muted)}
+.lla-lrow-meta{flex:none}
+.lla-lrow-actions{display:flex;flex:none;align-items:center;gap:12px}
+.lla-lrow-label{color:var(--muted)}
+.lla-lrow-value{font-weight:400;color:var(--ink-strong)}
+.lla-lrow-link{display:inline-block;margin-top:12px;padding:0;border:0;border-radius:var(--radius-xs);background:none;font:inherit;font-weight:450;color:var(--settings-link);text-decoration:underline;cursor:pointer}
+
+/* ---------- SettingsSection + SettingsHeader ---------- */
+.lla-ssection{margin:0}
+.lla-ssection+.lla-ssection{margin-top:36px}
+.lla-ssection-head{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.lla-ssection-title{margin:0 0 12px;font-family:var(--font-sans);font-size:12px;line-height:18px;font-weight:400;letter-spacing:.07em;text-transform:uppercase;color:var(--settings-heading)}
+.lla-ssection-meta{font-size:11px;line-height:16.5px;color:var(--settings-meta)}
+.lla-ssection-desc{margin:0;font-size:14px;line-height:21px;color:var(--muted)}
+.lla-ssection-card{padding:24px;border:1px solid var(--line-card);border-radius:var(--radius-xl);background:var(--surface);box-shadow:var(--shadow-sm);color:var(--ink-strong)}
+.lla-ssection-card>.lla-ssection-desc:only-child{margin:0}
+.lla-sheader{margin-bottom:32px}
+.lla-sheader-eyebrow{display:block;font-size:11px;line-height:21px;color:var(--settings-meta)}
+.lla-sheader-title{margin:0;font-size:26px;line-height:32.5px;font-weight:500;letter-spacing:-.045em;color:var(--ink)}
+.lla-sheader-mark{display:inline-grid;place-items:center;width:30px;height:30px;margin-right:10px;border:1px solid var(--settings-mark-border);border-radius:var(--radius-lg);background:var(--settings-mark-fill);font-size:14px;line-height:17.5px;font-weight:500}
+.lla-sheader-id{display:block}
+.lla-sheader-id small{font-size:11px;line-height:16.5px;color:var(--settings-meta)}
+.lla-code-chip{display:inline-block;padding:4px 10px;border:1px solid var(--settings-code-border);border-radius:var(--radius-label);background:var(--settings-code-fill);font-family:var(--font-code);font-size:11px;line-height:16.5px;color:var(--ink)}
+.lla-sheader-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:20px}
+
+/* ---------- Disclosure (native details / summary) ---------- */
+.lla-disclosure-details{margin:0}
+.lla-disclosure-summary{list-style:none;cursor:pointer}
+.lla-disclosure-summary::-webkit-details-marker{display:none}
+.lla-disclosure-chev{transition:transform .15s}
+.lla-disclosure.card{border:1px solid var(--disclosure-border);border-radius:var(--radius-card);background:var(--surface);color:var(--disclosure-ink)}
+.lla-disclosure.card .lla-disclosure-summary{display:flex;align-items:center;padding:18px 20px;border-radius:var(--radius-card);font-size:14px;line-height:21.7px;font-weight:500;color:var(--disclosure-ink)}
+.lla-disclosure.card .lla-disclosure-chev{margin:-4px 0 -4px -4px}
+.lla-disclosure.card details[open]>summary .lla-disclosure-chev{transform:rotate(90deg)}
+.lla-disclosure-status{margin-left:12px;font-size:12px;line-height:18.6px;font-weight:400;color:var(--disclosure-status)}
+.lla-disclosure.card .lla-disclosure-body{padding:0 20px 20px;font-size:14px;line-height:21.7px;color:var(--disclosure-body)}
+.lla-disclosure.card .lla-disclosure-body p{margin:0}
+.lla-disclosure.card .lla-disclosure-body .lla-disclosure-note{display:block;margin-top:16px;font-size:11.2px;line-height:17.36px;color:var(--disclosure-note)}
+.lla-disclosure.inline{font-family:var(--font-arial);letter-spacing:normal}
+.lla-disclosure.inline .lla-disclosure-details{margin-top:13px;padding-top:11px;border-top:1px solid var(--disclosure-inline-rule)}
+.lla-disclosure.inline .lla-disclosure-summary{display:flex;align-items:center;gap:5px;width:fit-content;border-radius:var(--radius-xs);font-size:11px;line-height:16.5px;font-weight:600;color:var(--disclosure-inline-ink)}
+.lla-disclosure.inline .lla-disclosure-chev{margin:-4px}
+.lla-disclosure.inline details[open]>summary .lla-disclosure-chev{transform:rotate(180deg)}
+.lla-disclosure-dl{display:grid;gap:9px;margin:15px 0 0;font-size:11px;line-height:16.5px}
+.lla-disclosure-dl>div{display:flex;justify-content:space-between;gap:15px}
+.lla-disclosure-dl dt{color:var(--disclosure-term)}
+.lla-disclosure-dl dd{margin:0;text-align:right;color:var(--disclosure-value)}
+.lla-disclosure.inline .lla-disclosure-body .lla-disclosure-note{margin:9px 0 0;font-size:10px;line-height:16.5px;color:var(--disclosure-term)}
+
+/* ---------- SelectableTile ---------- */
+.lla-tiles{display:flex;gap:12px}
+.lla-tiles>.lla-tile{flex:1}
+.lla-tile{display:flex;flex-direction:column;align-items:flex-start;min-width:0;padding:16px;border:1px solid var(--tile-border);border-radius:var(--radius-card);background:var(--surface);font-family:inherit;font-size:14px;line-height:21.7px;letter-spacing:normal;color:var(--tile-ink);text-align:left;cursor:pointer}
+.lla-tile.selected{border:2px solid var(--tile-selected-border);background:var(--tile-selected-fill)}
+.lla-tile strong{font-weight:700}
+.lla-tile-desc{display:block;margin-top:6px;font-size:12px;line-height:18.6px}
+.lla-tile:disabled{opacity:var(--opacity-disabled);cursor:not-allowed}
+/* D's flow ring (.ivy-flow button:focus-visible): 2px focus-ring-portal at 3px. Buttons only, as in D. */
+button.lla-tile:focus-visible{outline:2px solid var(--focus-ring-portal);outline-offset:3px}
+.lla-tile-why{margin:6px 0 0;font-size:12px;line-height:18px;color:var(--muted)}
+
+/* ---------- PortalShell (creator portal: Arial, green) ---------- */
+.lla-portal{container-type:inline-size;width:100%;background:var(--surface);font-family:var(--font-arial);font-size:16px;line-height:1.6;letter-spacing:normal;color:var(--portal-ink)}
+.lla-portal-page{max-width:var(--portal-max-width);margin:0 auto;padding:28px 40px 80px}
+.lla-portal-top{display:flex;align-items:center;justify-content:space-between;gap:20px;padding-bottom:20px;border-bottom:1px solid var(--portal-line);font-size:13px;line-height:20.8px;color:var(--portal-meta)}
+.lla-portal-brand{font-size:25px;line-height:40px;font-weight:800;letter-spacing:-1px;color:var(--portal-brand)}
+.lla-portal-banner{margin:20px 0;padding:10px 14px;border-radius:var(--radius-md);background:var(--portal-banner);font-size:12px;line-height:19.2px;color:var(--portal-meta)}
+.lla-portal-heading{max-width:var(--portal-heading-width);padding:18px 0 28px}
+.lla-portal-heading small{font-size:12px;line-height:19.2px;letter-spacing:1px;text-transform:uppercase;color:var(--portal-eyebrow)}
+.lla-portal-heading h1{margin:14px 0 20px;font-size:40px;line-height:46px;font-weight:650;letter-spacing:-1.5px;color:var(--portal-ink)}
+.lla-portal-heading p{margin:0;font-size:16px;line-height:25.6px}
+.lla-portal-layout{display:grid;grid-template-columns:minmax(0,1fr) var(--portal-aside-width);gap:40px;align-items:start}
+.lla-portal-article{min-width:0}
+.lla-portal-glance{display:grid;gap:16px;margin-bottom:26px;padding:20px;border-radius:var(--radius-card);background:var(--portal-glance-fill)}
+.lla-portal-glance small{display:block;font-size:12px;line-height:19.2px;color:var(--portal-glance-label)}
+.lla-portal-glance strong{font-size:14px;line-height:22.4px;font-weight:500}
+.lla-portal-section{padding:24px 0;border-top:1px solid var(--portal-rule)}
+.lla-portal-section h2,.lla-portal-aside h2{margin:0 0 18px;font-size:22px;line-height:35.2px;font-weight:400;letter-spacing:-.4px;color:var(--portal-ink)}
+.lla-portal-field{margin-bottom:20px}
+.lla-portal-field h3{margin:0 0 7px;font-size:13px;line-height:20.8px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:var(--portal-field-label)}
+.lla-portal-field p{margin:0;white-space:pre-line}
+.lla-portal a{border-radius:var(--radius-xs);color:var(--portal-link);text-decoration:none;overflow-wrap:anywhere}
+.lla-portal-ext{margin:-4px -4px -4px 0;vertical-align:-3px}
+.lla-portal-aside{position:sticky;top:20px;padding:22px;border:1px solid var(--portal-aside-border);border-radius:var(--radius-xl);background:var(--portal-aside-fill);font-size:14px;line-height:22.4px}
+.lla-portal-aside h2{font-size:20px;line-height:32px}
+.lla-portal-aside p{margin:0}
+.lla-portal-actions{display:flex;flex-direction:column;gap:14px}
+.lla-portal-btn{padding:10px 14px;border:1px solid var(--portal-control-border);border-radius:var(--radius-portal);background:var(--surface);font-size:14px;line-height:22.4px;color:var(--portal-ink);cursor:pointer}
+.lla-portal-btn.primary{border-color:var(--portal-primary);background:var(--portal-primary);color:var(--portal-on-primary)}
+/* D's portal ring (.creator-portal button:focus-visible): 2px focus-ring-portal at 3px. Links keep the global ring, as in D. */
+.lla-portal-btn:focus-visible{outline:2px solid var(--focus-ring-portal);outline-offset:3px}
+.lla-portal-btn:disabled{opacity:var(--opacity-portal-disabled);cursor:not-allowed}
+@container (max-width: 850px){
+  .lla-portal-page{padding:20px}
+  .lla-portal-top{flex-direction:column;align-items:flex-start;gap:5px}
+  .lla-portal-heading h1{font-size:30px;line-height:34.5px}
+  .lla-portal-layout{grid-template-columns:minmax(0,1fr)}
+  .lla-portal-aside{position:static;grid-row:1}
+}
+
+/* ===== G-teamops-inbox ===== */
+/* Team operations and Ivy Inbox. Values are D's computed styles at 1440x900 (.operations, .approval-row, .activity-list,
+   .routine-meta, .ws-thread, .ws-message, .ws-recommendation, .inbox-payment). Departures are listed in exceptions.json. */
+
+/* ---------- Shared: agent line and card ---------- */
+.lla-ops-agent{font-size:12px;line-height:18px;font-weight:550;color:var(--ink-strong);white-space:nowrap}
+.lla-ops-kind{font-weight:400;color:var(--muted)}
+.lla-appr,.lla-pend,.lla-rit,.lla-skill{background:var(--surface);border:1px solid var(--line-card);border-radius:var(--radius-xl);box-shadow:var(--shadow-sm);color:var(--ink-strong)}
+
+/* ---------- Overlay content (inside Drawer / Dialog, which portal outside the brand scope: system face, black ink) ---------- */
+.lla-opov-stack{display:flex;flex-direction:column;gap:16px;font-family:var(--font-system);font-size:16px;line-height:24px;letter-spacing:normal;color:var(--ink-overlay)}
+.lla-opov-stack p,.lla-opov-stack h2,.lla-opov-stack h3{margin:0}
+.lla-opov-stack h3{font-size:16px;line-height:24px;font-weight:600}
+.lla-opov-stack .lla-skill-cfg-name{font-size:16px;line-height:24px;font-weight:400}
+.lla-opov-badge{display:flex;align-items:center;padding:2px 10px;border:1px solid transparent;border-radius:var(--radius-md);background:var(--surface-subtle);color:var(--ink-hover);font-size:12px;line-height:16px;font-weight:600}
+.lla-opov-muted{color:var(--muted-overlay)}
+.lla-opov-small{display:block;font-size:12.8px;line-height:19.2px}
+.lla-opov-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.lla-opov-stack .lla-opov-reason{margin-top:-8px;font-size:14px;line-height:20px;color:var(--muted-overlay)}
+/* D's dialog fields (Edit ritual): a 16px regular label straight above the control. */
+.lla-opov-stack .lla-field{gap:0}
+.lla-opov-stack .lla-field-label{font-family:inherit;font-size:16px;line-height:24px;font-weight:400;letter-spacing:normal;color:var(--ink-overlay)}
+/* D's drawer textarea: 212 x 220 (8 rows) beside its label text, radius 8. EXCEPTION: D draws no border; the DS adds control-border-overlay and takes 1px off the padding so the box and the text wrap stay D's. */
+.lla-opov-field{display:block}
+.lla-opov-textarea{width:212px;padding:13px;border:1px solid var(--control-border-overlay);border-radius:var(--radius-lg);background:transparent;font:inherit;color:inherit;resize:vertical}
+.lla-g-missing{padding:24px;border:1px dashed var(--line-overlay)}
+
+/* ---------- CountHeader ---------- */
+.lla-ops-head-row{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:26px}
+.lla-ops-head-text{min-width:0}
+.lla-ops-kicker{margin:0;font-size:10px;line-height:21px;font-weight:500;letter-spacing:.1em;color:var(--ops-kicker)}
+.lla-ops-title{margin:8px 0 6px;font-size:26px;line-height:32.5px;font-weight:500;letter-spacing:-.045em;color:var(--ink)}
+.lla-ops-desc{margin:0;font-size:14px;line-height:21px;color:var(--muted)}
+.lla-ops-count{flex:none;margin:0;text-align:right;font-size:34px;line-height:51px;font-weight:500;letter-spacing:-.05em;color:var(--ink);font-variant-numeric:tabular-nums}
+.lla-ops-count-n{display:block}
+.lla-ops-count small{display:block;font-size:11px;line-height:16.5px;font-weight:400;letter-spacing:0;color:var(--ops-count-label)}
+.lla-ops-toolbar{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin:0 0 14px}
+
+/* ---------- ApprovalRow ---------- */
+.lla-appr-in{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:16px;row-gap:2px;padding:12px 14px}
+.lla-appr-top,.lla-appr-title,.lla-appr-context,.lla-appr-body{grid-column:1;margin:0}
+.lla-appr-top{display:flex;align-items:center;gap:8px;min-width:0;line-height:18px}
+.lla-appr-title{font-size:14px;line-height:18.9px;font-weight:500;letter-spacing:-.025em;color:var(--ink-strong)}
+.lla-appr-context{font-size:11px;line-height:16.5px;color:var(--muted)}
+.lla-appr-body{font-size:12px;line-height:16.8px;color:var(--ink-strong);white-space:pre-wrap;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+.lla-appr-actions{grid-column:2;grid-row:1/5;align-self:center;display:grid;grid-template-columns:1fr 1fr;gap:5px;max-width:var(--ops-row-actions-max)}
+.lla-appr-actions .lla-btn{height:var(--ops-row-button-height);padding:4px 8px;font-size:11px;line-height:15.71px}
+.lla-appr-actions .lla-btn:first-child{grid-column:1/-1}
+@media (max-width:650px){
+  .lla-appr-in{grid-template-columns:1fr}
+  .lla-appr-actions{grid-column:1;grid-row:auto;display:flex;flex-wrap:wrap;max-width:none;margin-top:8px}
+}
+
+/* ---------- ActivityItem ---------- */
+.lla-act{display:flex;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
+.lla-act-dot{flex:none;width:8px;height:8px;margin-top:6px;border-radius:50%;background:var(--ops-activity-dot)}
+.lla-act-main{min-width:0}
+.lla-act-meta{margin:0;font-size:11px;line-height:21px;color:var(--muted-subtle)}
+.lla-act-title{margin:4px 0;font-size:15px;line-height:22.5px;font-weight:500;color:var(--ink)}
+.lla-act-detail{margin:4px 0;font-size:13px;line-height:19.5px;color:var(--muted)}
+.lla-act .lla-btn{padding:4px 8px;font-size:11px;line-height:15.71px}
+
+/* ---------- PendingActionCard ---------- */
+.lla-pend{padding:24px}
+.lla-pend-badge{line-height:21px;height:21px}
+.lla-pend-title,.lla-pend-text{margin:0;font-size:14px;line-height:21px;color:var(--ink-strong)}
+.lla-pend-title{font-weight:500}
+
+/* ---------- RitualCard ---------- */
+.lla-rit{padding:24px}
+.lla-rit-top{display:flex;align-items:center;justify-content:space-between;gap:16px;line-height:18px}
+.lla-rit-name{margin:16px 0 10px;font-size:19px;line-height:25.65px;font-weight:500;letter-spacing:-.025em;color:var(--ink-strong)}
+.lla-rit-desc{margin:0 0 20px;font-size:14px;line-height:22.4px}
+.lla-rit-meta{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:18px;margin:0 0 18px;padding:18px 0;border-block:1px solid var(--line);font-size:13px;line-height:19.5px}
+.lla-rit-meta dt{margin:0 0 6px;font-size:11px;line-height:16.5px;color:var(--ops-meta-label)}
+.lla-rit-meta dd{margin:0}
+.lla-rit-last{margin:0;font-size:14px;line-height:21px;color:var(--muted)}
+.lla-rit-suggest{margin:0 0 20px;padding:18px;border:1px solid var(--ops-suggestion-border);border-radius:var(--radius-flow);background:var(--ops-suggestion-fill);font-size:13px;line-height:19.5px}
+.lla-rit-suggest p{margin:8px 0 14px}
+.lla-rit-suggest small{display:block;margin-top:8px;font-size:10.4px;line-height:15.6px;color:var(--ops-suggestion-note)}
+.lla-rit-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.lla-rit-reason{margin:8px 0 0;font-size:12px;line-height:18px;color:var(--muted)}
+
+/* ---------- SkillCard ---------- */
+.lla-skill{padding:24px}
+.lla-skill-name{margin:0;font-size:13px;line-height:19.5px;font-weight:500;color:var(--ink-strong)}
+.lla-skill-desc{margin:0;font-size:14px;line-height:22.4px;color:var(--muted)}
+
+/* ---------- ThreadListItem (and the thread list column it sits in) ---------- */
+.lla-thread-list{display:flex;flex-direction:column;gap:8px;width:var(--inbox-thread-col);padding:12px;border-right:1px solid var(--inbox-list-border)}
+@media (max-width:1150px){.lla-thread-list{width:var(--inbox-thread-col-compact)}}
+@media (max-width:750px){.lla-thread-list{width:auto;max-height:var(--inbox-thread-list-max);overflow:auto}}
+.lla-thread{display:flex;flex-direction:column;gap:10px;width:100%;margin:8px 0;padding:14px;border:1px solid transparent;border-bottom-color:var(--inbox-thread-divider);border-radius:0;background:transparent;text-align:left;font-family:var(--font-sans);font-size:12px;line-height:18px;font-weight:450;color:var(--ink);cursor:pointer}
+.lla-thread[aria-current="true"]{border-color:var(--inbox-thread-selected)}
+.lla-thread-person{display:flex;align-items:center;gap:10px;min-width:0}
+.lla-thread-name{font-size:13px;line-height:19.5px;font-weight:700;color:var(--ink)}
+.lla-thread-meta{display:block;margin-top:4px;font-size:11px;line-height:16.5px}
+.lla-thread>.lla-badge{align-self:flex-start}
+.lla-thread-preview{display:block;overflow-wrap:anywhere}
+.lla-thread-unread{display:block;font-size:9.6px;line-height:14.4px}
+
+/* ---------- ThreadHeader ---------- */
+.lla-thdr{position:relative;display:flex;flex-direction:column;gap:8px;margin-bottom:20px;padding-right:38px;font-size:12px;line-height:18px}
+.lla-thdr-link{display:flex;align-items:center;gap:12px;width:100%;padding:0;border:0;background:transparent;text-align:left;font:inherit;color:inherit;cursor:pointer}
+.lla-thdr-link:hover .lla-thread-name{text-decoration:underline}
+/* D's own ring on the View creator link: 2px focus-ring-inbox at a 5px offset, radius 4. */
+.lla-thdr .lla-thdr-link:focus-visible{outline:2px solid var(--focus-ring-inbox);outline-offset:5px;border-radius:var(--radius-sm)}
+.lla-thdr-view{display:inline-flex;align-items:center;font-size:12px;line-height:18px;font-weight:450;color:var(--inbox-link)}
+.lla-thdr-view .lla-ibox{margin:-4px -4px -4px -2px}
+.lla-thdr-role{color:var(--muted)}
+.lla-thdr-campaign{font-size:13px;line-height:19.5px;font-weight:600;color:var(--inbox-campaign)}
+.lla-thdr-menu{position:absolute;top:0;right:0}
+
+/* ---------- MessageBubble ---------- */
+.lla-msg-list{display:flex;flex-direction:column;gap:20px}
+.lla-msg{max-width:90%;font-size:13px;line-height:20.8px;color:var(--ink)}
+.lla-msg.out{align-self:flex-end;padding:12px 16px;border-radius:var(--radius-card);background:var(--inbox-out-fill)}
+.lla-msg.draft{border:1px dashed var(--inbox-draft-border);background:var(--inbox-draft-fill)}
+.lla-msg-meta{margin:0;font-size:10.4px;line-height:19.5px;color:var(--muted)}
+.lla-msg-body{margin:6px 0;white-space:pre-wrap;overflow-wrap:anywhere}
+.lla-msg>.lla-btn{margin-top:10px}
+
+/* ---------- ReadCard ---------- */
+.lla-read{padding:24px;border:1px solid var(--inbox-read-border);border-radius:var(--radius-xl);background:var(--inbox-read-gradient);box-shadow:var(--shadow-sm);color:var(--ink-strong)}
+.lla-read-top{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.lla-read-eyebrow{font-size:10px;line-height:15px;letter-spacing:.15em;text-transform:uppercase}
+.lla-read-headline{margin:12px 0;font-size:17px;line-height:25.5px;font-weight:500;color:var(--ink-strong)}
+.lla-read-text{margin:12px 0 0;font-size:14px;line-height:22.4px}
+.lla-read-pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.lla-read-facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:20px 0}
+.lla-read-facts dt{font-size:11.2px;line-height:21px;color:var(--muted)}
+.lla-read-facts dd{margin:6px 0 0;font-size:15px;line-height:22.5px;font-weight:700}
+.lla-read-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+@media (max-width:1150px){.lla-read-facts{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* ---------- InlinePaymentCard ---------- */
+.lla-pay{margin:20px 0;padding:22px;border:1px solid var(--inbox-pay-border);border-radius:var(--radius-xl);background:var(--surface);font-size:14px;line-height:21.7px;color:var(--flow-ink)}
+.lla-pay p{margin:8px 0 14px;line-height:22.4px;color:var(--flow-muted)}
+.lla-pay .lla-pay-eyebrow{margin:0;font-size:11.2px;line-height:21.7px;color:var(--flow-ink)}
+.lla-pay-title{margin:8px 0;font-size:17px;line-height:26.35px;font-weight:500;color:var(--flow-ink)}
+.lla-pay-amount{display:block;font-weight:700}
+.lla-pay-field{display:flex;flex-direction:column;gap:6px;margin:14px 0;font-weight:500}
+/* D's native provider select: 41px, radius 7, 10px 12px padding, 14px/500 flow ink. EXCEPTION: border control-border-flow (D's own border is 1.46:1). */
+.lla-pay-select{width:100%;height:41px;padding:10px 12px;border:1px solid var(--control-border-flow);border-radius:var(--radius-flow);background:var(--surface);font:inherit;color:inherit}
+/* The flow checkbox label keeps D's inherited -0.168px tracking. */
+.lla-pay .lla-check.flow .lla-check-row{letter-spacing:inherit}
+.lla-pay-check{margin:14px 0;font-weight:400}
+.lla-pay-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+/* D's .ivy-flow ring on the card's buttons: 2px focus-ring-inbox-pay at a 3px offset. */
+.lla-pay .lla-btn:focus-visible{outline:2px solid var(--focus-ring-inbox-pay);outline-offset:3px}
+.lla-pay .lla-pay-reason{margin:8px 0 0}
+.lla-pay .lla-pay-failed{color:var(--danger-ink)}
+
+/* ===== H-cal-metrics-elliot-seq ===== */
+/* ---------- Trend chart (D Lr) ---------- */
+.lla-spark{display:block;width:100%;height:100px;overflow:visible}
+.lla-spark-area{fill:var(--chart-area)}
+.lla-spark-line{fill:none;stroke:var(--chart-1);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.lla-spark-dot{fill:var(--chart-1)}
+.lla-spark-line.prev{stroke:var(--chart-previous)}
+.lla-spark-dot.prev{fill:var(--chart-previous)}
+.lla-spark-line.s2{stroke:var(--chart-2)}
+.lla-spark-dot.s2{fill:var(--chart-2)}
+.lla-spark-bar{fill:var(--chart-bar)}
+
+/* ---------- CalendarEvent: booking chip ---------- */
+.lla-cal-event{display:flex;align-items:center;justify-content:flex-start;gap:8px;width:100%;max-width:100%;height:29px;margin-top:8px;padding:8px 6px;border:0;border-left:2px solid var(--cal-live-mark);border-radius:var(--radius-sm);background:var(--cal-live-fill);color:var(--cal-live-ink);font-family:var(--font-sans);font-size:11px;line-height:15.71px;font-weight:450;text-align:left;white-space:nowrap;cursor:pointer}
+.lla-cal-event-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lla-cal-event .lla-badge{flex:none}
+.lla-cal-event.revisions{background:var(--cal-revisions-fill);border-left-color:var(--cal-revisions-mark);color:var(--cal-revisions-ink)}
+.lla-cal-event.progress{background:var(--cal-progress-fill);border-left-color:var(--cal-progress-mark);color:var(--cal-progress-ink)}
+.lla-cal-event.brief{background:var(--cal-brief-fill);border-left-color:var(--cal-brief-mark);color:var(--cal-brief-ink)}
+.lla-cal-event.contracting{background:var(--cal-contracting-fill);border-left-color:var(--cal-contracting-mark);color:var(--cal-contracting-ink)}
+.lla-cal-event.scheduled{background:var(--cal-scheduled-fill);border-left-color:var(--cal-scheduled-mark);color:var(--cal-scheduled-ink)}
+
+/* ---------- CalendarEvent: post card (Elliot) ---------- */
+.lla-post-event{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:7px;width:100%;margin-top:8px;padding:9px;border:1px solid var(--ed-event-line);border-left:3px solid var(--ed-status-scheduled);border-radius:var(--radius-md);background:var(--surface);color:var(--ed-cal-ink);font-family:var(--font-sans);font-size:12px;line-height:18px;font-weight:450;text-align:left;cursor:pointer}
+.lla-post-event.published{border-left-color:var(--ed-status-published)}
+.lla-post-event.pending{border-left-color:var(--ed-status-pending)}
+.lla-post-event.draft{border-left-color:var(--ed-status-draft)}
+.lla-post-event-meta{align-self:stretch;font-size:.8em;line-height:1.5}
+.lla-post-event-title{align-self:stretch;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:12px;line-height:18px;font-weight:700}
+.lla-post-event.block{font-size:14px;line-height:21px;color:var(--ink-strong)}
+
+/* ---------- MonthGrid ---------- */
+.lla-mgrid.campaign{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));border-top:1px solid var(--line);border-left:1px solid var(--line);border-radius:var(--radius-lg);overflow:hidden;background:var(--surface)}
+.lla-mgrid.campaign .lla-mgrid-wd,.lla-mgrid.campaign .lla-mgrid-day{min-width:0;padding:10px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.lla-mgrid.campaign .lla-mgrid-wd{background:var(--surface-nav);color:var(--muted);font-size:10px;line-height:15px;font-weight:600;letter-spacing:.09em}
+.lla-mgrid.campaign .lla-mgrid-day{min-height:var(--cal-day-min-height)}
+.lla-mgrid.campaign .lla-mgrid-day.outside{background:var(--cal-outside)}
+.lla-mgrid.campaign .lla-mgrid-num{display:block;color:var(--muted);font-size:12px;line-height:21px}
+.lla-mgrid.content{display:grid;grid-template-columns:repeat(7,minmax(100px,1fr));gap:9px;overflow:auto}
+.lla-mgrid.content .lla-mgrid-wd{padding:8px;color:var(--ed-cal-weekday);font-size:11.2px;line-height:16.8px}
+.lla-mgrid.content .lla-mgrid-day{min-width:0;min-height:var(--ed-cal-day-min-height);padding:9px;border:1px solid var(--ed-cal-line);border-radius:var(--radius-lg);background:var(--surface);color:var(--ed-cal-ink);font-size:12px;line-height:18px}
+.lla-mgrid.content .lla-mgrid-day.outside{background:var(--ed-cal-outside)}
+.lla-mgrid.content .lla-mgrid-num{display:block}
+.lla-mgrid.content .today .lla-mgrid-num{font-weight:700}
+.lla-mgrid .lla-btn.lla-mgrid-create{display:block;width:100%;height:auto;min-height:var(--control-height);padding:7px 8px;color:var(--ed-cal-ink);white-space:normal;text-align:center}
+.lla-mgrid .lla-mgrid-create .lla-ibox{display:inline-grid;margin:-4px 4px -4px -4px;vertical-align:-6px}
+.lla-mgrid-list{display:flex;flex-direction:column;gap:16px;margin:0;padding:0;list-style:none}
+.lla-mgrid-list-card{padding:24px;border:1px solid var(--line-card);border-radius:var(--radius-xl);background:var(--surface);box-shadow:var(--shadow-sm);line-height:21px}
+.lla-mgrid-list-date{display:block;color:var(--ink-strong);font-size:11.2px;line-height:21px}
+.lla-mgrid-empty{margin:0;font-size:14px;line-height:22.4px}
+
+/* ---------- PartyFilterTile ---------- */
+.lla-party-group{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);border:1px solid var(--line);border-radius:var(--radius-lg);background:var(--surface)}
+.lla-party{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:8px;min-width:0;margin:0;padding:16px;border:0;border-radius:0;background:var(--surface);color:var(--ink-strong);font-family:var(--font-sans);text-align:left;white-space:normal;cursor:pointer;transition:background-color .15s}
+.lla-party-group>.lla-party+.lla-party{border-left:1px solid var(--line)}
+.lla-party-group>.lla-party:first-child{border-radius:calc(var(--radius-lg) - 1px) 0 0 calc(var(--radius-lg) - 1px)}
+.lla-party-group>.lla-party:last-child{border-radius:0 calc(var(--radius-lg) - 1px) calc(var(--radius-lg) - 1px) 0}
+.lla-party:focus-visible{z-index:1}
+.lla-party-label{font-size:14px;line-height:20px;font-weight:450}
+.lla-party-count{font-size:24px;line-height:34.29px;font-weight:500;color:var(--party-count)}
+.lla-party-reason{font-size:11px;line-height:15.71px;font-weight:450;color:var(--party-reason)}
+.lla-party:hover{background:var(--surface-hover);color:var(--ink-hover)}
+.lla-party[aria-pressed="true"]{background:var(--party-pressed-fill);box-shadow:inset 0 -2px var(--party-pressed-mark)}
+.lla-party[aria-pressed="true"]:hover{color:var(--ink-hover)}
+.lla-party:disabled{background:var(--surface);color:var(--party-disabled);cursor:default}
+.lla-party:disabled .lla-party-count{color:var(--party-disabled)}
+
+/* ---------- Stepper (drawer: system font) ---------- */
+.lla-stepper{display:grid;gap:4px;margin:0;padding:0;list-style:none;color:var(--stepper-todo-ink);font-family:var(--font-system);font-size:10px;line-height:15px;letter-spacing:normal}
+.lla-stepper>li{position:relative;padding-top:24px}
+.lla-stepper>li::before{content:"";position:absolute;top:7px;left:0;right:-4px;height:2px;background:var(--stepper-todo-line)}
+.lla-stepper>li:last-child::before{right:90%}
+.lla-stepper-dot{position:absolute;top:3px;left:0;width:10px;height:10px;border:2px solid var(--stepper-todo-dot);border-radius:var(--radius-full);background:var(--surface)}
+.lla-stepper>li.done{color:var(--stepper-done-ink)}
+.lla-stepper>li.done::before{background:var(--stepper-done-line)}
+.lla-stepper>li.done .lla-stepper-dot{border-color:var(--stepper-done-dot);background:var(--stepper-done-dot)}
+.lla-stepper>li[aria-current="step"]{color:var(--stepper-current-ink);font-weight:650}
+.lla-handoff{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border:1px solid var(--handoff-line);border-radius:var(--radius-lg);color:var(--ink-overlay);font-family:var(--font-system);letter-spacing:normal}
+.lla-handoff-tile{min-width:0;padding:12px}
+.lla-handoff-tile+.lla-handoff-tile{border-left:1px solid var(--handoff-line)}
+.lla-handoff-head{display:flex;align-items:center;gap:8px;margin-top:14px}
+.lla-handoff-head strong{font-size:12px;line-height:18px;font-weight:700}
+.lla-handoff-flag{margin:-3px -4px;color:var(--handoff-todo)}
+.lla-handoff-flag.done{color:var(--handoff-done)}
+.lla-handoff-tile small{display:block;color:var(--muted-overlay);font-size:11px;line-height:21px}
+
+/* ---------- ReadinessList ---------- */
+.lla-readiness{color:var(--readiness-ink);font-family:var(--font-system);font-size:14px;line-height:21.7px;letter-spacing:normal}
+.lla-readiness-list{margin:0;padding:0;list-style:none}
+.lla-readiness-list li{display:flex;align-items:flex-start;gap:4px;padding:10px 0;border-bottom:1px solid var(--readiness-line)}
+.lla-readiness-list .lla-ibox{margin:-1px -4px}
+.lla-readiness-notice{margin-top:14px;padding:16px;border:1px solid var(--readiness-warn-line);border-radius:var(--radius-lg);background:var(--readiness-warn-fill)}
+.lla-readiness-notice strong{display:block;font-weight:700}
+.lla-readiness-notice p{margin:8px 0 14px;color:var(--readiness-muted)}
+.lla-readiness-brief{padding:14px;color:var(--readiness-brief-ink);font-size:12px;line-height:18.6px}
+.lla-readiness-brief strong{font-weight:700}
+.lla-readiness-brief ul{margin:0;padding:0 0 0 14px;list-style:none}
+.lla-readiness-brief li{margin:8px 0}
+
+/* ---------- MetricCard ---------- */
+.lla-metric,.lla-funnel{min-width:0;padding:24px;border:1px solid var(--line-card);border-radius:var(--radius-xl);background:var(--surface);box-shadow:var(--shadow-sm);color:var(--ink-strong)}
+.lla-metric-label{display:block;color:var(--muted);font-size:14px;line-height:21px}
+.lla-metric.wallet .lla-metric-value{margin:15px 0;font-size:26px;line-height:39px;font-weight:400;letter-spacing:-.6px;white-space:nowrap}
+.lla-metric-unit{margin-left:8px;color:var(--muted-overlay);font-size:10px;line-height:15px;letter-spacing:0}
+.lla-metric-note{margin:0;color:var(--muted);font-size:14px;line-height:22.4px}
+.lla-metric.stat{display:flex;flex-direction:column;gap:12px}
+.lla-metric.stat .lla-metric-value{font-size:27px;line-height:40.5px;font-weight:550;letter-spacing:-.7px}
+.lla-metric.stat.lg .lla-metric-value{font-size:30px;line-height:45px;font-weight:500}
+.lla-metric-delta{color:var(--metric-up);font-size:11.2px;line-height:16.8px}
+.lla-metric-delta.down{color:var(--metric-down)}
+.lla-metric.stat .lla-spark{height:36px}
+.lla-metric.stat.lg .lla-spark{height:38px}
+.lla-metric-head{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.lla-metric-title{margin:0;font-size:13px;line-height:19.5px;font-weight:500}
+.lla-metric-aside{color:var(--muted);font-size:11.2px;line-height:16.8px}
+.lla-metric-legend{display:flex;flex-wrap:wrap;gap:10px;color:var(--muted-overlay);font-size:11.2px;line-height:16.8px}
+.lla-metric-legend span{display:inline-flex;align-items:center;gap:5px}
+.lla-swatch{display:inline-block;width:10px;height:3px;border-radius:calc(var(--radius-xs) - 1px);background:var(--chart-1)}
+.lla-swatch.prev{background:var(--chart-previous)}
+.lla-swatch.s2{background:var(--chart-2)}
+.lla-metric-headline{margin:0;color:var(--metric-up);font-size:14px;line-height:22.4px}
+.lla-metric-headline.down{color:var(--metric-alert)}
+.lla-metric-big{margin:20px 0;font-size:36px;line-height:54px;font-weight:400;letter-spacing:-1px}
+.lla-metric-caption{margin:0;font-size:14px;line-height:22.4px}
+
+/* ---------- Funnel ---------- */
+.lla-funnel-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:0;padding:0;list-style:none}
+.lla-funnel-value{display:block;font-size:23px;line-height:34.5px;font-weight:700}
+.lla-funnel-label{margin:0;font-size:12px;line-height:19.2px}
+.lla-funnel-meta{display:block;color:var(--funnel-meta);font-size:11.2px;line-height:21px}
+.lla-funnel-bar{margin-top:20px;background:var(--chart-funnel)}
+
+/* ---------- Gauge ---------- */
+.lla-gauge-track{position:relative;height:6px;margin:24px 0 10px;border-radius:var(--radius-sm);background:var(--gradient-cadence)}
+.lla-gauge-usual{position:absolute;top:-5px;width:2px;height:16px;background:var(--chart-usual)}
+.lla-gauge-current{position:absolute;top:-4px;width:14px;height:14px;border:3px solid var(--surface);border-radius:var(--radius-full);background:var(--chart-1)}
+.lla-gauge-ends{display:flex;justify-content:space-between;gap:16px;color:var(--muted)}
+.lla-gauge-ends small{font-size:11.2px;line-height:16.8px}
+.lla-gauge-groups{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:14px}
+.lla-gauge-groups>small{color:var(--ink-strong);font-size:11.2px;line-height:16.8px}
+
+/* ---------- PostCard ---------- */
+.lla-post{min-width:0;padding:24px;border:1px solid var(--line-card);border-radius:var(--radius-xl);background:var(--surface);box-shadow:var(--shadow-sm);color:var(--ink-strong)}
+.lla-post-open{display:block;width:100%;margin:0;padding:0;border:0;background:transparent;color:inherit;font:inherit;letter-spacing:inherit;text-align:left;cursor:pointer}
+.lla-post-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.lla-post-person{display:flex;flex:none;align-items:center;gap:10px}
+.lla-post-name{max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px;line-height:19.5px;font-weight:700}
+.lla-post-date{margin:16px 0;color:var(--muted);font-size:11px;line-height:16.5px;font-weight:450}
+.lla-post-body{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;margin:0;font-size:13px;line-height:19.5px;font-weight:450}
+.lla-post-image{display:grid;place-items:center;height:110px;margin:14px 0;border:1px solid var(--post-image-line);border-radius:var(--radius-lg);background:var(--post-image-fill);color:var(--post-image-glyph)}
+.lla-post .lla-btn.lla-post-cta{max-width:100%;height:auto;min-height:var(--control-height);margin-top:6px;white-space:normal;text-align:center}
+.lla-post-open.has-image+.lla-post-cta{margin-top:0}
+.lla-post-row{display:inline-block;max-width:100%;margin:0;padding:0;border:0;background:transparent;color:var(--ink);font-family:var(--font-sans);text-align:center;cursor:pointer}
+.lla-post-row strong{font-size:14px;line-height:20px;font-weight:700}
+.lla-post-row span{display:block;color:var(--muted);font-size:14px;line-height:22.4px;font-weight:450}
+
+/* ---------- StepCard ---------- */
+.lla-stepcard{padding:24px;border:1px solid var(--line-card);border-radius:var(--radius-xl);background:var(--surface);box-shadow:var(--shadow-sm);color:var(--ink-strong)}
+.lla-stepcard-head{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.lla-stepcard-row{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin:16px 0}
+.lla-stepcard-delay{width:220px}
+.lla-stepcard .lla-select-trigger,.lla-stepcard .lla-input{color:var(--ink-strong)}
+.lla-stepcard-after{font-size:14px;line-height:21px}
+.lla-stepcard .lla-btn.lla-stepcard-remove{padding:8px 13px}
+.lla-stepcard-text{display:block;width:100%;min-height:120px;margin:0 0 6px;padding:18px;border:1px solid var(--ed-field-line);border-radius:var(--ed-radius-field);background:var(--surface);color:var(--ink-strong);font-family:var(--font-sans);font-size:14px;line-height:23.1px;resize:vertical}
+.lla-stepcard-seq{display:flex;flex-direction:column;gap:18px;padding-left:20px;border-left:2px solid var(--ed-sequence-line)}
+.lla-h-missing{display:inline-flex;align-items:center;min-height:var(--control-height);padding:0 12px;border:1px dashed var(--control-border);border-radius:var(--radius-md);color:var(--muted);font-size:12px}
+
+/* ---------- Sequence builder parts (Inter, seq palette) ---------- */
+.lla-steprail,.lla-cadpill,.lla-cadpill-mini,.lla-token,.lla-emailpv{font-family:var(--font-inter);letter-spacing:normal}
+.lla-steprail{width:var(--seq-rail-width);padding:22px 18px;border-right:1px solid var(--seq-line);background:var(--seq-rail);color:var(--seq-ink);font-size:14px;line-height:21px}
+.lla-steprail-note{margin:0 0 14px;padding:13px 14px;border:1px solid var(--seq-reco-line);border-radius:var(--radius-card);background:var(--seq-reco-fill);color:var(--seq-reco-ink);font-size:12px;line-height:19.2px;font-weight:500}
+.lla-steprail-stop{display:flex;align-items:flex-start;gap:9px;margin-bottom:16px;padding:13px 12px;border:1px solid var(--seq-line);border-radius:var(--radius-card);background:var(--surface);color:var(--seq-ink-2);font-size:11px;line-height:17.6px}
+.lla-steprail-stop b{color:var(--seq-ink);font-weight:700}
+/* D's builder switch: 34x20 track, 16px knob 2px in, travels 14px (group E Toggle markup, resized here). */
+.lla-steprail-stop .lla-switch{width:34px;height:20px;border-width:2px;background:var(--seq-switch-off)}
+.lla-steprail-stop .lla-switch[aria-checked="true"]{background:var(--seq-ivy)}
+.lla-steprail-stop .lla-switch-thumb{width:16px;height:16px;box-shadow:var(--seq-shadow-knob)}
+.lla-steprail-stop .lla-switch[aria-checked="true"] .lla-switch-thumb{transform:translateX(14px)}
+.lla-steprail-list{margin:0;padding:0;list-style:none}
+.lla-steprail-step{position:relative;display:block;width:100%;margin:0 0 6px;padding:15px 12px 15px 30px;border:1px solid var(--seq-line);border-radius:var(--radius-card);background:var(--surface);color:var(--seq-ink);font:inherit;text-align:left;cursor:pointer}
+.lla-steprail-step:hover{border-color:var(--seq-hover-line)}
+.lla-steprail-step[aria-current="step"]{border-color:var(--seq-active-line);background:var(--seq-active-fill);box-shadow:var(--seq-shadow-active)}
+.lla-steprail-grip{position:absolute;top:5px;left:5px;color:var(--seq-ink-3)}
+.lla-steprail-tag{display:inline-block;padding:2px 8px;border-radius:var(--radius-md);background:var(--seq-tag-fill);color:var(--seq-ink);font-size:12px;line-height:18px;font-weight:700}
+.lla-steprail-meta{display:block;margin-top:8px;color:var(--seq-ink-2);font-size:12px;line-height:18px}
+.lla-steprail-meta .lla-ibox{margin:-3px 3px -3px -4px;vertical-align:top}
+.lla-steprail-needs{display:flex;align-items:center;gap:5px;margin-top:7px;color:var(--seq-amber);font-size:11px;line-height:16.5px;font-weight:600}
+.lla-steprail-needs .lla-ibox{margin:-4px}
+.lla-steprail-add{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:10px;padding:13px;border:1px dashed var(--seq-control-border);border-radius:var(--radius-card);background:var(--surface);color:var(--seq-ink-2);font:inherit;font-size:14px;line-height:21px;font-weight:600;cursor:pointer}
+.lla-steprail-add .lla-ibox{margin:-4px}
+.lla-steprail-add:hover{border-color:var(--seq-ivy);color:var(--seq-ivy-ink)}
+
+.lla-cadpill{display:inline-flex;align-items:center;gap:8px;width:max-content;max-width:100%;padding:7px 12px;border:1px solid var(--seq-line);border-radius:var(--seq-radius-control);background:var(--seq-pill-fill);color:var(--seq-ink-2);font-size:12px;line-height:18px}
+.lla-cadpill b{color:var(--seq-ink);font-weight:700}
+.lla-cadpill input,.lla-cadpill select{height:26px;padding:3px 8px;border:1px solid var(--seq-control-border);border-radius:var(--radius-md);background:var(--surface);color:var(--seq-ink);font:inherit;font-weight:600}
+.lla-cadpill select{padding:4px 8px}
+.lla-cadpill input.num{width:46px}
+.lla-cadpill input.time{width:74px}
+.lla-cadpill-mini{display:flex;align-items:center;justify-content:center;gap:6px;margin:4px 0;color:var(--seq-ink-3);font-size:11px;line-height:16.5px}
+.lla-cadpill-mini .lla-ibox{margin:-4px}
+
+.lla-token{display:inline-flex;align-items:center;gap:4px;padding:5px 8px;border:1px solid var(--seq-chip-line);border-radius:var(--radius-md);background:var(--seq-chip-fill);color:var(--seq-ink-2);font-size:11px;line-height:16.5px;font-weight:500;white-space:nowrap;cursor:pointer}
+.lla-token .lla-ibox{margin:-4px -2px -4px -4px}
+.lla-token:hover{color:var(--seq-ivy-ink)}
+.lla-token.command{background:var(--seq-ivy-fill);color:var(--seq-ivy-ink)}
+.lla-token.snippets,.lla-token.snippets:hover{border-color:var(--seq-snippets-line);background:var(--seq-subtle);color:var(--seq-ink-2)}
+.lla-token[aria-pressed="true"]{border-color:var(--seq-ivy)}
+
+.lla-emailpv{width:var(--seq-preview-width);max-width:100%;overflow:hidden;border-radius:var(--seq-radius-dialog);background:var(--surface);box-shadow:var(--shadow-toast);color:var(--seq-ink);font-size:14px;line-height:21px}
+.lla-emailpv-head{display:flex;align-items:center;padding:18px 22px;border-bottom:1px solid var(--seq-line)}
+.lla-emailpv-head h3{margin:0;font-size:17px;line-height:25.5px;font-weight:600}
+.lla-emailpv .lla-ibtn.lla-emailpv-close{margin:-2.25px -10px -2.25px auto;color:var(--seq-ink-3)}
+.lla-emailpv-meta{margin:0;padding:8px 22px}
+.lla-emailpv-meta>div{display:flex;align-items:center;gap:14px;padding:10px 0;border-bottom:1px solid var(--seq-line)}
+.lla-emailpv-meta dt{width:64px;flex:none;color:var(--seq-ink-2);font-weight:600}
+.lla-emailpv-meta dd{margin:0;min-width:0}
+.lla-emailpv-to{height:32px;width:230px;padding:6px 10px;border:1px solid var(--seq-control-border);border-radius:var(--radius-md);background:var(--surface);color:var(--seq-ink);font:inherit}
+.lla-emailpv-render{min-height:230px;margin:14px 22px;padding:18px;border:1px solid var(--seq-line);border-radius:var(--radius-card);line-height:22.4px;white-space:pre-wrap}
+.lla-emailpv-mark{padding:0 3px;border-radius:var(--radius-sm);background:var(--seq-ivy-fill);color:var(--seq-ivy-ink);font-weight:600}
+.lla-emailpv-foot{display:flex;flex-wrap:wrap;align-items:center;gap:14px;padding:16px 22px;border-top:1px solid var(--seq-line);background:var(--seq-subtle)}
+.lla-emailpv-lbl{flex:1;min-width:180px}
+.lla-emailpv-lbl b{display:block;font-weight:700}
+.lla-emailpv-lbl span{display:block;color:var(--seq-ink-3);font-size:12px;line-height:21px}
+.lla-emailpv-email{width:230px;height:41px;padding:9px 12px;border:1px solid var(--seq-control-border);border-radius:var(--seq-radius-field);background:var(--surface);color:var(--seq-ink);font:inherit}
+.lla-emailpv-email::placeholder{color:var(--seq-placeholder);opacity:1}
+.lla-emailpv-send{display:inline-flex;align-items:center;gap:6px;min-height:var(--control-height);padding:8px 15px;border:1px solid var(--seq-cta);border-radius:var(--seq-radius-control);background:var(--seq-cta);color:var(--surface);font:inherit;font-size:12px;line-height:18px;font-weight:550;cursor:pointer}
+.lla-emailpv-send .lla-ibox{margin:-4px -6px -4px -2px}
+.lla-emailpv-send:hover{opacity:var(--seq-opacity-hover)}
+.lla-post-event .lla-badge{white-space:normal}

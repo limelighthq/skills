@@ -1,0 +1,18 @@
+<!-- @dsCard group="Sequence builder" height=838 width=420 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>StepRail</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+var steps=[
+  {title:"Step 1: Email",from:"david@limelighthq.com",when:"Start immediately"},
+  {title:"Step 2: Reply",from:"david@limelighthq.com",thread:"Reply in same thread",when:"Jun 10, 9:00 AM (-03)",wait:"wait 2 business days"},
+  {title:"Step 3: Reply",from:"david@limelighthq.com",thread:"Reply in same thread",when:"Jun 12, 9:00 AM (-03)",wait:"wait 2 business days"},
+  {title:"Step 4: Reply",from:"david@limelighthq.com",thread:"Reply in same thread",when:"Jun 16, 9:00 AM (-03)",wait:"wait 4 business days"}];
+function Demo(){
+  var a=React.useState(0),s=React.useState(true);
+  return h(L.StepRail,{steps:steps,active:a[0],onSelect:a[1],stopOnReply:s[0],onStopOnReplyChange:s[1],onAdd:function(){}});
+}
+ReactDOM.createRoot(document.getElementById('root')).render(h("div",{style:{display:"flex",minHeight:760}},h(Demo),h("div",{style:{flex:1,background:"var(--seq-canvas)"}})));
+</script></body></html>

@@ -36,6 +36,24 @@
     "negative": "Implement this UI feature before the design PR is merged."
   },
   {
+    "skill": "limelight-product-design-system",
+    "positive": [
+      "Mock up the creator review table in our app's style.",
+      "Implement the V2 campaign card in agent-platform to match the product design system.",
+      "Check the screens in this PR against the Limelight app design system."
+    ],
+    "negative": "Build a pricing section for the limelighthq.com homepage."
+  },
+  {
+    "skill": "limelight-marketing-design-system",
+    "positive": [
+      "Mock up a new hero section for limelighthq.com.",
+      "Review this LinkedIn banner against the Limelight brand.",
+      "Which gradient goes with Cooper on the website?"
+    ],
+    "negative": "Mock up the Approvals screen in the Limelight app."
+  },
+  {
     "skill": "annotate-ui-screenshots",
     "positive": [
       "Annotate these screenshots as proof of the UI change.",

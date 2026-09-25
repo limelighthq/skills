@@ -1,0 +1,21 @@
+<!-- @dsCard group="Team operations" height=740 width=898 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>SkillCard</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="padding:24px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+var skills=[
+  ["Find lookalike creators","Find creators similar to an approved profile. Explain audience and topic fit."],
+  ["Draft outreach","Draft a personal introduction using the campaign brief and creator context."],
+  ["Negotiate rates","Compare the counter-offer with the budget. Prepare a reply for approval."],
+  ["Score against ICP","Explain how each creator matches our target audience and flag missing evidence."],
+  ["Summarise a thread","Summarise the conversation, current agreement and next decision."],
+  ["Build a sequence","Prepare an initial message and follow-ups. Stop the sequence on a reply."],
+  ["Reconcile payouts","Compare completed deliverables and pending payments. Flag discrepancies."],
+  ["Write a campaign brief","Create a brief with the audience, objective, deliverables and budget."]
+];
+ReactDOM.createRoot(document.getElementById('root')).render(
+  h("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr",gap:20}},skills.map(function(s,i){return h(L.SkillCard,i===0?{key:s[0],name:s[0],description:s[1],draft:"",defaultOpen:true,onSaveDraft:function(){}}:{key:s[0],name:s[0],description:s[1],onSaveDraft:function(){}});}))
+);
+</script></body></html>

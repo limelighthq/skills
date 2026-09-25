@@ -1,0 +1,12 @@
+<!-- @dsCard group="Form controls" height=96 width=960 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Toggle</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="padding:16px 24px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+ReactDOM.createRoot(document.getElementById('root')).render(h('div',{style:{display:'flex',gap:40,alignItems:'flex-start'}},
+ h(L.Toggle,{label:'Agent opens views',defaultChecked:true}),
+ h(L.Toggle,{label:'Agent opens views'}),
+ h(L.Toggle,{label:'Agent opens views',defaultChecked:true,disabled:true,disabledReason:'Views open again when the assistant is shown.'})));
+</script></body></html>

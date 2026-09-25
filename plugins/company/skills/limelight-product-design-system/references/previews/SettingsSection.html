@@ -1,0 +1,23 @@
+<!-- @dsCard group="Settings" height=1360 width=900 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>SettingsSection</title></head>
+<body style="margin:0;background:var(--settings-ground)">
+<div id="root" class="lla" style="padding:32px 0 48px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+var muted={margin:0,fontSize:14,lineHeight:'21px',color:'var(--muted)'};
+ReactDOM.createRoot(document.getElementById('root')).render(h('div',{style:{maxWidth:720,margin:'0 auto',padding:'0 20px'}},
+  h(L.SettingsSection,{title:'Organization members',meta:'1 member',footer:h(L.Button,{variant:'secondary'},'Invite teammate')},
+    h(L.ListRow,{leading:h(L.Avatar,{initials:'A',size:'card'}),title:'Agus',description:'agus@limelighthq.com',meta:h(L.Badge,null,'Owner')})),
+  h(L.SettingsSection,{title:'Join requests'},h('p',{style:muted},'No pending join requests.')),
+  h(L.SettingsSection,{title:'Integrations'},
+    h('div',{style:{display:'flex',justifyContent:'space-between',alignItems:'center',gap:16}},h('strong',{style:{fontSize:14,lineHeight:'21px',fontWeight:700}},'Connected services'),h(L.Badge,null,'0 connected')),
+    h(L.ListRow,{title:'Slack',description:'Connect to receive a Slack ping when agents finish background work',actions:h(L.Button,null,'Connect')}),
+    h(L.ListRow,{title:'HubSpot',description:'Not available yet. Ask your workspace owner to turn on HubSpot.',descriptionId:'hs-why',actions:h(L.Button,{disabled:true,'aria-describedby':'hs-why'},'Connect')})),
+  h(L.SettingsSection,{title:'Billing',footer:'Your team has complimentary access to Ivy. No payment method is on file and you will not be invoiced.'},
+    h('h3',{style:{margin:0,fontSize:14,lineHeight:'21px',fontWeight:500}},'Plan'),
+    h(L.ListRow,{label:'Current plan',value:'Full access · complimentary'}),h(L.ListRow,{label:'Billing',value:'No charge'}),h(L.ListRow,{label:'Next invoice',value:'—'})),
+  h(L.SettingsSection,{title:'API keys',actions:h(L.Button,null,'Create API key'),description:'Keys for programmatic access. Example keys do not grant access to the live app.'},h('p',{style:muted},'No API keys yet.')),
+  h(L.SettingsSection,{title:'Danger zone'},
+    h(L.ListRow,{title:'Leave this organization',description:'You’ll lose access to every team in this organization and your chat sessions. Rejoining needs a new invite. The organization and its data stay.',actions:h(L.Button,{variant:'secondary'},'Leave organization')}))));
+</script></body></html>

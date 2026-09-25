@@ -1,0 +1,21 @@
+<!-- @dsCard group="Sequence builder" height=702 width=820 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>EmailPreview</title></head>
+<body style="margin:0;background:var(--seq-canvas)">
+<div id="root" class="lla" style="padding:24px 30px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+var who={
+  maya:{"Creator First Name":"Maya","Niche":"dev tooling reviews","Platform":"YouTube","Brand Name":"Acme","Campaign":"Q2 SaaS Growth","Sender First Name":"David"},
+  leo:{"Creator First Name":"Leo","Niche":"B2B SaaS founders","Platform":"LinkedIn","Brand Name":"Acme","Campaign":"Q2 SaaS Growth","Sender First Name":"David"},
+  priya:{"Creator First Name":"Priya","Niche":"AI workflows","Platform":"TikTok","Brand Name":"Acme","Campaign":"Q2 SaaS Growth","Sender First Name":"David"}};
+var body="Hi {{Creator First Name}},\n\nYour {{Niche}} content on {{Platform}} caught our eye — it's exactly the voice {{Brand Name}} wants behind the {{Campaign}} push.\n\nA few reasons this could be a strong fit:\n• Your audience overlaps closely with who {{Brand Name}} is trying to reach\n• The brief is flexible on format — your call on how it lands\n• Paid, upfront, handled through Limelight\n\nOpen to a quick look at the brief?\n\n— {{Sender First Name}}";
+function Demo(){
+  var r=React.useState("maya"),e=React.useState("");
+  return h(L.EmailPreview,{from:"Ivy (David Walsh) <david@limelighthq.com>",
+    recipients:[{value:"maya",label:"Maya Chen — @mayacreates"},{value:"leo",label:"Leo Park — @leobuilds"},{value:"priya",label:"Priya Nair — @priyacodes"}],
+    recipient:r[0],onRecipientChange:r[1],values:who[r[0]],subject:"{{Creator First Name}} — partnering with {{Brand Name}}",body:body,
+    testEmail:e[0],onTestEmailChange:function(ev){e[1](ev.target.value);},onSendTest:function(){},onClose:function(){}});
+}
+ReactDOM.createRoot(document.getElementById('root')).render(h(Demo));
+</script></body></html>

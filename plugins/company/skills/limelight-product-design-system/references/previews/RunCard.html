@@ -1,0 +1,29 @@
+<!-- @dsCard group="Chat" height=620 width=1000 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>RunCard</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="padding:16px;display:flex;gap:20px;align-items:flex-start"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+function col(kids,w){return h('div',{className:'lla-panel-body',style:{width:w||298,flex:'none',boxSizing:'border-box',padding:'20px 16px',display:'flex',flexDirection:'column',gap:16,backgroundColor:'var(--surface-panel)',backgroundImage:'var(--gradient-panel-veil), var(--lla-panel-image)',backgroundSize:'100% 100%, auto 1454px',backgroundPosition:'center, left bottom',backgroundRepeat:'no-repeat'}},kids);}
+var week={mirror:'You want the week ahead. I’m counting anything scheduled or approved between today and Sunday, across all five profiles.',
+  steps:['Reading the content calendar','Checking approval state on each','Looking for gaps against your posting plan'],
+  question:'Fill the two empty days from the ideas backlog?'};
+ReactDOM.createRoot(document.getElementById('root')).render(h(React.Fragment,null,
+  col([
+    h(L.ChatMessage,{key:1,role:'user',text:'Who hasn’t posted lately?'}),
+    h(L.RunCard,{key:2,agent:'elliot',mirror:'You want to know who has gone quiet. I’m reading the last 21 days on LinkedIn only, and comparing each person to their own cadence rather than a company average, because Jessica at one a week is not the same as David at two.',
+      steps:['Reading posting history for 5 profiles','Comparing each to their own cadence','Checking which already have approved drafts waiting'],progress:1,question:'Draft a Slack nudge for the three who are behind?'})
+  ]),
+  col([
+    h(L.ChatMessage,{key:1,role:'user',text:'What goes out this week?'}),
+    h(L.RunCard,Object.assign({key:2,agent:'elliot'},week))
+  ]),
+  col([
+    h(L.ChatMessage,{key:1,agent:'elliot',text:'Six posts are scheduled and two days are empty, Wednesday and Friday. I drafted one for each from the ideas backlog. Both need your approval.'}),
+    h(L.RunCard,{key:2,kind:'offer',dest:'Calendar'}),
+    h(L.ChatMessage,{key:3,agent:'elliot'},'Your draft is ready. Open Content below to edit and schedule it.'),
+    h(L.RunCard,{key:4,kind:'ready'})
+  ])
+));
+</script></body></html>

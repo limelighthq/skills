@@ -1,0 +1,13 @@
+<!-- @dsCard group="Form controls" height=200 width=960 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Checkbox</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="padding:16px 24px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+function col(kids,ov,st){return h('div',{className:ov?'lla-overlay':null,style:Object.assign({display:'flex',flexDirection:'column',gap:14,alignItems:'flex-start'},st||{})},kids);}
+ReactDOM.createRoot(document.getElementById('root')).render(h('div',{style:{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:28}},
+ col([h(L.Checkbox,{key:1,label:'Connect your accounts',defaultChecked:true}),h(L.Checkbox,{key:2,label:'Select your creators'}),h(L.Checkbox,{key:3,label:'Learn from new posts automatically',defaultChecked:true})],false,{color:'var(--ink-strong)'}),
+ col([h(L.Checkbox,{key:1,variant:'flow',label:'I reviewed the fee and scope.'}),h(L.Checkbox,{key:2,variant:'flow',label:'I confirm this creator has already been paid externally.',defaultChecked:true})],true),
+ col([h(L.Checkbox,{key:1,variant:'plain',label:'Add to the knowledge base',defaultChecked:true,description:'Every agent can draw on it, not just Elliot writing in this voice.'}),h(L.Checkbox,{key:2,label:'Enable this key for MCP',disabled:true,disabledReason:'Choose at least one scope to enable MCP.'})],true)));
+</script></body></html>

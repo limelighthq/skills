@@ -1,0 +1,13 @@
+<!-- @dsCard group="Feedback" height=190 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>ProgressBar</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="padding:16px 24px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+function Row(t,el,w){return h('div',{style:{marginBottom:20}},h('p',{style:{margin:'0 0 8px',fontSize:12,lineHeight:'18px',color:'var(--muted)'}},t),h('div',{style:{width:w}},el));}
+ReactDOM.createRoot(document.getElementById('root')).render(h('div',null,
+  Row('Checklist · 20% completed',h(L.ProgressBar,{value:20,label:'Setup progress'}),246),
+  Row('Primary · 64% of this campaign is clear',h(L.ProgressBar,{variant:'primary',value:64,label:'Campaign clear'}),800),
+  Row('Primary · 1 of 5 complete',h(L.ProgressBar,{variant:'primary',value:20,label:'Getting started',valueText:'1 of 5 complete'}),800)));
+</script></body></html>

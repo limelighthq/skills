@@ -1,0 +1,21 @@
+<!-- @dsCard group="Inbox" height=1040 width=1160 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>ThreadListItem</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="padding:24px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+var threads=[
+  {id:"alex",initials:"AR",name:"Alex Rivera",campaign:"Q2 SaaS Growth",time:"2h ago",status:"Counter-offer",preview:"No rush. Worth flagging I’ve got two other slots filling for early May, so the earlier we lock it the better.",unread:true},
+  {id:"maya",initials:"MC",name:"Maya Chen",campaign:"Q2 SaaS Growth",time:"3h ago",status:"Draft ready",preview:"Draft: Thanks Maya — $3,200 works for a single sponsored video. Can we lock the first week of May? Happy to send the product across early so you can film with it.",unread:true},
+  {id:"leo",initials:"LP",name:"Leo Park",campaign:"Q2 SaaS Growth",time:"1 day",status:"Draft ready",preview:"Draft: Happy to send the product early so you can film with it. What address should I use?"},
+  {id:"jordan",initials:"JS",name:"Jordan Smith",campaign:"Q2 SaaS Growth",time:"3 days",status:"Awaiting reply",preview:"You: Quick nudge in case this got buried — happy to send the brief either way."}
+];
+function Demo(){
+  var s=React.useState("alex"),sel=s[0],set=s[1];
+  return h("div",{className:"lla lla-thread-list"},
+    L.TextInput?h(L.TextInput,{label:"Search conversations",hideLabel:true,placeholder:"Search conversations…"}):null,
+    threads.map(function(t){return h(L.ThreadListItem,Object.assign({key:t.id},t,{selected:sel===t.id,onSelect:function(){set(t.id);}}));}));
+}
+ReactDOM.createRoot(document.getElementById('root')).render(h(Demo));
+</script></body></html>

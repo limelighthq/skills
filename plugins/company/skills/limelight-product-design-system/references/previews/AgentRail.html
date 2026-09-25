@@ -1,0 +1,24 @@
+<!-- @dsCard group="Shell" height=900 width=520 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>AgentRail</title></head>
+<body style="margin:0;background:var(--surface-nav)">
+<div id="root" class="lla"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+var AG=[{id:'ivy',name:'Ivy'},{id:'elliot',name:'Elliot'}];
+var WS_MENU=[{section:'YOUR TEAMS'},{id:'ll',label:'Limelight',selected:true,meta:'Owner'},{separator:true},{id:'acc',label:'Account'},{id:'ts',label:'Team settings'},{id:'ct',label:'Create a team'},{id:'lo',label:'Log out'},{separator:true},{id:'pi',label:'Prototype index'}];
+var AG4=[{id:'ivy',name:'Ivy'},{id:'elliot',name:'Elliot'},{id:'cooper',name:'Cooper'},{id:'lana',name:'Lana'}];
+function Cap(p){return h('div',{style:{position:'absolute',left:p.x,top:p.y,width:84,fontSize:11,lineHeight:'16.5px',color:'var(--muted)'}},p.children);}
+function Live(){var a=React.useState('ivy'),n=React.useState(false);
+ return h(L.AgentRail,{agents:AG,value:a[0],onChange:a[1],navHidden:n[0],onToggleNav:function(){n[1](!n[0]);},workspaceMenu:WS_MENU,onAdd:function(){},onSettings:function(){},onHelp:function(){}});}
+function Col(p){return h('div',{style:{height:900,display:'flex'}},p.children);}
+ReactDOM.createRoot(document.getElementById('root')).render(
+ h('div',{style:{position:'relative',display:'flex',gap:96,height:900}},
+  h(Col,null,h(Live)),
+  h(Col,null,h(L.AgentRail,{agents:AG,value:'elliot',navHidden:true})),
+  h(Col,null,h(L.AgentRail,{agents:AG4,value:'ivy'})),
+  h(Cap,{x:64,y:20},'Ivy selected. Click a portrait or the menu button.'),
+  h(Cap,{x:216,y:20},'Elliot selected, nav hidden. The menu button reads "Show navigation".'),
+  h(Cap,{x:368,y:20},'Cooper and Lana (D-silent) follow Elliot.')));
+</script>
+</body></html>

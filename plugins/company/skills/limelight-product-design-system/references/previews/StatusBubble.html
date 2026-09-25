@@ -1,0 +1,23 @@
+<!-- @dsCard group="Chat" height=520 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>StatusBubble</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="padding:16px;display:flex;gap:20px;align-items:flex-start"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+function col(kids,w){return h('div',{className:'lla-panel-body',style:{width:w||298,flex:'none',boxSizing:'border-box',padding:'20px 16px',display:'flex',flexDirection:'column',gap:16,backgroundColor:'var(--surface-panel)',backgroundImage:'var(--gradient-panel-veil), var(--lla-panel-image)',backgroundSize:'100% 100%, auto 1454px',backgroundPosition:'center, left bottom',backgroundRepeat:'no-repeat'}},kids);}
+ReactDOM.createRoot(document.getElementById('root')).render(h(React.Fragment,null,
+  col([
+    h(L.ChatMessage,{key:1,role:'user',text:'How are we doing today?'}),
+    h(L.StatusBubble,{key:2,agent:'ivy',title:'Q2 SaaS Growth · as of today',
+      stats:[{value:'42',label:'In pipeline'},{value:'21',label:'Replied'},{value:'9',label:'Signed'},{value:'$11.4K',label:'Committed'}],
+      links:[{label:'4 replies need you'},{label:'3 payments due'}]})
+  ]),
+  col([
+    h(L.ChatMessage,{key:1,role:'user',text:'how is the team doing?'}),
+    h(L.StatusBubble,{key:2,agent:'elliot',title:'This week · employee advocacy',
+      stats:[{value:'14',label:'Scheduled'},{value:'5',label:'Awaiting approval'},{value:'9',label:'Drafts open'},{value:'62%',label:'Team participation'}],
+      links:[{label:'5 need approval'},{label:'See the week'}]})
+  ])
+));
+</script></body></html>

@@ -1,0 +1,11 @@
+<!-- @dsCard group="Form controls" height=72 width=960 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>SearchInput</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="padding:16px 24px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+ReactDOM.createRoot(document.getElementById('root')).render(h('div',{style:{display:'flex',gap:24,alignItems:'center'}},
+ h(L.SearchInput,{label:'Search creators',placeholder:'Search by name, role, category',style:{width:347}}),
+ h(L.SearchInput,{label:'Search creators',defaultValue:'founder',style:{width:347}})));
+</script></body></html>

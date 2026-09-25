@@ -1,0 +1,19 @@
+<!-- @dsCard group="Team operations" height=720 width=898 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>ApprovalRow</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="padding:24px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+var rows=[
+  {agent:"Ivy",kind:"Rate negotiation",title:"Reply to Maya Chen",context:"Q2 SaaS Growth",body:"Thanks Maya — $3,200 works for a single sponsored video. Can we lock the first week of May?"},
+  {agent:"Ivy",kind:"Creator reply",title:"Reply to Leo Park",context:"Q2 SaaS Growth",body:"Happy to send the product early so you can film with it. What address should I use?"},
+  {agent:"Elliot",kind:"Content approval",title:"Approve Michael’s post",context:"Hiring brand",body:"Engineering culture isn't ping pong tables. It's how you handle the third re-review of the same PR.\n\nEvery team I've worked on that ships well has the same trait."},
+  {agent:"Elliot",kind:"Routine review",title:"Check quiet team members",context:"Every weekday at 10:00",body:"Prepare a nudge when a team member has stopped posting. Review the suggested action before it runs."},
+  {agent:"Ivy",kind:"Payment approval",status:"Approved",title:"Payment to Alex Rivera",context:"Q2 SaaS Growth — Alex Rivera",body:"Approved 2800 USD via Stripe. Simulation only. Reference: 61f7721e-0daf-4724-ad8b-17bc71f23ab5"},
+  {agent:"Ivy",kind:"Rate negotiation",status:"Approved",title:"Reply to Priya Nair",context:"DevTools LinkedIn",body:"That rate is a bit above our band — could we do $1,400 plus a usage bonus?"}
+];
+ReactDOM.createRoot(document.getElementById('root')).render(
+  h("div",{style:{display:"grid",gap:8}},rows.map(function(r,i){return h(L.ApprovalRow,Object.assign({key:i,onReview:function(){},onApprove:function(){},onReject:function(){}},r));}))
+);
+</script></body></html>

@@ -1,0 +1,21 @@
+<!-- @dsCard group="Forms" height=580 width=720 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>SelectableTile</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="padding:24px;font-family:var(--font-system);letter-spacing:normal;color:var(--ink-overlay)"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+var cap={margin:'0 0 10px',fontSize:11,lineHeight:'16.5px',color:'var(--muted)',fontFamily:'var(--font-sans)'};
+var SUB={Stripe:'Connected payment provider',Lumanu:'Creator payout provider'};
+function Providers(){var s=React.useState('Stripe');return h('div',{className:'lla-tiles',role:'group','aria-label':'Choose how to pay',style:{width:462}},
+  ['Stripe','Lumanu'].map(function(q){return h(L.SelectableTile,{key:q,value:q,title:q,description:SUB[q],selected:s[0]===q,onSelect:s[1]});}));}
+function Roles(){var s=React.useState('Member');return h('fieldset',{className:'lla-radiogroup',style:{width:462}},h('legend',{className:'lla-sr'},'Role'),
+  h('div',{className:'lla-radiogroup-cards'},[['Member','Can use agents and run campaigns.'],['Admin','Can manage members, billing, and agents.']].map(function(r){return h(L.SelectableTile,{key:r[0],variant:'radio',name:'role',value:r[0],title:r[0],description:r[1],selected:s[0]===r[0],onSelect:s[1]});})));}
+ReactDOM.createRoot(document.getElementById('root')).render(h('div',null,
+  h('p',{style:cap},'Tile · pay modal "Choose how to pay" (Stripe selected)'),h(Providers),
+  h('p',{style:Object.assign({},cap,{marginTop:22})},'Disabled tile · the reason is opaque text tied with aria-describedby'),
+  h('div',{className:'lla-tiles',style:{width:462}},
+    h(L.SelectableTile,{title:'Stripe',description:SUB.Stripe,selected:true,disabled:true}),
+    h('div',{style:{flex:1,minWidth:0}},h(L.SelectableTile,{title:'Lumanu',description:SUB.Lumanu,disabled:true,disabledReason:'Provider choice is locked while the payment is processing.'}))),
+  h('p',{style:Object.assign({},cap,{marginTop:22})},'variant="radio" renders group E’s RadioCard · Invite teammate role (cards 70px tall, 38px apart)'),h(Roles)));
+</script></body></html>

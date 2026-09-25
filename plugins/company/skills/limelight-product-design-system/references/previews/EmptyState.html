@@ -1,0 +1,33 @@
+<!-- @dsCard group="Feedback" height=940 width=960 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>EmptyState</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="padding:16px 24px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+function Label(t){return h('p',{style:{margin:'0 0 6px',fontSize:10,lineHeight:'15px',letterSpacing:'0.12em',color:'var(--muted)'}},t);}
+function Demo(){
+  return h('div',{style:{display:'grid',gridTemplateColumns:'1fr 1fr',columnGap:24,rowGap:14}},
+    h('div',{style:{gridColumn:'1 / -1'}},Label('CARD · APPROVALS'),
+      h(L.EmptyState,{variant:'card',title:'You’re caught up.',action:h(L.Button,{variant:'secondary'},'View activity')},'Your agents will bring the next decision here.')),
+    h('div',null,Label('CENTER · CALENDAR'),
+      h(L.EmptyState,{title:'Nothing in this filter',action:h(L.Button,{},'Clear filters')},'No deliverables match it in May 2026.')),
+    h('div',null,Label('CENTER · CREATORS TABLE'),
+      h(L.EmptyState,{},'No creators match these filters.')),
+    h('div',null,Label('INLINE · INBOX THREAD LIST'),
+      h('div',{style:{width:235}},h(L.EmptyState,{variant:'inline',title:'No matching conversations',action:h(L.Button,{variant:'secondary'},'Show all conversations')},'No campaigns match these filters.'))),
+    h('div',null,Label('COLUMN · KANBAN'),
+      h('div',{style:{display:'grid',gridTemplateColumns:'repeat(2,1fr)',gap:12}},
+        ['Vetted','Approved'].map(function(c){return h('section',{key:c,'aria-label':c},h('h3',{style:{margin:'0 0 12px',fontSize:13,lineHeight:'19.5px',fontWeight:600}},c),h(L.EmptyState,{variant:'column'},'Empty'));}))),
+    h('div',null,Label('FLOW · CREATOR RESPONSES (GATED)'),
+      h('div',{style:{display:'flex',alignItems:'center',justifyContent:'space-between',gap:12}},
+        h('strong',{style:{fontSize:17,lineHeight:'24px',fontWeight:600}},'Pricing requests'),
+        h(L.Button,{disabled:true,'aria-describedby':'gate-why'},'Create pricing request')),
+      h(L.EmptyState,{variant:'flow',bodyId:'gate-why'},'Publish a reviewed brief in Campaigns → Brief before creating pricing requests.')),
+    h('div',null,Label('DRAWER · CREATOR REVIEW'),
+      h('div',{style:{fontFamily:'var(--font-arial)'}},h(L.EmptyState,{variant:'drawer',title:'No partnerships in this sample'},'Recent posts below can help you assess their voice and content style.'))),
+    h('div',{style:{gridColumn:'1 / -1'}},Label('TEXT · INSIDE AN OVERLAY (HISTORY SEARCH)'),
+      h('div',{className:'lla-overlay',style:{padding:'12px 16px',border:'1px solid var(--line-overlay)',borderRadius:8}},h(L.EmptyState,{variant:'text'},'No chats match.'))));
+}
+ReactDOM.createRoot(document.getElementById('root')).render(h(Demo));
+</script></body></html>

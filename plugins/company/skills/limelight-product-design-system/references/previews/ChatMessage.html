@@ -1,0 +1,22 @@
+<!-- @dsCard group="Chat" height=520 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>ChatMessage</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="padding:16px;display:flex;gap:20px;align-items:flex-start"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+function col(kids,w){return h('div',{className:'lla-panel-body',style:{width:w||298,flex:'none',boxSizing:'border-box',padding:'20px 16px',display:'flex',flexDirection:'column',gap:16,backgroundColor:'var(--surface-panel)',backgroundImage:'var(--gradient-panel-veil), var(--lla-panel-image)',backgroundSize:'100% 100%, auto 1454px',backgroundPosition:'center, left bottom',backgroundRepeat:'no-repeat'}},kids);}
+ReactDOM.createRoot(document.getElementById('root')).render(h(React.Fragment,null,
+  col([
+    h(L.ChatMessage,{key:1,role:'user',text:'Who hasn’t posted lately?'}),
+    h(L.ChatMessage,{key:2,agent:'elliot',text:'Four people haven’t posted in three weeks, Jordan, Sam, Priya and Chris. Two already have approved drafts sitting idle.'}),
+    h(L.ChatMessage,{key:3,role:'user',text:'Should we accept Alex’s counter?'}),
+    h(L.ChatMessage,{key:4,agent:'ivy',text:'$2,800 is 12% above your offer but in line with his rate. His relevancy score of 94 is the highest in your pipeline. I’d take it.'})
+  ],298),
+  col([
+    h(L.ChatMessage,{key:1,role:'user',text:'Turn this inspiration into a post in our team’s voice'}),
+    h(L.ChatMessage,{key:2,agent:'elliot'},['Drafted in ',h('b',{key:'b'},'Sarah'),'’s voice and opened in the composer — author, label and body are already set. Edit it there, then schedule it or send it for Sarah’s Slack approval.']),
+    h(L.ChatMessage,{key:3,agent:'ivy',text:'3 selected creators are in Q2 SaaS Growth.'})
+  ],298)
+));
+</script></body></html>

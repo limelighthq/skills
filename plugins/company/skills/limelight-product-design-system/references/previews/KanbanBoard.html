@@ -1,0 +1,28 @@
+<!-- @dsCard group="Kanban" height=1900 width=900 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>KanbanBoard</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="padding:24px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+function c(id,name,pl,fol,detail,score){return {id:id,name:name,platforms:pl,meta:fol+' followers',detail:detail,score:score};}
+var TW=c('tw','Taylor Wong',['linkedin','x'],'48.2K','B2B Growth Strategist \u00b7 ex-Loom',89),ML=c('ml','Morgan Lee',['instagram','tiktok','youtube'],'124.5K','Lifestyle & wellness creator',62),
+ JS=c('js','Jordan Smith',['x','linkedin','youtube'],'32.1K','DevTools founder \u00b7 writes The Stack',91),RC=c('rc','Riley Chen',['linkedin'],'22.8K','RevOps lead \u00b7 former Gong',80),
+ CD=c('cd','Casey Diaz',['linkedin'],'18.4K','$1,800',78),AR=c('ar','Alex Rivera',['linkedin','x'],'45.0K','$2,800',94),PN=c('pn','Pat Nguyen',['youtube','x'],'86.7K','$2,000',85);
+var COLS=[{id:'discovered',title:'Discovered',count:21,cards:[TW,ML]},{id:'vetted',title:'Vetted',cards:[JS,RC]},{id:'approved',title:'Approved',cards:[CD]},{id:'neg',title:'In negotiation',cards:[AR]},{id:'active',title:'Active',cards:[PN]}];
+var SEARCH=COLS.map(function(col){return {id:col.id,title:col.title,cards:col.cards.filter(function(k){return k.id==='js';})};});
+var POSTS=[['Draft',[['JL','Jordan Lee','Most teams treat onboarding as paperwork. We see it as the first chapter of belonging.','2026-09-03',0,1],['SC','Sarah Chen','Reflecting on Q3 \u2014 three lessons from shipping the new website.','2026-09-04',89,0],['DW','David Walsh','The best decisions start with the questions nobody wants to ask.','2026-09-05',91,0],['RT','Ryan Torres','What our customers taught us about building less.','2026-09-06',78,0]]],
+ ['Pending approval',[['MP','Michael Park','Engineering culture isn\u2019t ping pong tables. It\u2019s how you handle a production incident.','2026-09-02',87,1],['JV','Jessica Vega','Three things I\u2019ve learned closing enterprise deals that I wish I had known six months ago.','2026-09-02',84,0]]],
+ ['Approved',[['SC','Sarah Chen','Why I stopped running standups (and what we do instead).','2026-09-01',91,0]]],
+ ['Published',[['DW','David Walsh','Last week\u2019s launch reflections. Fifteen months of work and a new beginning.','2026-08-28',90,1],['SC','Sarah Chen','What I got wrong about product-market fit in year one.','2026-08-26',87,1]]]];
+var LANES=POSTS.map(function(col){return {id:col[0],title:col[0].toUpperCase(),cards:col[1].map(function(r,i){return {id:col[0]+i,initials:r[0],name:r[1],body:r[2],date:r[3],score:r[4]||undefined,image:!!r[5]};})};});
+function post(k){return L.PostCard?h(L.PostCard,k):h('div',{style:{padding:14,border:'1px solid var(--line-card)',borderRadius:12,background:'var(--surface)'}},k.body);}
+var cap={margin:'0 0 10px',fontSize:11,lineHeight:'16.5px',color:'var(--muted)'};
+ReactDOM.createRoot(document.getElementById('root')).render(h('div',{style:{width:850}},
+  h('p',{style:cap},'Pipeline \u00b7 Creators Kanban (first cards of each stage). Scroll sideways.'),
+  h(L.KanbanBoard,{label:'Creator pipeline',summary:'26 creators \u00b7 moved by Ivy as each stage clears',columns:COLS}),
+  h('p',{style:Object.assign({},cap,{marginTop:24})},'Search "Jordan" \u00b7 the other columns show Empty'),
+  h(L.KanbanBoard,{label:'Creator pipeline, filtered',summary:'1 creators \u00b7 moved by Ivy as each stage clears',columns:SEARCH}),
+  h('p',{style:Object.assign({},cap,{marginTop:24})},'Lanes \u00b7 Elliot content with group H\u2019s PostCard as the card renderer'),
+  h(L.KanbanBoard,{variant:'lanes',label:'Content',summary:'7 in flight \u00b7 2 awaiting your nod',columns:LANES,renderCard:post})));
+</script></body></html>

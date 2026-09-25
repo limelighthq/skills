@@ -1,0 +1,13 @@
+<!-- @dsCard group="Content pages" height=230 -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>ArticleHeader</title></head>
+<body style="margin:0;background:var(--surface-150)">
+<div id="root" style="padding:24px 40px"></div>
+<script>
+  var L=window.Limelight,h=React.createElement;
+  var play=h('svg',{width:12,height:12,viewBox:'0 0 12 12','aria-hidden':'true'},h('path',{d:'M2 1.5v9l8-4.5z',fill:'currentColor'}));
+  ReactDOM.createRoot(document.getElementById('root')).render(h(L.ArticleHeader,{backHref:'#',date:'July 9, 2026',chip:'33 Min',
+    title:'Drop the Learn More button (with Casey Hill from DoWhatWorks) | Ep. 7',
+    actions:[h(L.Button,{key:1},play,'Play'),h(L.Button,{key:2,variant:'secondary'},'View more')]}));
+</script>
+</body></html>

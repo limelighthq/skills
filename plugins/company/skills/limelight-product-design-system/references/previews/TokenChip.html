@@ -1,0 +1,21 @@
+<!-- @dsCard group="Sequence builder" height=257 width=860 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>TokenChip</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="padding:20px 24px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+function cap(t){return h("p",{style:{margin:"0 0 8px",font:"500 12px/18px var(--font-inter)",color:"var(--seq-ink-2)"}},t);}
+var toks=["Spintax Greeting","Creator First Name","Handle","Platform","Niche","Recent Post","Follower Count","Brand Name","Campaign","Sender First Name","More…"];
+function Cmd(){var s=React.useState(false);return h(L.TokenChip,{variant:"command",pressed:s[0],onClick:function(){s[1](!s[0]);}},"AI Command");}
+ReactDOM.createRoot(document.getElementById('root')).render(h("div",{style:{width:798}},
+  cap("AI Command (toggle, off) and Snippets"),
+  h("div",{style:{display:"flex",gap:8}},h(Cmd),h(L.TokenChip,{variant:"snippets"},"Snippets")),
+  h("div",{style:{height:10}}),
+  cap("AI Command on"),
+  h("div",{style:{display:"flex",gap:8}},h(L.TokenChip,{variant:"command",pressed:true},"AI Command")),
+  h("div",{style:{height:10}}),
+  cap("Merge tokens · insert at the cursor"),
+  h("div",{style:{display:"flex",flexWrap:"wrap",gap:5}},toks.map(function(t){return h(L.TokenChip,{key:t},t);}))
+));
+</script></body></html>

@@ -1,0 +1,11 @@
+<!-- @dsCard group="Form controls" height=140 width=960 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>FileDropzone</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="padding:16px 24px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+ReactDOM.createRoot(document.getElementById('root')).render(h('div',{className:'lla-overlay',style:{display:'grid',gridTemplateColumns:'1fr 1fr',gap:28,alignItems:'start'}},
+ h(L.FileDropzone,{ariaLabel:'Source file',hint:'MP3, MP4, DOCX, PDF, Markdown and more · up to 2GB',error:'Choose a file to add.'}),
+ h(L.FileDropzone,{ariaLabel:'Source file',hint:'MP3, MP4, DOCX, PDF, Markdown and more · up to 2GB',disabled:true,disabledReason:'Uploads open when Elliot is connected to Slack.'})));
+</script></body></html>

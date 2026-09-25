@@ -1,0 +1,13 @@
+<!-- @dsCard group="Cards" height=290 width=900 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>CampaignGrid</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="padding:24px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+var C=[{name:'Q2 SaaS Growth',status:'Running',subline:'42 creators in pipeline',stats:[{value:17,label:'Contacted'},{value:7,label:'Replied'},{value:3,label:'Signed'}]},
+ {name:'DevTools LinkedIn',status:'Running',subline:'18 creators in pipeline',stats:[{value:7,label:'Contacted'},{value:3,label:'Replied'},{value:1,label:'Signed'}]},
+ {name:'Customer story',status:'Draft',subline:'7 creators in pipeline',stats:[{value:3,label:'Contacted'},{value:1,label:'Replied'},{value:0,label:'Signed'}]}];
+function Demo(){var s=React.useState(0);return h('div',{style:{width:850}},h(L.CampaignGrid,{onNew:function(){}},C.map(function(c,i){return h(L.CampaignCard,Object.assign({key:i,selected:s[0]===i,onSelect:function(){s[1](i);}},c));})));}
+ReactDOM.createRoot(document.getElementById('root')).render(h(Demo));
+</script></body></html>

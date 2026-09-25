@@ -1,0 +1,14 @@
+<!-- @dsCard group="Actions" height=230 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Button</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="padding:16px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+function Row(p){return h('div',{style:{display:'flex',flexWrap:'wrap',gap:10,alignItems:'center',marginBottom:12}},p.children);}
+ReactDOM.createRoot(document.getElementById('root')).render(h('div',null,
+ h(Row,null,h(L.Button,{size:'toolbar',icon:'play'},'Run Discovery Now'),h(L.Button,{variant:'secondary'},'Internal targeting'),h(L.Button,{variant:'secondary',size:'sm',count:6},'Approvals'),h(L.Button,{variant:'ghost',size:'toolbar',icon:'plus'},'New campaign')),
+ h(Row,null,h(L.Button,null,'Add funds'),h(L.Button,{variant:'danger',icon:'trash-2'},'Delete thread'),h(L.Button,{disabled:true,'aria-describedby':'why'},'Run Discovery Now'),h('span',{id:'why',style:{fontSize:12,color:'var(--muted)'}},'Publish the brief first.')),
+ h('div',{style:{width:232}},h(L.Button,{block:true,size:'panel'},'Q2 SaaS Growth'),h('div',{style:{height:10}}),h(L.Button,{block:true,size:'panel',variant:'secondary'},'DevTools LinkedIn'))));
+</script>
+</body></html>

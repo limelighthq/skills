@@ -1,0 +1,20 @@
+<!-- @dsCard group="Sequence builder" height=313 width=640 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>CadencePill</title></head>
+<body style="margin:0;background:var(--seq-canvas)">
+<div id="root" class="lla" style="padding:20px 24px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+function cap(t){return h("p",{style:{margin:"0 0 8px",font:"500 12px/18px var(--font-inter)",color:"var(--seq-ink-2)"}},t);}
+function Wait(p){var a=React.useState(p.a),u=React.useState(p.u),t=React.useState("9:00AM");
+  return h(L.CadencePill,{amount:a[0],onAmountChange:function(e){a[1](e.target.value);},unit:u[0],onUnitChange:function(e){u[1](e.target.value);},time:t[0],onTimeChange:function(e){t[1](e.target.value);}});}
+ReactDOM.createRoot(document.getElementById('root')).render(h("div",null,
+  cap("variant=\"start\" · first step"),h(L.CadencePill,{variant:"start"}),
+  h("div",{style:{height:20}}),
+  cap("variant=\"wait\" · Step 2 (3 weeks) and Step 2 of the AI draft (2 business days)"),
+  h("div",{style:{display:"flex",gap:16,flexWrap:"wrap"}},h(Wait,{a:"3",u:"weeks"}),h(Wait,{a:"2",u:"business days"})),
+  h("div",{style:{height:20}}),
+  cap("variant=\"mini\" · between steps in the StepRail"),
+  h("div",{style:{width:243,background:"var(--seq-rail)"}},h(L.CadencePill,{variant:"mini"},"wait 2 business days"))
+));
+</script></body></html>

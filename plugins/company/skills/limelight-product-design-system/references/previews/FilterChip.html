@@ -1,0 +1,15 @@
+<!-- @dsCard group="Filters" height=110 width=960 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>FilterChip</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="padding:16px 24px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+function Demo(){
+ var s=React.useState('All campaigns'),v=s[0],set=s[1];
+ var rows=[['All campaigns',5],['Q2 SaaS Growth',4],['DevTools LinkedIn',1],['Customer story',0]];
+ return h('div',{role:'group','aria-label':'Filter conversations by campaign',style:{display:'flex',flexWrap:'wrap',gap:8}},
+  rows.map(function(r){return h(L.FilterChip,{key:r[0],label:r[0],count:r[1],unit:'conversation',selected:v===r[0],onClick:function(){set(r[0]);}});}));
+}
+ReactDOM.createRoot(document.getElementById('root')).render(h(Demo));
+</script></body></html>

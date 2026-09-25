@@ -1,0 +1,15 @@
+<!-- @dsCard group="Agent panel" height=450 width=620 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>TaskCard</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="display:flex;gap:24px;align-items:stretch;min-height:100vh"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+function col(el){return h("div",{style:{width:298,flex:"none",boxSizing:"border-box",padding:"20px 16px",alignSelf:"stretch",backgroundColor:"var(--surface-panel)",backgroundImage:"var(--gradient-panel-veil), var(--lla-panel-image)",backgroundSize:"100% 100%, auto 1454px",backgroundPosition:"center, left 0 top -727px",backgroundRepeat:"no-repeat"}},el);}
+function stack(kids){return col(h("div",{style:{display:"flex",flexDirection:"column",gap:10}},kids));}
+ReactDOM.createRoot(document.getElementById("root")).render(h(React.Fragment,null,
+ stack([h(L.TaskCard,{key:1,icon:"sparkles",title:"discovery",description:"Find creators that match a campaign brief",agent:"ivy"}),
+        h(L.TaskCard,{key:2,icon:"message-circle",title:"Monitor negotiations",description:"Where every open deal stands right now",agent:"ivy"})]),
+ stack([h(L.TaskCard,{key:3,icon:"notebook-pen",title:"Draft content",description:"A post in one of your team’s voices",agent:"elliot"}),
+        h(L.TaskCard,{key:4,icon:"lightbulb",title:"Browse content inspiration",description:"High-performing posts worth modelling",agent:"elliot"})])));
+</script></body></html>

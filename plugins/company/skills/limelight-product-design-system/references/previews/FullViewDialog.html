@@ -1,0 +1,19 @@
+<!-- @dsCard group="Chat" height=900 width=1440 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>FullViewDialog</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+var chats=[{id:'c3-seed-1',title:'Find creators that match our ICP',pinned:true},{id:'cur',title:'Who hasn’t posted lately?'},{id:'c3-seed-3',title:'Should we accept Alex’s counter?'},{id:'c3-seed-0',title:'How are we doing today?'}];
+function Demo(){
+  var o=React.useState(true);
+  return h(L.FullViewDialog,{open:o[0],onClose:function(){o[1](false);},chats:chats,currentId:'cur',onSend:function(){}},
+    h(L.ChatMessage,{key:1,role:'user',text:'Who hasn’t posted lately?'}),
+    h(L.ChatMessage,{key:2,agent:'elliot',text:'Four people haven’t posted in three weeks, Jordan, Sam, Priya and Chris. Two already have approved drafts sitting idle.'}),
+    h(L.ChatMessage,{key:3,role:'user',text:'What goes out this week?'}),
+    h(L.ChatMessage,{key:4,agent:'elliot',text:'Six posts are scheduled and two days are empty, Wednesday and Friday. I drafted one for each from the ideas backlog. Both need your approval.'}),
+    h(L.ChatMessage,{key:5,agent:'elliot',text:'Elliot opened Calendar because that is where the week lives.'}));
+}
+ReactDOM.createRoot(document.getElementById('root')).render(h(Demo));
+</script></body></html>

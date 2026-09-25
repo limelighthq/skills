@@ -1,0 +1,13 @@
+<!-- @dsCard group="Content pages" height=300 -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>ContentCard</title></head>
+<body style="margin:0;background:var(--surface-100)">
+<div id="root" class="ll-content-grid" style="padding:16px"></div>
+<script>
+  var L=window.Limelight,h=React.createElement;function art(a,b){var s='<svg xmlns="http://www.w3.org/2000/svg" width="1376" height="768"><defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset=".1" stop-color="#ffffff"/><stop offset=".5" stop-color="'+a+'"/><stop offset="1" stop-color="'+b+'"/></linearGradient></defs><rect width="1376" height="768" fill="url(#g)"/><text x="688" y="410" font-family="Arial" font-size="40" fill="#767676" text-anchor="middle">Cover art</text></svg>';return 'data:image/svg+xml,'+encodeURIComponent(s);}
+  ReactDOM.createRoot(document.getElementById('root')).render(h(React.Fragment,null,
+    h(L.ContentCard,{image:art('#d8ebfa','#85beec'),imageAlt:'',date:'June 17, 2026',tag:'Market Research',title:'Why small B2B creators often beat bigger influencers on pipeline'}),
+    h(L.ContentCard,{image:art('#ffe1f7','#aad5f6'),imageAlt:'',date:'June 12, 2026',tag:'Content Strategy',title:'How B2B teams should reuse creator content without diluting trust'}),
+    h(L.ContentCard,{image:art('#ffd9f3','#ffeccf'),imageAlt:'',ratio:'16/9',date:'27 March 2026',tag:'33 Min',title:'Drop the Learn More button (with Casey Hill from DoWhatWorks) | Ep. 7'})));
+</script>
+</body></html>

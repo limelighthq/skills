@@ -1,0 +1,752 @@
+/* Generated from tokens.json by tools/sync-design-system.mjs. Do not edit. */
+
+:root, [data-theme="light"] {
+  --ink: #1d1d20;
+  --ink-strong: #09090b;
+  --ink-overlay: #000000;
+  --ink-nav: #6b6b73;
+  --ink-nav-current: #242329;
+  --ink-tab: #76767b;
+  --ink-tab-current: #242229;
+  --muted: #686b73;
+  --muted-panel: #76767e;
+  --muted-subtle: #71777f;
+  --muted-overlay: #71717a;
+  --ink-hover: #18181b;
+  --danger-ink: #ae3333;
+  --focus-ring-panel: #2e68a8;
+  --glass-fill: #ffffff80;
+  --glass-border: #ffffff;
+  --on-primary: #fafafa;
+  --icon-rail: #74747d;
+  --icon-toolbar: #888891;
+  --icon-row: #72757b;
+  --surface: #ffffff;
+  --surface-header: #fcfdff;
+  --surface-nav: #fafafa;
+  --surface-bar: #f8faff;
+  --surface-panel: #eaf1fc;
+  --surface-subtle: #f4f4f5;
+  --surface-nav-current: #ececee;
+  --surface-nav-hover: #eeeef0;
+  --surface-hover: #f4f7fb;
+  --surface-portrait: #f5f6fb;
+  --surface-note: #f5f8fb;
+  --surface-selected: #f5faff;
+  --surface-selected-end: #fcfaff;
+  --primary: #1e1c22;
+  --primary-workspace: #211f25;
+  --scrim: #000000cc;
+  --line: #e9eaed;
+  --line-card: #e6e7eb;
+  --line-overlay: #e4e4e7;
+  --line-menu: #e0e1e5;
+  --line-panel: #cddaf0;
+  --line-bar: #dce2f0;
+  --line-insight: #e4e5ed;
+  --line-header-accent: #dbe7f4;
+  --control-border: #858d9e;
+  --selected-border: #6695c4;
+  --selected-halo: #eff5fa;
+  --portrait-ring: #e5e6ed;
+  --resize-grip: #748dac;
+  --focus-ring: #4d8bce;
+  --positive-fill: #f0f8f3;
+  --positive-text: #32795c;
+  --score-text: #297553;
+  --warning-fill: #fff5d2;
+  --warning-text: #926917;
+  --neutral-fill: #f2f2f3;
+  --neutral-text: #6e6e75;
+  --good: #23715a;
+  --accept-hover-fill: #edf8f2;
+  --accept-hover-ink: #26775c;
+  --accept-hover-border: #559f7c;
+  --reject-hover-fill: #fff0ed;
+  --reject-hover-ink: #b2493c;
+  --reject-hover-border: #ce7a6a;
+  --mint-fill: #e3f1eb;
+  --mint-border: #719c8a;
+  --ring-1: #29a1bf;
+  --ring-2: #6e93e2;
+  --ring-3: #a884da;
+  --ring-4: #cf75c3;
+  --avatar-1-fill: #efeeeb;
+  --avatar-1-ink: #756a62;
+  --avatar-2-fill: #edf1ee;
+  --avatar-2-ink: #5d7265;
+  --avatar-3-fill: #eeedf3;
+  --avatar-3-ink: #6e697b;
+  --checklist-ink: #30313a;
+  --checklist-step: #666e80;
+  --checklist-meta: #6f7686;
+  --checklist-current: #486aa7;
+  --checklist-hint: #687183;
+  --checklist-done: #62a185;
+  --checklist-todo-ring: #8895ab;
+  --checklist-current-ring: #7097cd;
+  --checklist-border: #dbdfe7;
+  --checklist-track: #f1f2f6;
+  --checklist-icon: #777d8b;
+  --checklist-grip: #8d95a5;
+  --progress-start: #678ec3;
+  --progress-end: #9282c6;
+  --ink-nav-current-top: #202025;
+  --ink-nav-last: #242429;
+  --ink-nav-hover: #17171c;
+  --surface-nav-tree-current: #e9edf1;
+  --ink-nav-tree-current: #222222;
+  --line-nav-tree: #dddddd;
+  --heading-kicker: #707580;
+  --rail-mark: #ffffff;
+  --menu-ink: #242429;
+  --menu-desc: #6e6e78;
+  --menu-label: #757580;
+  --menu-rule: #e6e6ea;
+  --menu-hover: #f0f4f9;
+  --menu-hover-ivy: #edf7f2;
+  --menu-hover-elliot: #eff5fc;
+  --menu-icon-ivy: #397965;
+  --menu-icon-elliot: #4674b6;
+  --resize-hover: #9bbce54d;
+  --resize-grip-hover: #6581a3;
+  --task-icon: #7695b4;
+  --task-arrow: #7392b2;
+  --task-link: #6e717a;
+  --panel-muted: #6b6b72;
+  --chat-option-ink: #27272a;
+  --chat-step-done: #39816c;
+  --chat-step-now: #333333;
+  --chat-step-pending: #757680;
+  --chat-history-current: #f0f4f9;
+  --chat-history-meta: #6f6f6f;
+  --chat-full-divider: #e5e6ea;
+  --chat-full-user-label: #6f6f78;
+  --chat-busy-border: #5f6678;
+  --chat-flow-border: #9393aa;
+  --chat-flow-placeholder: #767677;
+  --control-border-overlay: #8c8c99;
+  --primary-overlay: #18181b;
+  --on-dark: #ffffff;
+  --snackbar-action-border: #dddfe4;
+  --kebab-line: #e1e3e6;
+  --kebab-hover: #f3f4f5;
+  --kebab-rule: #e5e7eb;
+  --snackbar-fill: #202124;
+  --notice-fill: #edf5f0;
+  --line-empty: #dfe4e8;
+  --progress-track-primary: #1e1c2233;
+  --drawer-ink: #27272d;
+  --drawer-muted: #777581;
+  --drawer-note: #756e7b;
+  --drawer-meta: #756e7e;
+  --drawer-take: #746d84;
+  --drawer-campaign: #756e82;
+  --drawer-body: #4a4650;
+  --drawer-line: #e9e9ee;
+  --drawer-foot-line: #e7e5ed;
+  --drawer-divider: #dddddd;
+  --drawer-primary: #292332;
+  --drawer-avatar-fill: #efedf8;
+  --drawer-avatar-ink: #696080;
+  --drawer-undo-fill: #f5f1fa;
+  --drawer-undo-ink: #675978;
+  --drawer-rejected: #a44040;
+  --drawer-saved: #55715d;
+  --drawer-empty-fill: #fcfbfd;
+  --drawer-empty-line: #dedbe5;
+  --drawer-empty-title: #6e6677;
+  --seq-sheet-line: #dfe4ec;
+  --seq-icon: #777b85;
+  --seq-danger: #dc2626;
+  --seq-scrim: #12121c57;
+  --seq-scrim-confirm: #12121c66;
+  --seq-toast-fill: #1c1c24;
+  --seq-toast-muted: #b9b9c6;
+  --flow-ink: #242a28;
+  --flow-muted: #63706a;
+  --filterchip-ink: #53575b;
+  --filterchip-count-fill: #f0f1f2;
+  --filterchip-selected-fill: #edf5f0;
+  --filterchip-selected-border: #729680;
+  --filterchip-selected-ink: #244d36;
+  --filterchip-selected-count-fill: #d9e9de;
+  --check-border: #767676;
+  --check-border-hover: #4f4f4f;
+  --check-fill: #0075ff;
+  --check-fill-hover: #005cc8;
+  --check-mark: #ffffff;
+  --radiocard-border: #e5e5e9;
+  --control-border-flow: #7e9986;
+  --control-border-reply: #7d9c8a;
+  --filterchip-border: #91949e;
+  --dropzone-border: #949494;
+  --placeholder-flow: #737574;
+  --placeholder-reply: #767679;
+  --person-date: #6a7078;
+  --row-action-border: #8891a0;
+  --kanban-lane-fill: #f2f3f8;
+  --settings-ground: #faf9f7;
+  --settings-heading: #72727b;
+  --settings-meta: #737373;
+  --settings-divider: #ededf0;
+  --settings-link: #4e53a4;
+  --settings-code-fill: #f7f6f4;
+  --settings-code-border: #dedbd7;
+  --settings-mark-fill: #f5f4f1;
+  --settings-mark-border: #e1dfdc;
+  --disclosure-border: #e1e5e2;
+  --disclosure-ink: var(--flow-ink);
+  --disclosure-status: #69726d;
+  --disclosure-body: var(--flow-muted);
+  --disclosure-note: #767676;
+  --disclosure-inline-ink: #645774;
+  --disclosure-inline-rule: #e9e5ee;
+  --disclosure-term: var(--drawer-note);
+  --disclosure-value: var(--drawer-ink);
+  --tile-ink: var(--flow-ink);
+  --tile-border: #7b9c85;
+  --tile-selected-border: #3f775d;
+  --tile-selected-fill: #f0f8f2;
+  --portal-ink: var(--flow-ink);
+  --portal-brand: #263d30;
+  --portal-meta: #617169;
+  --portal-banner: #f2f5f3;
+  --portal-line: #e1e6e2;
+  --portal-rule: #dfe7e1;
+  --portal-eyebrow: #587061;
+  --portal-field-label: #69786f;
+  --portal-glance-fill: #f3f7f3;
+  --portal-glance-label: #68746c;
+  --portal-link: #316c4c;
+  --portal-aside-fill: #fafcfb;
+  --portal-aside-border: #d9e3dc;
+  --portal-control-border: #7e9985;
+  --portal-primary: #264b36;
+  --portal-on-primary: #ffffff;
+  --focus-ring-portal: #4a8260;
+  --ops-kicker: #717681;
+  --ops-count-label: #767676;
+  --ops-meta-label: #72767d;
+  --ops-activity-dot: #93b7a4;
+  --ops-suggestion-fill: #f3f7fa;
+  --ops-suggestion-border: #d8e6f0;
+  --ops-suggestion-note: #717171;
+  --inbox-list-border: #d9dfe6;
+  --inbox-thread-divider: #e4e6e8;
+  --inbox-thread-selected: #7c8288;
+  --inbox-link: #416b5e;
+  --inbox-campaign: #40644e;
+  --inbox-out-fill: #f0f7f4;
+  --inbox-draft-fill: #f3f8f5;
+  --inbox-draft-border: #769689;
+  --inbox-read-start: #f2f8fc;
+  --inbox-read-end: #f7f5fa;
+  --inbox-read-border: #deebe4;
+  --inbox-pay-border: #dddddd;
+  --focus-ring-inbox: #4b8574;
+  --focus-ring-inbox-pay: var(--focus-ring-portal);
+  --cal-outside: #f6f7f9;
+  --cal-live-fill: #eff7f3;
+  --cal-live-mark: #5f997f;
+  --cal-live-ink: #3f7560;
+  --cal-revisions-fill: #fff7df;
+  --cal-revisions-mark: #b08a39;
+  --cal-revisions-ink: #8d6d28;
+  --cal-progress-fill: #f2f3f5;
+  --cal-progress-mark: #848d9a;
+  --cal-progress-ink: #646a74;
+  --cal-brief-fill: #eef3fb;
+  --cal-brief-mark: #638fc3;
+  --cal-brief-ink: #507197;
+  --cal-contracting-fill: #f6f0f4;
+  --cal-contracting-mark: #ad7e97;
+  --cal-contracting-ink: #816777;
+  --cal-scheduled-fill: #f1eff9;
+  --cal-scheduled-mark: #9480be;
+  --cal-scheduled-ink: #766598;
+  --ed-cal-outside: #f7f7f8;
+  --ed-cal-line: #e7e5df;
+  --ed-cal-ink: #6c727d;
+  --ed-cal-weekday: #6e7279;
+  --ed-event-line: #e5e5e5;
+  --ed-status-scheduled: #8887bd;
+  --ed-status-published: #30a17a;
+  --ed-status-pending: #b18a1a;
+  --ed-status-draft: #8f8f8f;
+  --party-pressed-fill: #e9f1fa;
+  --party-pressed-mark: #638ebc;
+  --party-count: #b45736;
+  --party-reason: #6c6d75;
+  --party-disabled: #7c7d83;
+  --stepper-todo-ink: #767676;
+  --stepper-done-ink: #286d56;
+  --stepper-current-ink: #222222;
+  --stepper-todo-dot: #9393a0;
+  --stepper-done-dot: #4f997a;
+  --stepper-todo-line: #e7e7e9;
+  --stepper-done-line: #b5d6c5;
+  --handoff-line: #e8e8ec;
+  --handoff-done: #32836b;
+  --handoff-todo: #93949f;
+  --readiness-ink: var(--flow-ink);
+  --readiness-muted: var(--flow-muted);
+  --readiness-line: #e4ebe6;
+  --readiness-warn-fill: #fff6e8;
+  --readiness-warn-line: #e6c99b;
+  --readiness-brief-ink: #56675d;
+  --metric-up: #298561;
+  --metric-down: #b45309;
+  --metric-alert: #b42318;
+  --funnel-meta: #757679;
+  --chart-1: #8887bd;
+  --chart-2: #31977a;
+  --chart-previous: #949494;
+  --chart-bar: #9290c2;
+  --chart-area: #8887bd1f;
+  --chart-funnel: #8887bd4d;
+  --chart-usual: #8c8c97;
+  --post-image-fill: #f6f6f5;
+  --post-image-line: #e5e5e1;
+  --post-image-glyph: #8e8e8e;
+  --ed-sequence-line: #e6e3dd;
+  --ed-field-line: #959589;
+  --seq-ink: #25242a;
+  --seq-ink-2: #62636d;
+  --seq-ink-3: #6d717a;
+  --seq-placeholder: #77767b;
+  --seq-line: #e4e6eb;
+  --seq-control-border: #808fa7;
+  --seq-chip-line: #888da2;
+  --seq-snippets-line: #858ea5;
+  --seq-cta: #232127;
+  --seq-ivy: #4e8b77;
+  --seq-ivy-ink: #326653;
+  --seq-ivy-fill: #eff7f3;
+  --seq-ivy-line: #c9dfd4;
+  --seq-switch-off: #8795ab;
+  --seq-active-line: #609c7f;
+  --seq-active-fill: #f4faf6;
+  --seq-amber: #9c6712;
+  --seq-amber-fill: #fff7e4;
+  --seq-rail: #f8f9fb;
+  --seq-canvas: #fcfcfd;
+  --seq-subtle: #f5f6f8;
+  --seq-tag-fill: #f0f2f5;
+  --seq-pill-fill: #f6f8fa;
+  --seq-chip-fill: #fafafa;
+  --seq-reco-fill: #f0f5f9;
+  --seq-reco-line: #e1e9f1;
+  --seq-reco-ink: #52677b;
+  --seq-hover-line: #d4d9e1;
+  --shadow-sm: 0 1px 3px 0 #0000001a, 0 1px 2px -1px #0000001a;
+  --shadow-md: 0 4px 6px -1px #0000001a, 0 2px 4px -2px #0000001a;
+  --shadow-lg: 0 10px 15px -3px #0000001a, 0 4px 6px -4px #0000001a;
+  --shadow-card: 0 2px 8px #64749a08;
+  --shadow-panel: -3px 0 16px #a8bfe518;
+  --shadow-popover: 0 12px 36px #29334724;
+  --shadow-menu: 0 8px 28px #1717211a;
+  --shadow-selected: 0 0 0 2px #eff5fa;
+  --shadow-portrait: 0 0 0 1px #e5e6ed;
+  --shadow-signature: 0 0 0 7px #ffffff55, 0 12px 28px #819bb52b;
+  --shadow-toast: 0 24px 90px #20273526;
+  --shadow-kebab: 0 8px 30px #00000014;
+  --shadow-snackbar: 0 8px 28px #00000022;
+  --shadow-drawer-foot: 0 -5px 20px #29203505;
+  --seq-shadow-active: 0 0 0 1px #94bda930;
+  --seq-shadow-knob: 0 1px 2px #00000033;
+}
+
+:root {
+  --space-4: 4px;
+  --space-6: 6px;
+  --space-8: 8px;
+  --space-10: 10px;
+  --space-12: 12px;
+  --space-14: 14px;
+  --space-16: 16px;
+  --space-18: 18px;
+  --space-20: 20px;
+  --space-24: 24px;
+  --space-26: 26px;
+  --space-28: 28px;
+  --space-32: 32px;
+  --radius-xs: 3px;
+  --radius-sm: 4px;
+  --radius-chip: 5px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-card: 10px;
+  --radius-xl: 12px;
+  --radius-popover: 14px;
+  --radius-panel: 16px;
+  --radius-label: 20px;
+  --radius-pill: 22px;
+  --radius-full: 9999px;
+  --radius-flow: 7px;
+  --radius-check: 2px;
+  --radius-portal: 7px;
+  --seq-radius-control: 7px;
+  --seq-radius-field: 9px;
+  --seq-radius-dialog: 18px;
+  --ed-radius-field: 9px;
+  --gradient-selected: linear-gradient(130deg, #f5faff, #fcfaff);
+  --gradient-progress: linear-gradient(90deg, #678ec3, #9282c6);
+  --gradient-agent-ring: linear-gradient(135deg, #29a1bf, #6e93e2 35%, #a884da 65%, #cf75c3);
+  --gradient-panel-veil: linear-gradient(#ffffff12, #ffffff12);
+  --gradient-seq-head: linear-gradient(110deg, #f0f6fc, #f6f2fa 75%, #ffffff);
+  --inbox-read-gradient: linear-gradient(125deg, #f2f8fc, #f7f5fa);
+  --gradient-cadence: linear-gradient(90deg, #f7dfa0, #f4f4f5 12%, #f4f4f5 88%, #b9e9d5);
+  --rail-width: 56px;
+  --nav-width: 186px;
+  --main-min-width: 620px;
+  --panel-width: 300px;
+  --panel-min-width: 260px;
+  --panel-max-width: 440px;
+  --panel-key-step: 20px;
+  --resize-handle-width: 10px;
+  --header-height: 64px;
+  --control-height: 36px;
+  --control-height-panel: 32px;
+  --control-height-sm: 30px;
+  --segmented-height: 34px;
+  --segmented-height-md: 36px;
+  --icon-box: 24px;
+  --icon-glyph: 20px;
+  --icon-glyph-indicator: 16px;
+  --icon-button: 36px;
+  --icon-button-sm: 27px;
+  --toolbar-button-width: 26px;
+  --send-button-width: 36px;
+  --table-header-height: 38px;
+  --table-header-height-compact: 40px;
+  --table-row-height: 88px;
+  --table-row-height-compact: 59px;
+  --portrait-rail: 34px;
+  --portrait-select: 18px;
+  --portrait-take: 23px;
+  --portrait-signature: 96px;
+  --avatar-row: 26px;
+  --avatar-card: 32px;
+  --avatar-drawer: 44px;
+  --checkbox-size: 16px;
+  --switch-width: 36px;
+  --checklist-width: 280px;
+  --dialog-width: 512px;
+  --drawer-width: 600px;
+  --drawer-width-wide: 640px;
+  --full-view-width: 1100px;
+  --settings-column: 720px;
+  --menu-min-width: 128px;
+  --pill-height: 40px;
+  --chat-history-column: 260px;
+  --check-size: 13px;
+  --switch-height: 20px;
+  --switch-thumb: 16px;
+  --search-min-width: 230px;
+  --search-max-width: 320px;
+  --select-width-filter: 100px;
+  --select-width-sort: 150px;
+  --listbox-option-height: 32px;
+  --textarea-min-height: 110px;
+  --textarea-flow-min-height: 130px;
+  --textarea-voice-min-height: 120px;
+  --kanban-column: 210px;
+  --kanban-lane: 205px;
+  --person-name-max: 350px;
+  --portal-max-width: 1160px;
+  --portal-aside-width: 310px;
+  --portal-heading-width: 790px;
+  --ops-content-max: 1060px;
+  --ops-row-button-height: 28px;
+  --ops-row-actions-max: 180px;
+  --inbox-thread-col: 260px;
+  --inbox-thread-col-compact: 205px;
+  --inbox-thread-list-max: 250px;
+  --cal-day-min-height: 120px;
+  --ed-cal-day-min-height: 140px;
+  --seq-rail-width: 280px;
+  --seq-preview-width: 760px;
+  --z-base: 0;
+  --z-resize: 20;
+  --z-floating: 40;
+  --z-overlay: 50;
+  --z-snackbar: 90;
+  --z-menu: 100;
+  --z-header: 5;
+  --z-seq-scrim: 140;
+  --z-seq-sheet: 150;
+  --z-seq-confirm: 170;
+  --z-seq-toast: 180;
+  --opacity-disabled: 0.5;
+  --opacity-primary-hover: 0.9;
+  --opacity-close: 0.7;
+  --chat-opacity-answered: 0.65;
+  --opacity-portal-disabled: 0.45;
+  --seq-opacity-hover: 0.85;
+  --font-sans: "Helvetica Neue", Arial, sans-serif;
+  --font-system: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-arial: Arial, Helvetica, sans-serif;
+  --font-serif: Georgia, serif;
+  --font-inter: Inter, Arial, sans-serif;
+  --font-mono: SFMono-Regular, Consolas, monospace;
+  --font-code: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+.page-title { font-family: var(--font-sans); font-size: 26px; line-height: 32.5px; font-weight: 500; letter-spacing: -0.045em; }
+
+.detail-title { font-family: var(--font-sans); font-size: 22px; line-height: 27.5px; font-weight: 500; letter-spacing: -0.045em; }
+
+.agent-name { font-family: var(--font-sans); font-size: 22px; line-height: 27.5px; font-weight: 500; letter-spacing: -0.035em; }
+
+.crumb { font-family: var(--font-sans); font-size: 15px; line-height: 22.5px; font-weight: 400; letter-spacing: -0.168px; }
+
+.stat-value { font-family: var(--font-sans); font-size: 26px; line-height: 39px; font-weight: 400; letter-spacing: -0.6px; }
+
+.body { font-family: var(--font-sans); font-size: 14px; line-height: 21px; font-weight: 400; letter-spacing: -0.168px; }
+
+.button { font-family: var(--font-sans); font-size: 14px; line-height: 20px; font-weight: 450; letter-spacing: -0.168px; }
+
+.control { font-family: var(--font-sans); font-size: 12px; line-height: 17.14px; font-weight: 450; letter-spacing: -0.168px; }
+
+.input { font-family: var(--font-sans); font-size: 12px; line-height: 17.14px; font-weight: 400; letter-spacing: -0.168px; }
+
+.nav { font-family: var(--font-sans); font-size: 13px; line-height: 18.57px; font-weight: 450; letter-spacing: -0.168px; }
+
+.nav-child { font-family: var(--font-sans); font-size: 12px; line-height: 17.14px; font-weight: 450; letter-spacing: -0.168px; }
+
+.name { font-family: var(--font-sans); font-size: 13px; line-height: 19.5px; font-weight: 500; letter-spacing: -0.168px; }
+
+.small { font-family: var(--font-sans); font-size: 12px; line-height: 18px; font-weight: 400; letter-spacing: -0.168px; }
+
+.caption { font-family: var(--font-sans); font-size: 11px; line-height: 16.5px; font-weight: 400; letter-spacing: -0.168px; }
+
+.meta { font-family: var(--font-sans); font-size: 10px; line-height: 15px; font-weight: 400; letter-spacing: -0.168px; }
+
+.badge { font-family: var(--font-sans); font-size: 10px; line-height: 13.5px; font-weight: 450; letter-spacing: -0.168px; }
+
+.chip { font-family: var(--font-sans); font-size: 12px; line-height: 16.2px; font-weight: 500; letter-spacing: -0.168px; }
+
+.micro { font-family: var(--font-sans); font-size: 9px; line-height: 12.86px; font-weight: 400; letter-spacing: -0.168px; }
+
+.nav-tree { font-family: var(--font-sans); font-size: 11px; line-height: 15.71px; font-weight: 450; letter-spacing: -0.168px; }
+
+.reopen-label { font-family: var(--font-sans); font-size: 14px; line-height: 20px; font-weight: 600; letter-spacing: -0.012em; }
+
+.section-label { font-family: var(--font-sans); font-size: 10px; line-height: 15px; font-weight: 400; letter-spacing: 0.12em; }
+
+.filter-label { font-family: var(--font-sans); font-size: 9px; line-height: 13.5px; font-weight: 400; letter-spacing: 0.08em; }
+
+.table-head { font-family: var(--font-sans); font-size: 9px; line-height: 12.86px; font-weight: 500; letter-spacing: 0.02em; }
+
+.eyebrow { font-family: var(--font-sans); font-size: 11.2px; line-height: 16.8px; font-weight: 400; letter-spacing: 0.12em; }
+
+.eyebrow-page { font-family: var(--font-sans); font-size: 10px; line-height: 15px; font-weight: 400; letter-spacing: 0.15em; }
+
+.eyebrow-team { font-family: var(--font-sans); font-size: 10px; line-height: 15px; font-weight: 500; letter-spacing: 0.1em; }
+
+.number { font-family: var(--font-mono); font-size: 12px; line-height: 17.14px; font-weight: 400; letter-spacing: -0.04em; }
+
+.stat-m { font-family: var(--font-sans); font-size: 18px; line-height: 27px; font-weight: 500; letter-spacing: -0.168px; }
+
+.stat-l { font-family: var(--font-sans); font-size: 20px; line-height: 30px; font-weight: 500; letter-spacing: -0.168px; }
+
+.insight-title { font-family: var(--font-sans); font-size: 16px; line-height: 23.2px; font-weight: 500; letter-spacing: -0.025em; }
+
+.insight-body { font-family: var(--font-sans); font-size: 12px; line-height: 19.8px; font-weight: 400; letter-spacing: -0.168px; }
+
+.signature-label { font-family: var(--font-sans); font-size: 14px; line-height: 21px; font-weight: 400; letter-spacing: -0.04em; }
+
+.menu-title { font-family: var(--font-sans); font-size: 13px; line-height: 19.5px; font-weight: 600; letter-spacing: -0.168px; }
+
+.insight-eyebrow { font-family: var(--font-sans); font-size: 11.2px; line-height: 16.8px; font-weight: 400; letter-spacing: -0.168px; }
+
+.greeting-title { font-family: var(--font-sans); font-size: 14px; line-height: 21px; font-weight: 400; letter-spacing: -0.012em; }
+
+.selector-label { font-family: var(--font-sans); font-size: 10px; line-height: 14.29px; font-weight: 450; letter-spacing: -0.168px; }
+
+.task-link { font-family: var(--font-sans); font-size: 11px; line-height: 15.71px; font-weight: 450; letter-spacing: -0.168px; }
+
+.dialog-title { font-family: var(--font-system); font-size: 18px; line-height: 18px; font-weight: 600; letter-spacing: -0.025em; }
+
+.dialog-subtitle { font-family: var(--font-system); font-size: 14px; line-height: 20px; font-weight: 400; letter-spacing: 0; }
+
+.dialog-body { font-family: var(--font-system); font-size: 16px; line-height: 24px; font-weight: 400; letter-spacing: 0; }
+
+.chat-history-meta { font-family: var(--font-system); font-size: 10px; line-height: 14.29px; font-weight: 500; letter-spacing: 0; }
+
+.chat-full-author { font-family: var(--font-system); font-size: 12.8px; line-height: 19.2px; font-weight: 400; letter-spacing: 0; }
+
+.chat-full-stat { font-family: var(--font-system); font-size: 19px; line-height: 28.5px; font-weight: 700; letter-spacing: 0; }
+
+.alert-body { font-family: var(--font-system); font-size: 14px; line-height: 21.7px; font-weight: 400; letter-spacing: 0; }
+
+.kebab-item { font-family: var(--font-system); font-size: 14px; line-height: 21px; font-weight: 400; letter-spacing: 0; }
+
+.checklist-title { font-family: var(--font-serif); font-size: 18px; line-height: 24.3px; font-weight: 600; letter-spacing: -0.168px; }
+
+.checklist-step { font-family: var(--font-inter); font-size: 13px; line-height: 18.2px; font-weight: 450; letter-spacing: -0.168px; }
+
+.checklist-meta { font-family: var(--font-inter); font-size: 11px; line-height: 16.5px; font-weight: 550; letter-spacing: -0.168px; }
+
+.checklist-hint { font-family: var(--font-inter); font-size: 12px; line-height: 19.8px; font-weight: 400; letter-spacing: -0.168px; }
+
+.menu-item { font-family: var(--font-sans); font-size: 13px; line-height: 19.5px; font-weight: 400; letter-spacing: normal; }
+
+.menu-desc { font-family: var(--font-sans); font-size: 12px; line-height: 18px; font-weight: 400; letter-spacing: normal; }
+
+.menu-label { font-family: var(--font-sans); font-size: 10px; line-height: 15px; font-weight: 400; letter-spacing: normal; }
+
+.chat-author { font-family: var(--font-sans); font-size: 11.2px; line-height: 16.8px; font-weight: 400; letter-spacing: -0.012em; }
+
+.chat-text { font-family: var(--font-sans); font-size: 12px; line-height: 19.8px; font-weight: 400; letter-spacing: -0.012em; }
+
+.chat-busy-action { font-family: var(--font-sans); font-size: 11px; line-height: 15.71px; font-weight: 450; letter-spacing: -0.012em; }
+
+.notice-banner { font-family: var(--font-sans); font-size: 13px; line-height: 19.5px; font-weight: 400; letter-spacing: -0.012em; }
+
+.snackbar-title { font-family: var(--font-sans); font-size: 14px; line-height: 21.7px; font-weight: 700; letter-spacing: -0.012em; }
+
+.snackbar-body { font-family: var(--font-sans); font-size: 14px; line-height: 21.7px; font-weight: 400; letter-spacing: -0.012em; }
+
+.empty-title { font-family: var(--font-sans); font-size: 19px; line-height: 25.65px; font-weight: 500; letter-spacing: -0.025em; }
+
+.drawer-eyebrow { font-family: var(--font-arial); font-size: 10px; line-height: 15px; font-weight: 600; letter-spacing: 0.1em; }
+
+.drawer-title { font-family: var(--font-arial); font-size: 21px; line-height: 27.3px; font-weight: 600; letter-spacing: -0.5px; }
+
+.drawer-sub { font-family: var(--font-arial); font-size: 12px; line-height: 17.14px; font-weight: 400; letter-spacing: 0; }
+
+.drawer-button { font-family: var(--font-arial); font-size: 11px; line-height: 15.71px; font-weight: 500; letter-spacing: 0; }
+
+.drawer-notice { font-family: var(--font-arial); font-size: 11px; line-height: 16.5px; font-weight: 400; letter-spacing: 0; }
+
+.seq-sheet-title { font-family: var(--font-inter); font-size: 18px; line-height: 27px; font-weight: 550; letter-spacing: -0.45px; }
+
+.seq-button { font-family: var(--font-inter); font-size: 12px; line-height: 18px; font-weight: 550; letter-spacing: 0; }
+
+.seq-confirm-title { font-family: var(--font-inter); font-size: 17px; line-height: 25.5px; font-weight: 700; letter-spacing: 0; }
+
+.seq-confirm-body { font-family: var(--font-inter); font-size: 12px; line-height: 18px; font-weight: 400; letter-spacing: 0; }
+
+.seq-toast-title { font-family: var(--font-inter); font-size: 14px; line-height: 21px; font-weight: 700; letter-spacing: 0; }
+
+.seq-tag { font-family: var(--font-inter); font-size: 12px; line-height: 18px; font-weight: 700; letter-spacing: normal; }
+
+.seq-meta { font-family: var(--font-inter); font-size: 12px; line-height: 18px; font-weight: 400; letter-spacing: normal; }
+
+.seq-token { font-family: var(--font-inter); font-size: 11px; line-height: 16.5px; font-weight: 500; letter-spacing: normal; }
+
+.seq-title { font-family: var(--font-inter); font-size: 17px; line-height: 25.5px; font-weight: 600; letter-spacing: normal; }
+
+.field-label { font-family: var(--font-sans); font-size: 12px; line-height: 18px; font-weight: 400; letter-spacing: -0.012em; }
+
+.field-label-caps { font-family: var(--font-sans); font-size: 10px; line-height: 15px; font-weight: 400; letter-spacing: 0.07em; }
+
+.field-label-flow { font-family: var(--font-sans); font-size: 14px; line-height: 21.7px; font-weight: 500; letter-spacing: normal; }
+
+.field-input-md { font-family: var(--font-sans); font-size: 14px; line-height: 20px; font-weight: 400; letter-spacing: -0.012em; }
+
+.field-input-settings { font-family: var(--font-sans); font-size: 13px; line-height: 18.57px; font-weight: 400; letter-spacing: normal; }
+
+.field-counter { font-family: var(--font-sans); font-size: 11.2px; line-height: 16.8px; font-weight: 400; letter-spacing: -0.012em; }
+
+.filterchip-label { font-family: var(--font-sans); font-size: 14px; line-height: 21px; font-weight: 450; letter-spacing: -0.012em; }
+
+.filterchip-count { font-family: var(--font-sans); font-size: 12px; line-height: 18px; font-weight: 450; letter-spacing: -0.012em; }
+
+.radiocard-title { font-family: var(--font-sans); font-size: 12px; line-height: 18px; font-weight: 700; letter-spacing: normal; }
+
+.dropzone-hint { font-family: var(--font-sans); font-size: 9.6px; line-height: 14.4px; font-weight: 400; letter-spacing: normal; }
+
+.field-label-portal { font-family: var(--font-arial); font-size: 14px; line-height: 22.4px; font-weight: 500; letter-spacing: normal; }
+
+.listbox-option { font-family: var(--font-system); font-size: 14px; line-height: 20px; font-weight: 400; letter-spacing: normal; }
+
+.field-label-plain { font-family: var(--font-system); font-size: 16px; line-height: 24px; font-weight: 400; letter-spacing: normal; }
+
+.field-hint-plain { font-family: var(--font-system); font-size: 12.8px; line-height: 24px; font-weight: 400; letter-spacing: normal; }
+
+.table-head-compact { font-family: var(--font-sans); font-size: 14px; line-height: 20px; font-weight: 500; letter-spacing: -0.012em; }
+
+.table-strong { font-family: var(--font-sans); font-size: 14px; line-height: 20px; font-weight: 700; letter-spacing: -0.012em; }
+
+.table-sub { font-family: var(--font-sans); font-size: 14px; line-height: 22.4px; font-weight: 400; letter-spacing: -0.012em; }
+
+.platform-mark { font-family: var(--font-sans); font-size: 16px; line-height: 20px; font-weight: 700; letter-spacing: -0.012em; }
+
+.card-title { font-family: var(--font-sans); font-size: 13px; line-height: 18.57px; font-weight: 450; letter-spacing: -0.025em; }
+
+.kanban-name { font-family: var(--font-sans); font-size: 13px; line-height: 19.5px; font-weight: 700; letter-spacing: -0.012em; }
+
+.kanban-meta { font-family: var(--font-sans); font-size: 11px; line-height: 16.5px; font-weight: 450; letter-spacing: -0.012em; }
+
+.kanban-detail { font-family: var(--font-sans); font-size: 11.2px; line-height: 16.8px; font-weight: 450; letter-spacing: -0.012em; }
+
+.settings-section-title { font-family: var(--font-sans); font-size: 12px; line-height: 18px; font-weight: 400; letter-spacing: 0.07em; }
+
+.settings-row { font-family: var(--font-sans); font-size: 12px; line-height: 18px; font-weight: 400; letter-spacing: -0.012em; }
+
+.code-chip { font-family: var(--font-sans); font-size: 11px; line-height: 16.5px; font-weight: 400; letter-spacing: normal; }
+
+.portal-title { font-family: var(--font-arial); font-size: 40px; line-height: 46px; font-weight: 650; letter-spacing: -1.5px; }
+
+.portal-section { font-family: var(--font-arial); font-size: 22px; line-height: 35.2px; font-weight: 400; letter-spacing: -0.4px; }
+
+.portal-body { font-family: var(--font-arial); font-size: 16px; line-height: 25.6px; font-weight: 400; letter-spacing: normal; }
+
+.portal-field { font-family: var(--font-arial); font-size: 13px; line-height: 20.8px; font-weight: 600; letter-spacing: 0.5px; }
+
+.portal-control { font-family: var(--font-arial); font-size: 14px; line-height: 22.4px; font-weight: 400; letter-spacing: normal; }
+
+.portal-wordmark { font-family: var(--font-arial); font-size: 25px; line-height: 40px; font-weight: 800; letter-spacing: -1px; }
+
+.ops-kicker { font-family: var(--font-sans); font-size: 10px; line-height: 15px; font-weight: 500; letter-spacing: 0.1em; }
+
+.ops-count { font-family: var(--font-sans); font-size: 34px; line-height: 51px; font-weight: 500; letter-spacing: -0.05em; }
+
+.ops-agent { font-family: var(--font-sans); font-size: 12px; line-height: 18px; font-weight: 550; letter-spacing: -0.168px; }
+
+.approval-title { font-family: var(--font-sans); font-size: 14px; line-height: 18.9px; font-weight: 500; letter-spacing: -0.025em; }
+
+.ritual-title { font-family: var(--font-sans); font-size: 19px; line-height: 25.65px; font-weight: 500; letter-spacing: -0.025em; }
+
+.activity-title { font-family: var(--font-sans); font-size: 15px; line-height: 22.5px; font-weight: 500; letter-spacing: -0.168px; }
+
+.thread-name { font-family: var(--font-sans); font-size: 13px; line-height: 19.5px; font-weight: 700; letter-spacing: -0.168px; }
+
+.thread-unread { font-family: var(--font-sans); font-size: 9.6px; line-height: 14.4px; font-weight: 450; letter-spacing: -0.168px; }
+
+.read-eyebrow { font-family: var(--font-sans); font-size: 10px; line-height: 15px; font-weight: 400; letter-spacing: 0.15em; }
+
+.read-headline { font-family: var(--font-sans); font-size: 17px; line-height: 25.5px; font-weight: 500; letter-spacing: -0.168px; }
+
+.fact-value { font-family: var(--font-sans); font-size: 15px; line-height: 22.5px; font-weight: 700; letter-spacing: -0.168px; }
+
+.message-meta { font-family: var(--font-sans); font-size: 10.4px; line-height: 15.6px; font-weight: 400; letter-spacing: -0.168px; }
+
+.message-body { font-family: var(--font-sans); font-size: 13px; line-height: 20.8px; font-weight: 400; letter-spacing: -0.168px; }
+
+.cal-weekday { font-family: var(--font-sans); font-size: 10px; line-height: 15px; font-weight: 600; letter-spacing: 0.09em; }
+
+.cal-event { font-family: var(--font-sans); font-size: 11px; line-height: 15.71px; font-weight: 450; letter-spacing: -0.168px; }
+
+.ed-cal-weekday { font-family: var(--font-sans); font-size: 11.2px; line-height: 16.8px; font-weight: 400; letter-spacing: -0.168px; }
+
+.ed-event-time { font-family: var(--font-sans); font-size: 9.6px; line-height: 14.4px; font-weight: 450; letter-spacing: -0.168px; }
+
+.ed-event-title { font-family: var(--font-sans); font-size: 12px; line-height: 18px; font-weight: 700; letter-spacing: -0.168px; }
+
+.party-figure { font-family: var(--font-sans); font-size: 24px; line-height: 34.29px; font-weight: 500; letter-spacing: -0.168px; }
+
+.metric-value { font-family: var(--font-sans); font-size: 27px; line-height: 40.5px; font-weight: 550; letter-spacing: -0.7px; }
+
+.metric-value-lg { font-family: var(--font-sans); font-size: 30px; line-height: 45px; font-weight: 500; letter-spacing: -0.7px; }
+
+.metric-big { font-family: var(--font-sans); font-size: 36px; line-height: 54px; font-weight: 400; letter-spacing: -1px; }
+
+.metric-delta { font-family: var(--font-sans); font-size: 11.2px; line-height: 16.8px; font-weight: 400; letter-spacing: -0.168px; }
+
+.chart-title { font-family: var(--font-sans); font-size: 13px; line-height: 19.5px; font-weight: 500; letter-spacing: -0.168px; }
+
+.funnel-value { font-family: var(--font-sans); font-size: 23px; line-height: 34.5px; font-weight: 700; letter-spacing: -0.168px; }

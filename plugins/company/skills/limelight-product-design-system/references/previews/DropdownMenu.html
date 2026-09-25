@@ -1,0 +1,35 @@
+<!-- @dsCard group="Menus" height=560 width=1200 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>DropdownMenu</title></head>
+<body style="margin:0;background:var(--surface-nav)">
+<div id="root" class="lla" style="position:relative;height:560px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+function trig(text){return function(tp){return h(L.Button,Object.assign({variant:'secondary',size:'sm'},tp),text);};}
+var IVY=[
+ {id:'brief',icon:'pencil',label:'Create campaign brief',description:'Draft with Ivy, review in the campaign panel'},
+ {id:'discovery',icon:'target',label:'Run a new creator discovery',description:'Find creators that match a campaign brief'},
+ {id:'negotiations',icon:'message-circle',label:'Monitor negotiations',description:'Where every open deal stands right now'}];
+var ELLIOT=[
+ {id:'draft',icon:'notebook-pen',label:'Draft content',description:'A post in one of your team’s voices'},
+ {id:'inspiration',icon:'lightbulb',label:'Browse content inspiration',description:'High-performing posts worth modelling'},
+ {separator:true},{section:'Quick actions'},
+ {id:'q1',icon:'pencil',label:'Draft a new post',description:'Pick who it is for, Elliot writes in their voice'},
+ {id:'q2',icon:'sparkles',label:'Create an educational post',description:'Explain something your buyers keep getting wrong'},
+ {id:'q3',icon:'heart',label:'Turn a customer win into a post',description:'A result, told as a story rather than a case study'},
+ {id:'q4',icon:'sparkles',label:'Brainstorm angles first',description:'Five angles to react to before anything is written'}];
+var ACCOUNT=[
+ {section:'Your teams'},{id:'team',label:'Limelight',selected:true,meta:'Owner'},{separator:true},
+ {id:'account',label:'Account'},{id:'settings',label:'Team settings'},
+ {id:'create',label:'Create a team',disabled:true,description:'Create a team is not connected in the C3 preview.'},
+ {id:'logout',label:'Log out'},{separator:true},{id:'index',label:'Prototype index'}];
+function col(pos,label,el){return h('div',{style:Object.assign({position:'absolute',bottom:24,display:'flex',flexDirection:'column',alignItems:pos.right!=null?'flex-end':'flex-start'},pos)},h('div',{style:{font:'11px/16.5px var(--font-sans)',color:'var(--muted)',marginBottom:8}},label),el);}
+ReactDOM.createRoot(document.getElementById('root')).render(h(React.Fragment,null,
+ col({left:24},'Neutral, side="right", offset 10',h(L.DropdownMenu,{side:'right',align:'end',offset:10,defaultOpen:true,items:ACCOUNT,trigger:trig('Limelight workspace')})),
+ col({right:400},'tone="ivy" side="top" align="end"',h(L.DropdownMenu,{tone:'ivy',side:'top',align:'end',defaultOpen:true,items:IVY,trigger:trig('Build with Ivy')})),
+ col({right:24},'tone="elliot": separator and section',h(L.DropdownMenu,{tone:'elliot',side:'top',align:'end',defaultOpen:true,items:ELLIOT,trigger:trig('Build with Elliot')}))
+));
+// show the highlighted states: pointer hover in the Ivy menu, keyboard focus in the Elliot menu
+setTimeout(function(){var m=document.querySelectorAll('[role=menu]');function hover(menu,i){var it=menu&&menu.querySelectorAll('[role=menuitem]')[i];if(it)it.dispatchEvent(new MouseEvent('mousemove',{bubbles:true}));}
+ hover(m[1],1);hover(m[2],3);},200);
+</script></body></html>

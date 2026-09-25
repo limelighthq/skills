@@ -1,0 +1,31 @@
+<!-- @dsCard group="Calendar" height=508 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>CalendarEvent</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="padding:20px 24px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+function cap(t){return h("p",{style:{margin:"0 0 8px",font:"500 12px/18px var(--font-sans)",color:"var(--muted)"}},t);}
+function cell(child,bg){return h("div",{style:{width:121,padding:"0 10px 10px",background:bg||"var(--surface)",borderRight:"1px solid var(--line)"}},child);}
+var stages=[["Alex Rivera","live",2],["Jordan Smith","revisions"],["Priya Nair","progress",2],["Nina Alvarez","brief"],["Iris Bello","contracting"],["Tomas Reid","scheduled"]];
+var posts=[
+  {status:"published",time:"9:00 AM",title:"5 hard-won lessons from scaling our support team",label:"Tips",owner:"David Walsh"},
+  {status:"scheduled",time:"2:00 PM",title:"How we cut customer onboarding time by 40%",label:"Case Study",owner:"Priya Sharma"},
+  {status:"pending",time:"10:30 AM",title:"Why we bet the company on employee advocacy",label:"Education",owner:"Sarah Chen"},
+  {status:"draft",time:"Draft",title:"A look behind our latest release",label:"Feature Launch",owner:"Michael Park"},
+  {status:"rejected",time:"Draft",title:"Our Q2 numbers, unfiltered",label:"Case Study",owner:"Ryan Torres"}
+];
+ReactDOM.createRoot(document.getElementById('root')).render(h("div",null,
+  cap("variant=\"booking\" · one chip per stage (Live, In revisions, In progress, Brief sent, Contracting, Scheduled)"),
+  h("div",{style:{display:"flex",borderLeft:"1px solid var(--line)",borderTop:"1px solid var(--line)",borderBottom:"1px solid var(--line)",width:"max-content"}},
+    stages.map(function(s,i){return h("div",{key:i},cell(h(L.CalendarEvent,{name:s[0],stage:s[1],count:s[2],campaign:"Q2 SaaS Growth"})));})),
+  h("div",{style:{height:24}}),
+  cap("variant=\"post\" · published, scheduled, pending, draft, rejected (inside 114px day cards)"),
+  h("div",{style:{display:"flex",gap:9}},posts.map(function(p,i){
+    return h("div",{key:i,style:{width:114,padding:9,border:"1px solid var(--ed-cal-line)",borderRadius:"var(--radius-lg)",fontSize:12,lineHeight:"18px",color:"var(--ed-cal-ink)"}},h("span",null,13+i),h(L.CalendarEvent,Object.assign({variant:"post"},p)));
+  })),
+  h("div",{style:{height:24}}),
+  cap("variant=\"post\" block · the List view (14px context)"),
+  h("div",{style:{width:640}},h(L.CalendarEvent,{variant:"post",block:true,status:"pending",time:"11:00 AM",title:"Limelight has a new home on the web.",label:"Feature Launch",owner:"Sarah Chen",steps:2}))
+));
+</script></body></html>

@@ -1,0 +1,39 @@
+<!-- @dsCard group="Data table" height=1060 width=900 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>DataTable</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="padding:24px 24px 32px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+var CREATORS=[
+ {id:1,short:'Eli Garrison',name:'Eli Garrison Alexandra Santiago Victoria',role:'VP Marketing · series-B SaaS',added:'Added 14 Sept',platforms:['linkedin','x'],fol:'28.9K',eng:'8.3%',score:94,status:'New'},
+ {id:2,short:'Mei Lin',name:'Mei Lin Alexandra Morgan Taylor Reynolds',role:'Founder · writes Mei Lin Reads',added:'Added 13 Sept',platforms:['x'],fol:'19.4K',eng:'10.6%',score:90,status:'Accepted'},
+ {id:3,short:'Owen Chen',name:'Owen Chen Alexandra Santiago Rose Taylor',role:'Engineering manager · advisor',added:'Added 12 Sept',platforms:['linkedin','youtube'],fol:'41.2K',eng:'7.9%',score:88,status:'Rejected'},
+ {id:4,short:'Yuki Hayashi',name:'Yuki Hayashi Fernandez Anderson Santiago',role:'CRO advisor · GTM coach',added:'Added 11 Sept',platforms:['linkedin'],fol:'33.7K',eng:'7.2%',score:86,status:'New'}];
+var STATE={New:'pending',Accepted:'accepted',Rejected:'rejected',Contacted:'contacted'};
+function Creators(){
+  var s=React.useState(CREATORS),rows=s[0];var o=React.useState(null),open=o[0];
+  function set(id,st){s[1](rows.map(function(r){return r.id===id?Object.assign({},r,{status:st}):r;}));}
+  var cols=[
+   {key:'creator',header:'Creator',width:'40%',render:function(r){return h(L.CreatorCell,{name:r.name,shortName:r.short,status:r.status,role:r.role,added:r.added,onOpen:function(){o[1](r);}});}},
+   {key:'platforms',header:'Platforms',width:'10%',render:function(r){return h(L.PlatformIcons,{platforms:r.platforms});}},
+   {key:'fol',header:'Followers',width:'12%',numeric:true},
+   {key:'eng',header:'Eng.',width:'10%',numeric:true},
+   {key:'score',header:'Relevancy',width:'13%',render:function(r){return h(L.ScoreChip,{value:r.score});}},
+   {key:'actions',header:'Actions',width:'15%',render:function(r){return h(L.RowActions,{name:r.short,state:STATE[r.status],onAccept:function(){set(r.id,'Accepted');},onReject:function(){set(r.id,'Rejected');}});}}];
+  return h(React.Fragment,null,h(L.DataTable,{caption:'Creators in Q2 SaaS Growth',columns:cols,rows:rows}),
+    L.Drawer&&open?h(L.Drawer,{open:true,onClose:function(){o[1](null);},eyebrow:'CREATOR REVIEW',title:open.short,subtitle:open.role,width:600,label:'Creator review'},h('p',{style:{margin:0,fontWeight:600}},'Strong campaign fit'),h('p',{style:{margin:0}},'For Q2 SaaS Growth')):null);
+}
+var TX=[['Proposal payment with Stripe','Stripe','Paid','Sarah Chen','Maya Chen','03-31-2026 01:43','−$3,200.00'],['Proposal payment with Stripe','Stripe','Paid','Sarah Chen','Leo Park','03-18-2026 18:43','−$2,800.00'],['Proposal transaction','Lumanu','Paid','David Walsh','Priya Nair','02-27-2026 22:01','−$1,400.00'],['Affiliate payout','PartnerStack','Paid','Sarah Chen','Casey Kim','02-11-2026 09:12','−$2,200.00']].map(function(t,i){return {id:i,name:t[0],via:t[1],status:t[2],by:t[3],to:t[4],at:t[5],amt:t[6]};});
+var TXCOLS=[
+ {key:'name',header:'Name',render:function(r){return h(React.Fragment,null,h('strong',{className:'lla-cell-title'},r.name),h('p',{className:'lla-cell-sub'},r.via));}},
+ {key:'status',header:'Status',width:72,render:function(r){return h(L.Badge,null,r.status);}},
+ {key:'by',header:'Sent By',width:103},{key:'to',header:'To',width:96},{key:'at',header:'Created At',width:141},
+ {key:'amt',header:'Amount',width:96,numeric:true},
+ {key:'links',header:'Links',width:109,render:function(r){return h(L.Button,{variant:'secondary','aria-label':'Receipt for '+r.to},'Receipt');}}];
+var label={margin:'0 0 10px',fontSize:11,lineHeight:'16.5px',color:'var(--muted)'};
+ReactDOM.createRoot(document.getElementById('root')).render(h('div',{style:{width:850}},
+  h('p',{style:label},'Creator density · Accept and Reject change the row in place'),h(Creators),
+  h('p',{style:Object.assign({},label,{marginTop:32})},'Compact density · Payments transactions'),h(L.DataTable,{density:'compact',caption:'Transactions',columns:TXCOLS,rows:TX}),
+  h('p',{style:Object.assign({},label,{marginTop:32})},'No rows'),h(L.DataTable,{caption:'Creators',columns:[{key:'c',header:'Creator',width:'40%'},{key:'p',header:'Platforms'},{key:'f',header:'Followers'},{key:'a',header:'Actions'}],rows:[],empty:'No creators match these filters.'})));
+</script></body></html>

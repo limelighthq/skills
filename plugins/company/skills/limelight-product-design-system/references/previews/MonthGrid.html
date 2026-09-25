@@ -1,0 +1,45 @@
+<!-- @dsCard group="Calendar" height=1540 width=900 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>MonthGrid</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="padding:24px 25px;width:900px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+function cap(t){return h("p",{style:{margin:"0 0 10px",font:"500 12px/18px var(--font-sans)",color:"var(--muted)"}},t);}
+var may=[
+  {date:"2026-05-01",name:"Alex Rivera",stage:"live",count:2,campaign:"Q2 SaaS Growth"},
+  {date:"2026-05-04",name:"Maya Chen",stage:"live",count:2},
+  {date:"2026-05-06",name:"Leo Park",stage:"live"},
+  {date:"2026-05-07",name:"Owen Chen",stage:"live"},
+  {date:"2026-05-11",name:"Sofia Marin",stage:"live",count:2},
+  {date:"2026-05-12",name:"Hana Ito",stage:"live"},
+  {date:"2026-05-13",name:"Jordan Smith",stage:"revisions"},
+  {date:"2026-05-15",name:"Priya Nair",stage:"progress",count:2},
+  {date:"2026-05-19",name:"Dan Okafor",stage:"progress"},
+  {date:"2026-05-21",name:"Nina Alvarez",stage:"brief"},
+  {date:"2026-05-26",name:"Tomas Reid",stage:"scheduled"}
+];
+var july=[
+  {date:"2026-07-13",status:"published",time:"9:00 AM",title:"The one habit that made our team ship faster",label:"Tips",owner:"David Walsh"},
+  {date:"2026-07-14",status:"scheduled",time:"2:00 PM",title:"How we cut customer onboarding time by 40%",label:"Case Study",owner:"Priya Sharma"},
+  {date:"2026-07-15",status:"pending",time:"10:30 AM",title:"Why we bet the company on employee advocacy",label:"Education",owner:"Sarah Chen"},
+  {date:"2026-07-16",status:"draft",time:"Draft",title:"A look behind our latest release",label:"Feature Launch",owner:"Michael Park"},
+  {date:"2026-07-17",status:"scheduled",time:"1:00 PM",title:"Customer spotlight: how Runway Labs uses Limelight",label:"Testimonial",owner:"Ryan Torres"}
+];
+var listEv=[
+  {date:"2026-07-06",status:"published",time:"9:00 AM",title:"5 hard-won lessons from scaling our support team",label:"Tips",owner:"David Walsh"},
+  {date:"2026-07-19",status:"pending",time:"11:00 AM",title:"Limelight has a new home on the web.",label:"Feature Launch",owner:"Sarah Chen",steps:2}
+];
+ReactDOM.createRoot(document.getElementById('root')).render(h("div",{style:{width:850}},
+  cap("Campaign calendar · Month · May 2026 (Ivy › Campaign › Calendar)"),
+  h(L.MonthGrid,{variant:"campaign",year:2026,month:4,events:may,onOpen:function(){}}),
+  h("div",{style:{height:28}}),
+  cap("Content calendar · Week of 12 July 2026 (Elliot › Calendar)"),
+  h(L.MonthGrid,{variant:"content",view:"week",year:2026,month:6,weekOf:"2026-07-13",today:"2026-07-15",events:july,onCreate:function(){},onOpen:function(){}}),
+  h("div",{style:{height:28}}),
+  cap("Content calendar · List · July 2026"),
+  h(L.MonthGrid,{variant:"content",view:"list",year:2026,month:6,events:listEv}),
+  h("div",{style:{height:16}}),
+  h(L.MonthGrid,{variant:"content",view:"list",year:2026,month:7,events:listEv})
+));
+</script></body></html>

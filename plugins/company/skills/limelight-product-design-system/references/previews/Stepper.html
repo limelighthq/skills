@@ -1,0 +1,23 @@
+<!-- @dsCard group="Calendar" height=448 width=680 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Stepper</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="padding:20px 25px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+function cap(t){return h("p",{style:{margin:"0 0 10px",font:"500 12px/18px var(--font-system)",color:"var(--muted-overlay)"}},t);}
+var stages=["Contracting","Brief sent","In progress","In revisions","Scheduled","Live"];
+ReactDOM.createRoot(document.getElementById('root')).render(h("div",{style:{width:590}},
+  cap("Leo Park · Live (every stage done)"),
+  h(L.Stepper,{steps:stages,current:5,label:"Leo Park booking stage"}),
+  h("div",{style:{height:22}}),
+  cap("Jordan Smith · In revisions"),
+  h(L.Stepper,{steps:stages,current:3,label:"Jordan Smith booking stage"}),
+  h("div",{style:{height:22}}),
+  cap("variant=\"handoff\" · Leo Park"),
+  h(L.Stepper,{variant:"handoff",label:"Leo Park handoffs",steps:[{label:"Contracted",done:true,detail:"Omnia · procurement"},{label:"Paid",done:false,detail:"Finance"},{label:"Analytics submitted",done:false,detail:"Creator-reported"}]}),
+  h("div",{style:{height:16}}),
+  cap("variant=\"handoff\" · Alex Rivera"),
+  h(L.Stepper,{variant:"handoff",label:"Alex Rivera handoffs",steps:[{label:"Contracted",done:true,detail:"Omnia · procurement"},{label:"Paid",done:true,detail:"Finance"},{label:"Analytics submitted",done:true,detail:"Creator-reported"}]})
+));
+</script></body></html>

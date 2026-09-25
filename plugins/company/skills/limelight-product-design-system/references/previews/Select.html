@@ -1,0 +1,17 @@
+<!-- @dsCard group="Form controls" height=330 width=960 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Select</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="padding:16px 24px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+ReactDOM.createRoot(document.getElementById('root')).render(h('div',{style:{display:'grid',gridTemplateColumns:'200px 1fr',gap:20,alignItems:'start'}},
+ h(L.Select,{inlineLabel:'Status',label:'Status',options:['All','New','Accepted','Rejected','Contacted'],width:100,defaultOpen:true}),
+ h('div',{style:{display:'grid',gridTemplateColumns:'150px 260px 220px',gap:20,alignItems:'start'}},
+  h(L.Select,{size:'sm',label:'Sort creators',options:['Relevancy','Newest added','Oldest added'],width:150}),
+  h(L.Select,{size:'md',block:true,label:'Message filter',options:['All messages','Unread','Drafts','Hidden']}),
+  h('div',null),
+  h('div',null),
+  h('div',{className:'lla-overlay'},h(L.Select,{variant:'plain',size:'md',block:true,showLabel:true,label:'Approval mode',options:['Manual approval','Delayed with veto','Automatic']})),
+  h('div',{className:'lla-overlay'},h(L.Select,{size:'md',block:true,showLabel:true,label:'Autonomy',options:['Assistant','Recommended','Autonomous'],defaultValue:'Recommended',disabled:true,disabledReason:'Only the organization owner can change autonomy.'})))));
+</script></body></html>

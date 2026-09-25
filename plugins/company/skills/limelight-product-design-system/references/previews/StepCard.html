@@ -1,0 +1,22 @@
+<!-- @dsCard group="Elliot content" height=528 width=900 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>StepCard</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="padding:20px 24px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+var accounts=["Limelight","David Walsh","Sarah Chen","Jessica Vega","Michael Park","Ryan Torres"];
+function Demo(){
+  var s=React.useState([
+    {type:"Reply",account:"Limelight",delay:"3",unit:"min",text:"Huge milestone — the new site pulls together everything we've shipped this year. Explore it here: limelighthq.com"},
+    {type:"Reaction",account:"Michael Park",delay:"5",unit:"min",reaction:"Like"}]),steps=s[0],set=s[1];
+  function upd(i,patch){set(steps.map(function(x,j){return j===i?Object.assign({},x,patch):x;}));}
+  return h(L.StepCard.Sequence,null,steps.map(function(st,i){
+    return h(L.StepCard,{key:i,index:i,type:st.type,account:st.account,accounts:accounts,delay:st.delay,unit:st.unit,text:st.text,reaction:st.reaction,
+      onTypeChange:function(v){upd(i,{type:v});},onAccountChange:function(v){upd(i,{account:v});},onDelayChange:function(e){upd(i,{delay:e.target.value});},
+      onUnitChange:function(v){upd(i,{unit:v});},onTextChange:function(e){upd(i,{text:e.target.value});},onReactionChange:function(v){upd(i,{reaction:v});},
+      onRemove:function(){set(steps.filter(function(x,j){return j!==i;}));}});
+  }));
+}
+ReactDOM.createRoot(document.getElementById('root')).render(h("div",{style:{width:850}},h(Demo)));
+</script></body></html>

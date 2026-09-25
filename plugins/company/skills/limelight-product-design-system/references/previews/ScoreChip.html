@@ -1,0 +1,12 @@
+<!-- @dsCard group="Status" height=84 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>ScoreChip</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="padding:16px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+function Row(p){return h('div',{style:Object.assign({display:'flex',flexWrap:'wrap',gap:12,alignItems:'center',marginBottom:12},p.style)},p.children);}
+function Cap(t){return h('div',{style:{fontSize:11,lineHeight:'16.5px',color:'var(--muted)',marginBottom:6}},t);}
+ReactDOM.createRoot(document.getElementById('root')).render(h(Row,null,h(L.ScoreChip,{value:94}),h(L.ScoreChip,{value:90}),h(L.ScoreChip,{value:88}),h(L.ScoreChip,{value:94,max:100,label:'Campaign fit'})));
+</script>
+</body></html>

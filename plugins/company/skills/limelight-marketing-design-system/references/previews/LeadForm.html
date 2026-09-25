@@ -1,0 +1,16 @@
+<!-- @dsCard group="Forms" height=380 -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>LeadForm</title></head>
+<body style="margin:0;background:var(--surface-150)">
+<div id="root" style="max-width:560px;padding:24px 16px"></div>
+<script>
+  var L=window.Limelight,h=React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h(L.LeadForm,{fields:[
+    {name:'firstname',label:'First name',required:true,half:true,autoComplete:'given-name'},
+    {name:'lastname',label:'Last name',required:true,half:true,autoComplete:'family-name'},
+    {name:'email',label:'Email',type:'email',required:true,autoComplete:'email'},
+    {name:'company',label:'Company name',required:true,half:true,autoComplete:'organization'},
+    {name:'website',label:'Website URL',type:'url',required:true,half:true},
+    {name:'source',label:'Where did you hear about us?',required:true,options:['LinkedIn','Podcast','Search','A friend or colleague','Other']}],cta:'Submit'}));
+</script>
+</body></html>

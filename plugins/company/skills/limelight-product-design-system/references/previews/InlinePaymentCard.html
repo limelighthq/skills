@@ -1,0 +1,16 @@
+<!-- @dsCard group="Inbox" height=1060 width=590 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>InlinePaymentCard</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="padding:0 20px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+function Demo(){
+  var s=React.useState(true),snack=s[0],setSnack=s[1];
+  return h(React.Fragment,null,
+    h(L.InlinePaymentCard,{creator:"Alex Rivera",campaign:"Q2 SaaS Growth",amount:"$2,800",deliverable:"One native LinkedIn post",onCancel:function(){},onConfirm:function(){}}),
+    h(L.InlinePaymentCard,{mode:"record",creator:"Alex Rivera",campaign:"Q2 SaaS Growth",amount:"$2,800",status:"Paid",provider:"Stripe",reference:"61f7721e-0daf-4724-ad8b-17bc71f23ab5",onClose:function(){},
+      confirmation:snack?{title:"Payment complete · $2,800 to Alex Rivera",detail:"Payments and Approvals updated. Simulation only.",actions:[{label:"View payments",onClick:function(){}},{label:"View approvals",onClick:function(){}}],onDismiss:function(){setSnack(false);}}:null}));
+}
+ReactDOM.createRoot(document.getElementById('root')).render(h(Demo));
+</script></body></html>

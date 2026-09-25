@@ -1,0 +1,13 @@
+<!-- @dsCard group="Agents" height=96 -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>AgentTag</title></head>
+<body style="margin:0;background:var(--gradient-ivy)">
+<div id="root" class="ll-row" style="padding:24px 16px"></div>
+<script>
+  var L=window.Limelight,h=React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h(React.Fragment,null,
+    h(L.AgentTag,{mono:true},'Ivy'),
+    h(L.AgentTag,null,'Influencer Manager'),
+    h(L.AgentTag,{live:true},'Live now')));
+</script>
+</body></html>

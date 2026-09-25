@@ -1,0 +1,13 @@
+<!-- @dsCard group="Content" height=440 -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>StepCard</title></head>
+<body style="margin:0;background:var(--surface-150)">
+<div id="root" style="padding:16px"></div>
+<script>
+  var L=window.Limelight,h=React.createElement;
+  var visual=h('div',{style:{height:'100%',minHeight:360,display:'flex',alignItems:'center',justifyContent:'center'}},
+    h(L.ProofCard,{title:'Marcus Webb',meta:h('span',null,'ICP match ',h('b',null,'92'))}));
+  ReactDOM.createRoot(document.getElementById('root')).render(
+    h(L.StepCard,{number:1,title:'Discover',visual:visual},'Ivy searches LinkedIn, Instagram, TikTok, YouTube, and X for creators that match your ICP.'));
+</script>
+</body></html>

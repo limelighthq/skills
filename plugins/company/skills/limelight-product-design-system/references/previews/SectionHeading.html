@@ -1,0 +1,29 @@
+<!-- @dsCard group="Shell" height=760 width=898 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>SectionHeading</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="padding:24px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+function Cap(p){return h('p',{style:{margin:'0 0 10px',fontSize:11,lineHeight:'17px',color:'var(--muted)'}},p.children);}
+/* Each example sits in a whole-pixel box so its offsets compare 1:1 with D. */
+function Box(p){return h('div',{style:{display:'flow-root',height:p.h}},p.children);}
+function Sep(){return h('div',{style:{height:1,background:'var(--line)',margin:'22px 0'}});}
+var TABS=[{id:'creators',label:'Creators'},{id:'brief',label:'Brief'},{id:'calendar',label:'Calendar'},{id:'performance',label:'Performance'}];
+ReactDOM.createRoot(document.getElementById('root')).render(h('div',null,
+ h(Cap,null,'variant="detail": campaign detail h1 (22px), one action, the tabs row'),
+ h(Box,{h:106},h(L.SectionHeading,{title:'Q2 SaaS Growth',action:h(L.Button,{variant:'secondary'},'Internal targeting')},h(L.Tabs,{label:'Campaign sections',tabs:TABS}))),
+ h(Sep),
+ h(Cap,null,'variant="page" with an agent eyebrow (Inbox)'),
+ h(Box,{h:92},h(L.SectionHeading,{eyebrow:'Ivy / Inbox',title:'Inbox',description:'Conversations, reply approvals, and the sequences behind them.'})),
+ h(Sep),
+ h(Cap,null,'Page title and subtitle, no eyebrow (Payments)'),
+ h(Box,{h:55},h(L.SectionHeading,{variant:'page',title:'Your Wallet',description:'Deposit budget into your Limelight wallet to spend over time, or pay creators directly.'})),
+ h(Sep),
+ h(Cap,null,'eyebrowTone="team" (Approvals)'),
+ h(Box,{h:89},h(L.SectionHeading,{eyebrow:'Limelight / Your team',eyebrowTone:'team',title:'Approvals',description:'The decisions your agents need from you.'})),
+ h(Sep),
+ h(Cap,null,'Page title with an action on the right (Elliot Content)'),
+ h(Box,{h:55},h(L.SectionHeading,{variant:'page',title:'Content',description:"Draft, review and publish in your team's voices",actions:h(L.Button,{icon:'plus'},'Create')}))));
+</script>
+</body></html>

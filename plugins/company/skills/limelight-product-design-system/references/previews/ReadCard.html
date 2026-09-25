@@ -1,0 +1,20 @@
+<!-- @dsCard group="Inbox" height=800 width=1200 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>ReadCard</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="padding:20px;width:590px;display:flex;flex-direction:column;gap:20px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+ReactDOM.createRoot(document.getElementById('root')).render(h(React.Fragment,null,
+  h(L.ReadCard,{status:"Counter-offer",headline:"Accept. Alex is worth $2,800.",
+    pills:["1,240 comparable deals","25% above market","ICP 94"],
+    facts:[{label:"Your offer",value:"$2,500"},{label:"His counter",value:"$2,800"},{label:"Typical rate",value:"$2,800"},{label:"Budget left",value:"$10,200"}],
+    actions:[{label:"Accept $2,800",haspopup:"dialog"},{label:"Counter"},{label:"Decline"}]},
+    "12% above your offer and in line with his rate. Audience is 78% engineering leadership, and his ICP score of 94 is the highest in your pipeline."),
+  h(L.ReadCard,{status:"Paid",headline:"Payment complete. Continue the collaboration.",
+    pills:["Payment recorded","Approved"],
+    facts:[{label:"Payment",value:"Paid"},{label:"Next step",value:"Confirm delivery dates"}],
+    actions:[{label:"View payment"},{label:"Counter"},{label:"Decline"}]},
+    "$2,800 payment to Alex Rivera completed via Stripe in this simulation. Proposal and payment approved; Payments and Approvals updated. No money moved or email was sent. Reference: 61f7721e-0daf-4724-ad8b-17bc71f23ab5.")
+));
+</script></body></html>

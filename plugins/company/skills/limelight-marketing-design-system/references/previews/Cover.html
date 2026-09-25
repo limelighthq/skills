@@ -1,0 +1,55 @@
+<!-- @dsCard height=288 -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Limelight</title>
+<style>
+  html, body { margin:0; height:100%; }
+  body { background:var(--surface-150); color:var(--text-600); font-family:var(--font-display); overflow:hidden; }
+  .cover { position:relative; width:960px; height:288px; overflow:hidden; }
+  .art { position:absolute; top:0; left:480px; width:480px; height:288px; overflow:hidden; }
+  .art svg { display:block; width:480px; height:288px; }
+  .blue { fill:var(--limelight-blue); }
+  .black { fill:var(--limelight-black); }
+  .ivy { fill:var(--ivy-pink); }
+  .cooper { fill:var(--cooper-aqua); }
+  .lana { fill:var(--lana-peach); }
+  .ground { fill:var(--surface-150); }
+  .blk { rx:var(--radius-md); }
+  .orbit { fill:none; stroke:var(--limelight-black); stroke-width:1; }
+  .orbit.dash { stroke-dasharray:4 4; }
+  .words { position:absolute; left:40px; bottom:40px; max-width:440px; }
+  .name { margin:0; font-size:80px; line-height:.95; font-weight:400; letter-spacing:-.03em; color:var(--text-600); }
+  .tag { margin:var(--space-2) 0 0 3px; font-family:var(--font-sans); font-size:14px; line-height:20px; letter-spacing:-.01em; color:var(--text-500); }
+</style>
+</head>
+<body>
+<div class="cover">
+<div class="art" aria-hidden="true">
+<svg viewBox="0 0 480 288" width="480" height="288">
+<!--
+  blocks      limelight-blue 200×264 slab bled off the top (the primary gradient's signature end stop, largest) · limelight-black 120×176 · ivy-pink 112×120 and cooper-aqua 112×104 bleeding off the right edge · lana-peach 120×32 once, ~40% of 960×288
+  arrangement one tall blue slab with satellites; bottoms on one line space-10 (40px) above the edge; space-4 (16px) gutters
+  pattern     literal motif: the agent marks' orbit lines ("faint hairline orbits and dashed arcs", README Imagery) as 4 concentric arcs from one corner of the slab (every 3rd dashed), plus one ground-colour disc = Elliot's point of light
+  scales      sides in space-2 multiples; gutters space-4; arc pitch space-6 (24px); corners radius-md; disc r = space-4
+-->
+<rect class="blue blk" x="16" y="-16" width="200" height="264" rx="8"/>
+<rect class="black blk" x="232" y="72" width="120" height="176" rx="8"/>
+<rect class="lana blk" x="232" y="24" width="120" height="32" rx="8"/>
+<rect class="ivy blk" x="368" y="16" width="120" height="120" rx="8"/>
+<rect class="cooper blk" x="368" y="152" width="120" height="96" rx="8"/>
+<path class="orbit" d="M 16 176 A 72 72 0 0 1 88 248"/>
+<path class="orbit" d="M 16 152 A 96 96 0 0 1 112 248"/>
+<path class="orbit dash" d="M 16 128 A 120 120 0 0 1 136 248"/>
+<path class="orbit" d="M 16 104 A 144 144 0 0 1 160 248"/>
+<circle class="ground" cx="160" cy="64" r="16"/>
+</svg>
+</div>
+<div class="words">
+  <h1 class="name">Limelight</h1>
+  <p class="tag">Calm futurism for the AI employees on your social team.</p>
+</div>
+</div>
+</body>
+</html>

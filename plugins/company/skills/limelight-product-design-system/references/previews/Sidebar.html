@@ -1,0 +1,32 @@
+<!-- @dsCard group="Shell" height=900 width=640 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Sidebar</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+var OPS={label:'TEAM OPERATIONS',items:[{id:'ap',label:'Approvals',count:6},{id:'ac',label:'Activity'},{id:'rs',label:'Rituals & Skills'}]};
+var SETUP={label:'SETUP',items:[{id:'gs',label:'Getting started'},{id:'kn',label:'Knowledge'}]};
+var CAMPAIGNS=['Q2 SaaS Growth','DevTools LinkedIn','Customer story'];
+function ivy(dest,camp,open){return [{label:'WORKSPACE',items:[
+  {id:'campaigns',label:'Campaigns',expanded:open,children:CAMPAIGNS.map(function(c,i){return {id:'c'+i,label:c,current:dest==='Campaigns'&&camp===i};})},
+  {id:'inbox',label:'Inbox',count:12,current:dest==='Inbox'},{id:'payments',label:'Payments',count:3,current:dest==='Payments'},{id:'analytics',label:'Analytics',current:dest==='Analytics'}]},OPS,SETUP];}
+var MEMBERS=[['DW','David Walsh',91],['SC','Sarah Chen',87],['JV','Jessica Vega',82],['MP','Michael Park',87],['RT','Ryan Torres',78]];
+var PAGES=['Posts','Sources','Inspiration','Tone of Voice','Content Strategy'];
+function elliot(member,page){return [{label:'WORKSPACE',items:[
+  {id:'content',label:'Content'},{id:'calendar',label:'Calendar'},{id:'e-analytics',label:'Analytics'},
+  {id:'team',label:'Team',nest:'flat',actions:[{icon:'search',label:'Search team'},{icon:'plus',label:'Add member'}],children:
+    [{id:'limelight',label:'Limelight',avatar:'L'}].concat(MEMBERS.map(function(m){return {id:m[1],label:m[1],avatar:m[0],count:m[2],expanded:m[1]===member,
+      children:PAGES.map(function(pg){return {id:m[1]+'/'+pg,label:pg,current:m[1]===member&&pg===page};})};}),
+    [{id:'onb',label:'Onboarding in progress',note:true},{id:'addp',label:'Add profile',icon:'plus'}])}]},OPS,SETUP];}
+function Live(){var d=React.useState({dest:'Campaigns',camp:0});
+ return h(L.Sidebar,{agent:{name:'Ivy',role:'Creator outreach'},sections:ivy(d[0].dest,d[0].camp,true),onNavigate:function(it){
+   if(it.id==='campaigns')return;var ci=CAMPAIGNS.indexOf(it.label);d[1](ci>=0?{dest:'Campaigns',camp:ci}:{dest:it.label,camp:-1});}});}
+function Col(p){return h('div',{style:{height:900,flex:'none',display:'flex'}},p.children);}
+ReactDOM.createRoot(document.getElementById('root')).render(
+ h('div',{style:{display:'flex',gap:40,height:900}},
+  h(Col,null,h(Live)),
+  h(Col,null,h(L.Sidebar,{agent:{name:'Ivy',role:'Creator outreach'},sections:ivy('Inbox',-1,false)})),
+  h(Col,null,h(L.Sidebar,{agent:{name:'Elliot',role:'Employee advocacy'},sections:elliot('David Walsh','Posts')}))));
+</script>
+</body></html>

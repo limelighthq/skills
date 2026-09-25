@@ -1,0 +1,14 @@
+<!-- @dsCard group="Filters" height=90 width=898 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>FilterBar</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="padding:16px 24px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+ReactDOM.createRoot(document.getElementById('root')).render(h(L.FilterBar,null,
+ h(L.SearchInput,{label:'Search creators',placeholder:'Search by name, role, category'}),
+ h(L.Select,{inlineLabel:'Status',label:'Status',options:['All','New','Accepted','Rejected','Contacted'],width:100}),
+ L.SegmentedControl?h(L.SegmentedControl,{label:'View',options:['List','Kanban'],size:'sm'}):h('span',{style:{fontSize:12,color:'var(--muted)'}},'[SegmentedControl]'),
+ h(L.ResultCount,{shown:20,total:20}),
+ h(L.Button,{size:'toolbar',icon:'play'},'Run Discovery Now')));
+</script></body></html>

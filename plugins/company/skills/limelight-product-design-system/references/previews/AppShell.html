@@ -1,0 +1,82 @@
+<!-- @dsCard group="Shell" height=1820 width=1440 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>AppShell</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+/* Guard for components owned by other groups: render nothing if they throw. */
+function Safe(p){React.Component.call(this,p);this.state={err:false};}
+Safe.prototype=Object.create(React.Component.prototype);Safe.prototype.constructor=Safe;
+Safe.getDerivedStateFromError=function(){return {err:true};};
+Safe.prototype.render=function(){return this.state.err?(this.props.fallback||null):this.props.children;};
+var AG=[{id:'ivy',name:'Ivy'},{id:'elliot',name:'Elliot'}];
+var WS_MENU=[{section:'YOUR TEAMS'},{id:'ll',label:'Limelight',selected:true,meta:'Owner'},{separator:true},{id:'acc',label:'Account'},{id:'ts',label:'Team settings'},{id:'ct',label:'Create a team'},{id:'lo',label:'Log out'},{separator:true},{id:'pi',label:'Prototype index'}];
+var OPS={label:'TEAM OPERATIONS',items:[{id:'ap',label:'Approvals',count:6},{id:'ac',label:'Activity'},{id:'rs',label:'Rituals & Skills'}]};
+var SETUP={label:'SETUP',items:[{id:'gs',label:'Getting started'},{id:'kn',label:'Knowledge'}]};
+var IVY_NAV=[{label:'WORKSPACE',items:[{id:'campaigns',label:'Campaigns',children:[{id:'q2',label:'Q2 SaaS Growth',current:true},{id:'dt',label:'DevTools LinkedIn'},{id:'cs',label:'Customer story'}]},
+ {id:'inbox',label:'Inbox',count:12},{id:'payments',label:'Payments',count:3},{id:'analytics',label:'Analytics'}]},OPS,SETUP];
+var ELLIOT_NAV=[{label:'WORKSPACE',items:[{id:'content',label:'Content',current:true},{id:'calendar',label:'Calendar'},{id:'ea',label:'Analytics'},
+ {id:'team',label:'Team',nest:'flat',actions:[{icon:'search',label:'Search team'},{icon:'plus',label:'Add member'}],children:[{id:'ll',label:'Limelight',avatar:'L'},
+  {id:'dw',label:'David Walsh',avatar:'DW',count:91},{id:'sc',label:'Sarah Chen',avatar:'SC',count:87},{id:'jv',label:'Jessica Vega',avatar:'JV',count:82},
+  {id:'mp',label:'Michael Park',avatar:'MP',count:87},{id:'rt',label:'Ryan Torres',avatar:'RT',count:78},{id:'onb',label:'Onboarding in progress',note:true},{id:'addp',label:'Add profile',icon:'plus'}]}]},OPS,SETUP];
+var CAMPAIGNS=[{name:'Q2 SaaS Growth',status:'Running',statusTone:'positive',subline:'42 creators in pipeline',stats:[{value:17,label:'Contacted'},{value:7,label:'Replied'},{value:3,label:'Signed'}]},
+ {name:'DevTools LinkedIn',status:'Running',statusTone:'positive',subline:'18 creators in pipeline',stats:[{value:7,label:'Contacted'},{value:3,label:'Replied'},{value:1,label:'Signed'}]},
+ {name:'Customer story',status:'Draft',subline:'7 creators in pipeline',stats:[{value:3,label:'Contacted'},{value:1,label:'Replied'},{value:0,label:'Signed'}]}];
+/* Stand-in for group B's AgentPanel while it is not built: D's panel frame, toolbar and composer. */
+function PanelFrame(p){
+  return h('aside',{className:'lla','aria-label':'Assistant',style:{display:'flex',flexDirection:'column',minWidth:0,height:'100%',background:'var(--surface-panel)',border:'1px solid var(--line-panel)',borderRadius:'var(--radius-panel) 0 0 var(--radius-panel)',boxShadow:'var(--shadow-panel)',overflow:'hidden'}},
+    h('div',{style:{display:'flex',alignItems:'center',justifyContent:'flex-end',gap:6,height:'var(--header-height)',padding:'0 14px',background:'var(--surface-bar)',borderBottom:'1px solid var(--line-bar)',flex:'none'}},
+      h(L.IconButton,{size:'toolbar',icon:'chevron-right',label:'Hide assistant',onClick:p.onHide})),
+    h('div',{style:{flex:1,backgroundImage:'var(--gradient-panel-veil), var(--lla-panel-image)',backgroundSize:'100% 100%, auto 200%',backgroundPosition:'center, left bottom',backgroundRepeat:'no-repeat'}}),
+    h('div',{style:{display:'flex',gap:6,padding:14,background:'var(--surface-bar)',borderTop:'1px solid var(--line-bar)',flex:'none'}},
+      h('input',{'aria-label':'Ask your team',placeholder:'Ask your team anything…',style:{flex:1,minWidth:0,height:36,padding:'4px 12px',border:'1px solid var(--control-border)',borderRadius:'var(--radius-md)',font:'inherit',fontSize:12,background:'var(--surface)',color:'var(--ink)',boxShadow:'var(--shadow-sm)'}}),
+      h(L.IconButton,{variant:'solid',icon:'send',label:'Send message'})));
+}
+var IVY_MENU=[{id:'brief',icon:'pencil',label:'Create campaign brief',description:'Draft with Ivy, review in the campaign panel'},{id:'discovery',icon:'target',label:'Run a new creator discovery',description:'Find creators that match a campaign brief'},{id:'negotiations',icon:'message-circle',label:'Monitor negotiations',description:'Where every open deal stands right now'}];
+var ELLIOT_MENU=[{id:'draft',icon:'notebook-pen',label:'Draft content',description:"A post in one of your team's voices"},{id:'inspiration',icon:'lightbulb',label:'Browse content inspiration',description:'High-performing posts worth modelling'}];
+function panelKids(agent){
+  var k=[];if(L.AgentSignature)k.push(h(L.AgentSignature,{key:'s',agent:agent}));
+  if(agent==='elliot'){if(L.PanelGreeting)k.push(h(L.PanelGreeting,{key:'g',destination:'Content'}));
+    if(L.InsightCard)k.push(h(L.InsightCard,{key:'i',eyebrow:"ELLIOT'S READ ON THE PIPELINE",badge:'2 need your nod',title:'Five of the nine open drafts are waiting on someone else, not you.',body:'Drafts in review sit with their author in Slack, so that queue moves at their pace. Only two are actually yours to approve, and both have been there since Tuesday.',stats:[{label:'Drafts open',value:'9'},{label:'In review',value:'5'},{label:'Yours to approve',value:'2'},{label:'Inspiration saved',value:'18'}],actions:[{label:'Drafts'},{label:'Inspiration'},{label:'Open the week'}]}));}
+  else if(L.InsightCard)k.push(h(L.InsightCard,{key:'i',title:'25 of the 42 on Q2 SaaS Growth have never been contacted.',body:'DevTools is a third the size and further through its list, so the thing holding Q2 back is outreach, not discovery. Running more matching adds to a pile nobody has worked yet.',stats:[{label:'Shortlisted',value:'67'},{label:'Contacted',value:'27'},{label:'Signed',value:'4'},{label:'Never approached',value:'40'}],tags:['Q2 is the backlog','Customer story still a draft'],actionLayout:'stack',actions:[{label:'Q2 SaaS Growth'},{label:'DevTools LinkedIn'}]}));
+  return k;}
+function composer(){if(!L.ChatComposer)return null;return h(L.ChatComposer,{selectors:L.AgentSelector?[h(L.AgentSelector,{key:'i',agent:'ivy',items:IVY_MENU}),h(L.AgentSelector,{key:'e',agent:'elliot',items:ELLIOT_MENU})]:null});}
+function Panel(p){
+  var fb=h(PanelFrame,p);
+  if(!L.AgentPanel)return fb;
+  return h(Safe,{fallback:fb},h(L.AgentPanel,{agent:p.agent,agentName:p.agent==='elliot'?'Elliot':'Ivy',onHide:p.onHide,width:p.width,onWidthChange:p.onWidthChange,composer:composer()},panelKids(p.agent)));
+}
+function Cards(){
+  if(!L.CampaignCard)return null;
+  return h(Safe,null,h('div',{style:{display:'grid',gridTemplateColumns:'repeat(3,minmax(0,1fr))',gap:'12px 14px',paddingBottom:20,marginBottom:28,borderBottom:'1px solid var(--line)'}},
+    CAMPAIGNS.map(function(c,i){return h(L.CampaignCard,Object.assign({key:i,selected:i===0},c));}).concat([h('div',{key:'n'},h(L.Button,{variant:'ghost',size:'toolbar',icon:'plus'},'New campaign'))])));
+}
+function Main(p){
+  if(p.agent==='elliot')return h('div',null,
+    h('div',{style:{display:'flex',justifyContent:'space-between',paddingBottom:20,marginBottom:22,borderBottom:'1px solid var(--line)'}},h(L.Tabs,{variant:'pill',label:'Content views',tabs:[{id:'c',label:'Content'},{id:'i',label:'Inspiration'}]})),
+    h('div',{style:{display:'flex',alignItems:'center',gap:16,marginBottom:22}},h('div',{style:{flex:1}},h(L.SectionHeading,{variant:'page',title:'Content',description:"Draft, review and publish in your team's voices",actions:h(L.Button,{icon:'plus'},'Create')}))),
+    h('div',{style:{display:'flex',justifyContent:'flex-end'}},h(L.SegmentedControl,{size:'md',label:'Content view',options:['Kanban','List']})));
+  return h('div',null,h(Cards),
+    h(L.SectionHeading,{title:'Q2 SaaS Growth',action:h(L.Button,{variant:'secondary'},'Internal targeting')},h(L.Tabs,{label:'Campaign sections',tabs:[{id:'c',label:'Creators'},{id:'b',label:'Brief'},{id:'cal',label:'Calendar'},{id:'p',label:'Performance'}]})),
+    h('div',{style:{display:'flex',alignItems:'center',gap:10,paddingBottom:18,borderBottom:'1px solid var(--line)'}},
+      h('span',{style:{flex:1,fontSize:12,lineHeight:'18px',color:'var(--muted)'}},'Filter bar, bulk bar and creator table come from their own components.'),
+      h(L.SegmentedControl,{label:'Creators view',options:['List','Kanban']}),
+      h(L.Button,{size:'toolbar',icon:'play'},'Run Discovery Now')));
+}
+function Shell(p){
+  var a=React.useState('ivy'),nav=React.useState(false),hid=React.useState(!!p.hidden),w=React.useState(300);
+  var agent=a[0];
+  return h(L.AppShell,{style:{height:900},agent:agent,navHidden:nav[0],panelHidden:hid[0],chatWidth:w[0],
+    rail:h(L.AgentRail,{agents:AG,value:agent,onChange:function(id){a[1](id);hid[1](false);},navHidden:nav[0],onToggleNav:function(){nav[1](!nav[0]);},workspaceMenu:WS_MENU,onAdd:function(){}}),
+    sidebar:h(L.Sidebar,{agent:agent==='elliot'?{name:'Elliot',role:'Employee advocacy'}:{name:'Ivy',role:'Creator outreach'},sections:agent==='elliot'?ELLIOT_NAV:IVY_NAV}),
+    header:h(L.PageHeader,{title:agent==='elliot'?'Content':'Campaigns',approvals:6,panelHidden:hid[0],agent:agent,onShowAssistant:function(){hid[1](false);}}),
+    panel:h(Panel,{agent:agent,width:w[0],onWidthChange:w[1],onHide:function(){hid[1](true);}})},
+    h(Main,{agent:agent}));
+}
+ReactDOM.createRoot(document.getElementById('root')).render(h('div',null,
+  h(Shell,null),
+  h('div',{style:{height:20,background:'var(--surface-subtle)'}}),
+  h(Shell,{hidden:true})));
+</script>
+</body></html>

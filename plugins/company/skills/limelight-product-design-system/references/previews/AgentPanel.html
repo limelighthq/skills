@@ -1,0 +1,28 @@
+<!-- @dsCard group="Agent panel" height=900 width=700 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>AgentPanel</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="display:flex;gap:60px;justify-content:flex-end;height:900px;padding-right:20px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+var IVY_MENU=[{id:"brief",icon:"pencil",label:"Create campaign brief",description:"Draft with Ivy, review in the campaign panel"},{id:"discovery",icon:"target",label:"Run a new creator discovery",description:"Find creators that match a campaign brief"},{id:"negotiations",icon:"message-circle",label:"Monitor negotiations",description:"Where every open deal stands right now"}];
+var ELLIOT_MENU=[{id:"draft",icon:"notebook-pen",label:"Draft content",description:"A post in one of your team’s voices"},{id:"inspiration",icon:"lightbulb",label:"Browse content inspiration",description:"High-performing posts worth modelling"},{separator:true},{section:"Quick actions"},{id:"q1",icon:"pencil",label:"Draft a new post",description:"Pick who it is for, Elliot writes in their voice"},{id:"q2",icon:"sparkles",label:"Create an educational post",description:"Explain something your buyers keep getting wrong"},{id:"q3",icon:"heart",label:"Turn a customer win into a post",description:"A result, told as a story rather than a case study"},{id:"q4",icon:"sparkles",label:"Brainstorm angles first",description:"Five angles to react to before anything is written"}];
+function composer(){return h(L.ChatComposer,{selectors:[h(L.AgentSelector,{key:"i",agent:"ivy",items:IVY_MENU}),h(L.AgentSelector,{key:"e",agent:"elliot",items:ELLIOT_MENU})]});}
+function Panel(props){var s=React.useState(300);return h(L.AgentPanel,Object.assign({width:s[0],onWidthChange:s[1],composer:composer()},props));}
+ReactDOM.createRoot(document.getElementById("root")).render(h(React.Fragment,null,
+ h(Panel,{agent:"ivy"},
+  h(L.AgentSignature,{agent:"ivy"}),
+  h(L.InsightCard,{title:"25 of the 42 on Q2 SaaS Growth have never been contacted.",
+   body:"DevTools is a third the size and further through its list, so the thing holding Q2 back is outreach, not discovery. Running more matching adds to a pile nobody has worked yet.",
+   stats:[{label:"Shortlisted",value:"67"},{label:"Contacted",value:"27"},{label:"Signed",value:"4"},{label:"Never approached",value:"40"}],
+   tags:["Q2 is the backlog","Customer story still a draft"],actionLayout:"stack",
+   actions:[{label:"Q2 SaaS Growth"},{label:"DevTools LinkedIn"}]})),
+ h(Panel,{agent:"elliot"},
+  h(L.AgentSignature,{agent:"elliot"}),
+  h(L.PanelGreeting,{destination:"Content"}),
+  h(L.InsightCard,{eyebrow:"ELLIOT’S READ ON THE PIPELINE",badge:"2 need your nod",title:"Five of the nine open drafts are waiting on someone else, not you.",
+   body:"Drafts in review sit with their author in Slack, so that queue moves at their pace. Only two are actually yours to approve, and both have been there since Tuesday.",
+   stats:[{label:"Drafts open",value:"9"},{label:"In review",value:"5"},{label:"Yours to approve",value:"2"},{label:"Inspiration saved",value:"18"}],
+   actions:[{label:"Drafts"},{label:"Inspiration"},{label:"Open the week"}]}))
+));
+</script></body></html>

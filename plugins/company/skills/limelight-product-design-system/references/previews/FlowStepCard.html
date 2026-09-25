@@ -1,0 +1,46 @@
+<!-- @dsCard group="Chat" height=810 width=1640 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>FlowStepCard</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="padding:16px;display:flex;gap:20px;align-items:flex-start"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+function col(kids,w){return h('div',{className:'lla-panel-body',style:{width:w||298,flex:'none',boxSizing:'border-box',padding:'20px 16px',display:'flex',flexDirection:'column',gap:16,backgroundColor:'var(--surface-panel)',backgroundImage:'var(--gradient-panel-veil), var(--lla-panel-image)',backgroundSize:'100% 100%, auto 1454px',backgroundPosition:'center, left bottom',backgroundRepeat:'no-repeat'}},kids);}
+var authors=[{value:'David',label:'David Walsh — CEO · 91% fidelity'},{value:'Sarah',label:'Sarah Chen — VP Marketing · 87%'},{value:'Michael',label:'Michael Park — Engineering · 87%'},{value:'Jessica',label:'Jessica Vega — Sales · 82%'},{value:'Ryan',label:'Ryan Torres — Product · 78%'}];
+ReactDOM.createRoot(document.getElementById('root')).render(h(React.Fragment,null,
+  col([
+    h(L.FlowStepCard,{key:1,eyebrow:'STEP 1 OF 3',title:'Which campaign?',choices:[
+      {label:'Q2 SaaS Growth',description:'42 creators in pipeline'},{label:'DevTools LinkedIn',description:'18 creators in pipeline'},{label:'Customer story',description:'7 creators in pipeline'}]}),
+    h(L.FlowStepCard,{key:2,eyebrow:'STEP 2 OF 3',title:'Confirm the ICP',description:'This is the ICP I will search against for Q2 SaaS Growth. Right?',
+      fields:[{label:'WHO',value:'Senior RevOps and marketing ops, Series B to D'},{label:'BUDGET',value:'$2,400 average per placement'},{label:'PLATFORMS',value:'LinkedIn and X'}],
+      actions:[{label:'Looks right',primary:true},{label:'Change the ICP'}]})
+  ]),
+  col([
+    h(L.FlowStepCard,{key:1,eyebrow:'STEP 3 OF 3',title:'Priya Nair',aside:h(L.ScoreChip,{value:96}),
+      description:['RevOps lead · writes Ops Weekly','$1,400 · In network'],
+      fields:[{label:'AUDIENCE OVERLAP',value:'88% of Priya’s readers match your ICP'},{label:'WHY THIS CAMPAIGN',value:'RevOps lead · writes Ops Weekly, which is the seat this campaign is trying to reach'},{label:'TRACK RECORD',value:'Worked with you before at a known rate'}],
+      note:'Creator 1 of 5 · 0 selected',actions:[{label:'Add Priya',primary:true},{label:'Skip'}]}),
+    h(L.BusyBar,{key:2,label:'Adding creators'})
+  ]),
+  col([
+    h(L.ChatMessage,{key:1,agent:'elliot'},h(L.FlowStepCard,{frame:'none',lead:['Drafting as ',h('b',{key:'b'},'Sarah'),'.'],
+      picker:{label:'Post author',options:authors,defaultValue:'Sarah'},
+      prompt:'Do you already have a specific topic or story in mind, or should I help you find one?',
+      options:[{key:'A',label:'I already have a topic/story'},{key:'B',label:'Help me find a strong angle'}],
+      answer:{key:'C',placeholder:'Or type your own answer…'}})),
+    h(L.BusyBar,{key:2,label:'Working with Elliot'})
+  ]),
+  col([
+    h(L.ChatMessage,{key:1,agent:'elliot'},h(L.FlowStepCard,{frame:'none',lead:['Which type of post feels most interesting for ',h('b',{key:'b'},'Michael'),' right now?'],
+      options:[{key:'A',label:'Personal milestone \u2014 a big win, turning point, or \u201ccrazy to look back\u201d moment'},{key:'B',label:'Career before/after \u2014 contrast between old you and current you'},{key:'C',label:'Vulnerable moment \u2014 a mistake, flop, stress, or hard lesson'},{key:'D',label:'Personal hot take \u2014 an opinion that might spark debate'},{key:'E',label:'Day-in-the-life \u2014 behind the scenes of how the work actually happens'}],
+      answer:{placeholder:'Or type your own answer\u2026'},chips:[{icon:'sparkles',label:'Generate now'},{label:'Different question'}]}))
+  ]),
+  col([
+    h(L.ChatMessage,{key:1,agent:'elliot'},h(L.FlowStepCard,{frame:'none',disabled:true,lead:['Drafting as ',h('b',{key:'b'},'Michael'),'. Three openers in his voice — pick one:'],
+      options:[{key:'A',label:'“We spent 6 weeks on this. The data surprised us.”'},{key:'B',label:'“The fix took 2 days. Finding it took 6 weeks.”'},{key:'C',label:'“Everyone measures the wrong thing here. We did too.”'}],
+      answer:{placeholder:'Or describe a different angle…'}})),
+    h(L.FlowStepCard,{key:2,title:'Customer story',description:'Your brief is ready to review. Publishing remains a separate approval.',
+      actions:[{label:'Open campaign brief',primary:true},{label:'Close brief assistant'}],actionsLayout:'inline'})
+  ])
+));
+</script></body></html>

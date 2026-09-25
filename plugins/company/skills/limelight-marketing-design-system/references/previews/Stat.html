@@ -1,0 +1,13 @@
+<!-- @dsCard group="Content" height=240 -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Stat</title></head>
+<body style="margin:0;background:var(--surface-150)">
+<div id="root" class="ll-stats" style="padding:16px"></div>
+<script>
+  var L=window.Limelight,h=React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h(React.Fragment,null,
+    h(L.Stat,{value:'44% vs 13%',lead:'Marketing spends'},'3x more on labor than tech, yet software still relies on humans.'),
+    h(L.Stat,{value:'15–25',lead:'Tools to ship'},'one campaign. Each needs someone to run it.'),
+    h(L.Stat,{value:'$1M+',lead:'Annual spend'},'on disconnected tools by mid-size SaaS marketing teams.')));
+</script>
+</body></html>

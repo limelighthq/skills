@@ -1,0 +1,21 @@
+<!-- @dsCard group="Team operations" height=1290 width=898 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>RitualCard</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="padding:24px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+function Ritual(init){
+  var s=React.useState(init),r=s[0],set=s[1];
+  return h(L.RitualCard,Object.assign({},r,{
+    onToggle:function(){set(Object.assign({},r,{active:r.active===false}));},
+    onRunNow:function(){set(Object.assign({},r,{lastRun:"9/23/2026, 7:53:42 PM",runDisabled:r.mode!=="Automatic",runDisabledReason:r.mode==="Delayed with veto"?"An action is waiting in Activity. Cancel it there or wait one minute.":"A review is pending in Approvals."}));},
+    onSave:function(v){set(Object.assign({},r,v));}}));
+}
+ReactDOM.createRoot(document.getElementById('root')).render(
+  h("div",{style:{display:"flex",flexDirection:"column",gap:20}},
+    h(Ritual,{agent:"Ivy",name:"Collect campaign results",description:"Ask live creators for missing impressions and engagement.",schedule:"Every Monday at 09:00",mode:"Manual approval",next:"2026-09-21 09:00",lastRun:"9/23/2026, 3:58:35 PM",approvals:3,runDisabled:true,runDisabledReason:"A review is pending in Approvals."}),
+    h(Ritual,{agent:"Elliot",name:"Prepare the weekly content plan",description:"Match approved drafts to open calendar slots.",schedule:"Every Friday at 15:00",mode:"Delayed with veto",next:"2026-09-18 15:00",active:false}),
+    h(Ritual,{agent:"Elliot",name:"Check quiet team members",description:"Prepare a nudge when a team member has stopped posting.",schedule:"Every weekday at 10:00",mode:"Manual approval",next:"2026-09-16 10:00"})
+  ));
+</script></body></html>

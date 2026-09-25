@@ -1,0 +1,18 @@
+<!-- @dsCard group="Form controls" height=330 width=960 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>TextInput</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="padding:16px 24px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+function col(title,ov,kids){return h('div',{className:ov?'lla-overlay':null,style:{display:'flex',flexDirection:'column',gap:16,minWidth:0}},h('div',{className:'section-label',style:{fontFamily:'var(--font-sans)',color:'var(--muted)',textTransform:'uppercase'}},title),kids);}
+ReactDOM.createRoot(document.getElementById('root')).render(h('div',{style:{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:24}},
+ col('Team settings',false,[
+  h(L.TextInput,{key:1,variant:'settings',label:'Organization name',defaultValue:"Agus's Studio"}),
+  h(L.TextInput,{key:2,variant:'settings',label:'Product / app domain',placeholder:'acme.com',defaultValue:'limelighthq.com',disabled:true,disabledReason:'Only the organization owner can change the domain.'})]),
+ col('Invite teammate',true,[h(L.TextInput,{key:1,label:'Email',type:'email',placeholder:'teammate@example.com'})]),
+ col('Add a source · Edit ritual',true,[
+  h(L.TextInput,{key:1,variant:'plain',label:'Link','aria-label':'Source URL',defaultValue:'notalink',placeholder:'A talk, a podcast, an article they wrote…',hint:'YouTube, Substack, or any public page.',error:'Enter a complete link starting with https:// or http://.'}),
+  h(L.TextInput,{key:2,variant:'plain',label:'Schedule','aria-label':'Ritual schedule',defaultValue:'Every Monday at 09:00'})]),
+ col('Record external payment',true,[h(L.TextInput,{key:1,variant:'flow',label:'External reference','aria-label':'External payment reference',placeholder:'Invoice or transfer reference'})])));
+</script></body></html>

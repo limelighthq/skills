@@ -1,0 +1,14 @@
+<!-- @dsCard group="Navigation" height=300 width=1200 -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Navbar</title></head>
+<body style="margin:0;background:linear-gradient(180deg,#ffffff 0%,#d8ebfa 100%);min-height:300px">
+<div id="root" style="padding:24px 16px"></div>
+<script>
+  var L=window.Limelight,h=React.createElement;
+  var agents=[{label:'Ivy',description:'Influencer Manager',icon:'images/Agent-marks/ivy-mark.svg'},{label:'Cooper',description:'Customer Advocacy Manager',icon:'images/Agent-marks/cooper-mark.svg'},{label:'Elliot',description:'Employee Social Manager',icon:'images/Agent-marks/elliot-mark.svg'},{label:'Lana',description:'Social Intelligence Manager',icon:'images/Agent-marks/lana-mark.svg'}];
+  ReactDOM.createRoot(document.getElementById('root')).render(
+    h(L.Navbar,{logo:'images/Logos/limelight-logo-black.svg',defaultOpen:0,links:[{label:'Agents',items:agents},{label:'About us'},{label:'Pricing'},{label:'Resources',items:[{label:'Blog'},{label:'Podcast'},{label:'Guides'}]}],
+      mobileActions:[h(L.Button,{key:1,variant:'secondary'},'Sign up'),h(L.Button,{key:2},'Book a demo')]},
+      h(L.Button,{variant:'tertiary'},'Sign in'),h(L.Button,null,'Get started')));
+</script>
+</body></html>

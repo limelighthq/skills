@@ -1,0 +1,12 @@
+<!-- @dsCard group="Inbox" height=150 width=590 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>ThreadHeader</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="padding:20px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+ReactDOM.createRoot(document.getElementById('root')).render(
+  h(L.ThreadHeader,{initials:"AR",name:"Alex Rivera",role:"Engineering leader · ex-Datadog",campaign:"Q2 SaaS Growth",onViewCreator:function(){},
+    menuItems:[{id:"hide",label:"Hide thread",icon:"eye-off",onSelect:function(){}},{separator:true},{id:"delete",label:"Delete thread",icon:"trash-2",danger:true,onSelect:function(){}}]})
+);
+</script></body></html>

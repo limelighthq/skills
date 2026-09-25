@@ -1,0 +1,12 @@
+<!-- @dsCard group="Agent panel" height=210 width=560 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>StatGrid</title></head>
+<body style="margin:0;background:var(--surface)">
+<div id="root" class="lla" style="display:flex;gap:40px;padding:0 16px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+function col(el){return h("div",{style:{width:232}},el);}
+ReactDOM.createRoot(document.getElementById("root")).render(h(React.Fragment,null,
+ col(h(L.StatGrid,{items:[{label:"Shortlisted",value:"67"},{label:"Contacted",value:"27"},{label:"Signed",value:"4"},{label:"Never approached",value:"40"}]})),
+ col(h(L.StatGrid,{items:[{label:"Accepted",value:"1"},{label:"Providers",value:"2"},{label:"Mode",value:"Demo"}]}))));
+</script></body></html>

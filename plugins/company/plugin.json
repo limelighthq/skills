@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "company",
-  "description": "Skills for everyone at Limelight: where work goes, and everyday document tasks.",
+  "description": "Skills for everyone at Limelight: where work goes, everyday document tasks, and the product and marketing design systems.",
   "author": {
     "name": "Limelight"
   },

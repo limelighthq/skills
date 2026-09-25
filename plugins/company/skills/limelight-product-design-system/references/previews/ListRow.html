@@ -1,0 +1,28 @@
+<!-- @dsCard group="Settings" height=745 width=760 -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>ListRow</title></head>
+<body style="margin:0;background:var(--settings-ground)">
+<div id="root" class="lla" style="padding:24px 40px"></div>
+<script>
+var L=window.LimelightApp,h=React.createElement;
+var card={padding:24,border:'1px solid var(--line-card)',borderRadius:12,background:'var(--surface)',boxShadow:'var(--shadow-sm)'};
+var cap={margin:'0 0 8px',fontSize:11,lineHeight:'16.5px',color:'var(--muted)'};
+ReactDOM.createRoot(document.getElementById('root')).render(h('div',{style:{width:680,display:'grid',gap:20}},
+  h('div',null,h('p',{style:cap},'Title, description and actions · the disabled Connect is explained by its description'),
+   h('div',{style:card},
+    h(L.ListRow,{title:'Slack',description:'Connect to receive a Slack ping when agents finish background work',actions:h(L.Button,null,'Connect')}),
+    h(L.ListRow,{title:'HubSpot',description:'Not available yet. Ask your workspace owner to turn on HubSpot.',descriptionId:'hubspot-why',actions:h(L.Button,{disabled:true,'aria-describedby':'hubspot-why'},'Connect')}),
+    h(L.ListRow,{title:'Limelight Marketplace',description:'Message creators in their Limelight marketplace inbox.',actions:[h(L.Button,{key:'b',variant:'secondary'},'Create a brand'),h(L.Button,{key:'c'},'Connect')]}))),
+  h('div',null,h('p',{style:cap},'Leading avatar and meta'),
+   h('div',{style:card},h(L.ListRow,{leading:h(L.Avatar,{initials:'A',size:'card'}),title:'Agus',description:'agus@limelighthq.com',meta:h(L.Badge,null,'Owner')}))),
+  h('div',{style:{display:'grid',gridTemplateColumns:'1fr 1fr',gap:14}},
+   h('div',null,h('p',{style:cap},'Pairs (compact) · link values'),
+    h('div',{style:card},
+     h(L.ListRow,{density:'compact',label:'Autonomy',value:'Recommended'}),h(L.ListRow,{density:'compact',label:'Spend cap',value:'$2,500'}),
+     h(L.ListRow,{density:'compact',label:'Targeting',value:'29 attributes',onValueClick:function(){}}),h(L.ListRow,{density:'compact',label:'Mailboxes',value:'None connected',onValueClick:function(){}}))),
+   h('div',null,h('p',{style:cap},'Pairs with dividers (Billing)'),
+    h('div',{style:card},
+     h(L.ListRow,{label:'Current plan',value:'Full access · complimentary'}),
+     h(L.ListRow,{label:'Billing',value:'No charge'}),
+     h(L.ListRow,{label:'Next invoice',value:'—'}))))));
+</script></body></html>

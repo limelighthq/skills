@@ -11,6 +11,7 @@
     "test": "node --test \"tests/*.test.mjs\"",
     "test:install": "node tools/test-install.mjs",
     "new:skill": "node tools/new-skill.mjs",
+    "sync:design-system": "node tools/sync-design-system.mjs",
     "notion:catalog": "node tools/notion-sync.mjs catalog",
     "notion:plan": "node tools/notion-sync.mjs plan",
     "notion:schema": "node tools/notion-sync.mjs schema",

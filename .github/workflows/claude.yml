@@ -1,0 +1,68 @@
+name: Claude Code
+
+# Answers @claude mentions in pull request comments, reviews, and issues.
+# pr-review.yml posts an automated review on every pull request. This workflow
+# runs only when a person asks Claude for something, such as "@claude fix the
+# High issues from the review".
+#
+# It signs in to Claude with the same CLAUDE_CODE_OAUTH_TOKEN secret as the
+# review. It reaches GitHub through the Claude GitHub App instead of the
+# workflow's own token. Commits pushed with that token would not start other
+# workflows, so `validate` would never run on Claude's fixes. Two consequences:
+#   - The Claude GitHub App must be installed on this repository.
+#   - The action runs only after this file is on main. Before that, it skips
+#     itself because the file differs from the version on the default branch.
+
+on:
+  issue_comment:
+    types: [created]
+  pull_request_review_comment:
+    types: [created]
+  issues:
+    types: [opened, assigned]
+  pull_request_review:
+    types: [submitted]
+
+permissions:
+  contents: read
+
+jobs:
+  claude:
+    if: |
+      (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude')) ||
+      (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@claude')) ||
+      (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@claude')) ||
+      (github.event_name == 'issues' && (contains(github.event.issue.body, '@claude') || contains(github.event.issue.title, '@claude')))
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      pull-requests: read
+      issues: read
+      id-token: write
+      actions: read
+    steps:
+      # Keep checkout's credentials: the action fetches the pull request branch
+      # before it installs its own.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 1
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          cache: npm
+
+      # No `prompt:` here. Claude reads the comment that mentioned it and follows
+      # it. The npm commands let it run the checks AGENTS.md requires before
+      # it pushes.
+      - name: Run Claude Code
+        uses: anthropics/claude-code-action@9171db3e57d6a3140a37ddc2ba92788584e0ead6 # v1.0.234
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          # Lets Claude read CI results when it reasons about a pull request.
+          additional_permissions: |
+            actions: read
+          claude_args: |
+            --model claude-sonnet-5
+            --allowedTools "Bash(npm ci),Bash(npm run validate),Bash(npm test)"

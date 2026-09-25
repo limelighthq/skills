@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { planSync, applyPlan, schemaChanges, remoteSnapshot } from '../tools/notion/sync.mjs';
+import { planSync, applyPlan, schemaChanges, remoteSnapshot, revisionGuard } from '../tools/notion/sync.mjs';
+import { digest } from '../tools/notion/catalog.mjs';
 
 const config = { repository: 'example/skills', databaseId: 'db', dataSourceId: 'ds', adopt: {} };
 const skill = { name: 'hello', description: 'A useful skill', origin: 'example/skills', sourcePath: 'plugins/company/skills/hello',
@@ -48,10 +49,16 @@ function remote(rows = []) {
 
 test('schema setup adds only missing fields and rejects incompatible fields', () => {
   const props = { 'Skill name': { type: 'title' }, Description: { type: 'rich_text' }, Files: { type: 'files' }, Tags: { type: 'multi_select', multi_select: { options: [{ name: 'custom' }] } } };
-  const changes = schemaChanges(props);
-  assert.deepEqual(Object.keys(changes).sort(), ['Origin', 'Source path', 'Sync state']);
+  const changes = schemaChanges(props, ['company', 'engineering']);
+  assert.deepEqual(Object.keys(changes).sort(), ['Origin', 'Plugin', 'Source path', 'Sync state']);
+  assert.deepEqual(changes.Plugin, { select: { options: [{ name: 'company' }, { name: 'engineering' }] } });
   assert.equal(changes.Tags, undefined);
   assert.throws(() => schemaChanges({ ...props, 'Sync state': { type: 'number' } }), /Sync state/);
+  assert.throws(() => schemaChanges({ ...props, Plugin: { type: 'rich_text' } }), /Plugin/);
+  const existing = { id: 'company-option', name: 'company', color: 'blue' };
+  const additions = schemaChanges({ ...props, Plugin: { type: 'select', select: { options: [existing] } } }, ['company', 'engineering']);
+  assert.deepEqual(additions.Plugin.select.options, [existing, { name: 'engineering' }]);
+  assert.equal(schemaChanges({ ...props, Plugin: { type: 'select', select: additions.Plugin.select } }, ['company', 'engineering']).Plugin, undefined);
 });
 
 test('plan makes no writes and does not adopt a matching name without a page mapping', async () => {
@@ -87,6 +94,7 @@ test('create verifies content, commits its marker last, then becomes a no-op', a
   assert.equal(state.phase, 'complete');
   assert.equal(state.source, skill.hash);
   assert.equal(state.revision, 'rev');
+  assert.deepEqual(api.pages.get('new').properties.Plugin, { select: { name: 'company' } });
   assert.match(state.remote, /^[a-f0-9]{64}$/);
   api.writes.length = 0;
   const next = await planSync(api, config, [skill]);
@@ -180,4 +188,88 @@ test('an edit between Markdown write and readback never gets a completion marker
   await assert.rejects(applyPlan(api, config, await planSync(api, config, [skill]), { revision: 'rev' }), /content verification/i);
   const state = JSON.parse(api.pages.get('new').properties['Sync state'].rich_text[0].text.content);
   assert.equal(state.phase, 'pending');
+});
+
+function enrollment() {
+  const page = row();
+  page.parent = { type: 'data_source_id', data_source_id: 'ds' };
+  page.properties.Plugin = { type: 'select', select: { name: 'company' } };
+  page.properties.Origin = rich('');
+  page.properties['Source path'] = rich('');
+  const receipt = { format: 2, kind: 'enrollment', repository: config.repository, plugin: 'company', sourcePath: skill.sourcePath,
+    pageId: page.id, baseline: null, guard: revisionGuard(page), source: skill.hash,
+    remote: remoteSnapshot(page, { markdown: skill.body }) };
+  return { page, receipt };
+}
+
+test('an enrollment receipt adopts its original unmanaged row and converges after publication', async () => {
+  const { page, receipt } = enrollment();
+  const api = remote([page]);
+  const receipts = { hello: receipt };
+  const plan = await planSync(api, config, [skill], { receipts });
+  assert.deepEqual(plan.conflicts, []);
+  assert.deepEqual(plan.actions.map(action => [action.kind, action.pageId]), [['adopt', 'row']]);
+  await applyPlan(api, config, plan, { revision: 'rev' });
+  assert.equal(api.pages.size, 1);
+  assert.equal(JSON.parse(api.pages.get('row').properties['Sync state'].rich_text[0].text.content).phase, 'complete');
+  assert.equal((await planSync(api, config, [skill], { receipts })).actions[0].kind, 'skip');
+});
+
+test('missing or changed enrollment targets cannot be replaced or overwritten even with repair', async () => {
+  const mutations = [
+    ({ api }) => api.pages.delete('row'),
+    ({ api }) => api.bodies.set('row', '# A later draft'),
+    ({ page }) => { page.properties.Plugin.select = null; },
+    ({ page }) => { page.properties.Plugin.select.name = 'engineering'; },
+    ({ page }) => { page.parent = { type: 'page_id', page_id: 'elsewhere' }; },
+    ({ page }) => { page.properties.Origin = rich('other/repo'); },
+    ({ page }) => { page.properties['Source path'] = rich('plugins/company/skills/other'); },
+    ({ page }) => { page.properties['Skill name'] = title('renamed'); },
+    ({ page }) => { page.properties['Sync state'] = rich(JSON.stringify({ repo: 'other/repo', key: 'hello', phase: 'complete' })); },
+    ({ receipt }) => { receipt.source = 'b'.repeat(64); },
+    ({ receipt }) => { receipt.repository = 'other/repo'; },
+    ({ receipt }) => { receipt.sourcePath = 'plugins/company/skills/other'; },
+    ({ receipt }) => { receipt.plugin = 'engineering'; },
+    ({ receipt }) => { receipt.baseline = {}; },
+  ];
+  for (const mutate of mutations) {
+    const { page, receipt } = enrollment();
+    const api = remote([page]);
+    mutate({ api, page: api.pages.get('row'), receipt });
+    for (const repair of [[], ['hello']]) {
+      const plan = await planSync(api, config, [skill], { receipts: { hello: receipt }, repair });
+      assert.ok(plan.conflicts.length, mutate.toString());
+      assert.equal(plan.actions.length, 0, mutate.toString());
+      await assert.rejects(applyPlan(api, config, plan), /conflict/i);
+      assert.deepEqual(api.writes, []);
+    }
+  }
+});
+
+test('an explicit adoption mapping cannot redirect an enrollment receipt', async () => {
+  const { page, receipt } = enrollment();
+  const api = remote([page]);
+  const plan = await planSync(api, { ...config, adopt: { hello: 'different' } }, [skill], { receipts: { hello: receipt } });
+  assert.ok(plan.conflicts.length);
+  assert.deepEqual(plan.actions, []);
+});
+
+test('Plugin selection is bound to publication guards without changing existing snapshot hashes', () => {
+  const page = row();
+  const original = remoteSnapshot(page, { markdown: skill.body });
+  const guard = revisionGuard(page);
+  assert.equal(guard, digest(JSON.stringify({ state: '', parent: page.parent })));
+  page.properties.Plugin = { select: { name: 'company' } };
+  assert.equal(remoteSnapshot(page, { markdown: skill.body }), original);
+  assert.notEqual(revisionGuard(page), guard);
+});
+
+test('revoking Plugin after an enrollment plan prevents all writes', async () => {
+  const { page, receipt } = enrollment();
+  const api = remote([page]);
+  const plan = await planSync(api, config, [skill], { receipts: { hello: receipt } });
+  assert.deepEqual(plan.conflicts, []);
+  api.pages.get('row').properties.Plugin.select = null;
+  await assert.rejects(applyPlan(api, config, plan, { revision: 'rev' }), /changed since/i);
+  assert.deepEqual(api.writes, []);
 });

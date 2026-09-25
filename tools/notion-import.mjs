@@ -8,6 +8,7 @@ import { buildCatalog } from './notion/catalog.mjs';
 import { NotionClient } from './notion/client.mjs';
 import { planImports } from './notion/import.mjs';
 import { loadReceipts } from './notion/receipts.mjs';
+import { enrollmentReadmeEntries } from './notion/readmes.mjs';
 import { GitHub, candidateEntries, verifyCandidateCommit, requireValidation } from './notion/github.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -29,10 +30,10 @@ async function main() {
   const database = await api.request('GET', `/databases/${config.databaseId}`);
   if (database.database_type !== 'skills' || !database.data_sources?.some(source => source.id.replaceAll('-', '') === config.dataSourceId.replaceAll('-', ''))) throw new Error('Not the configured Skills database.');
   const plan = await planImports(api, config, skills, loadReceipts(root, skills));
-  report(`# Notion import\n\n${plan.candidates.length} changed skills.\n${plan.candidates.map(item => `- ${item.skill.name}`).join('\n')}`);
+  report(`# Notion import\n\n${plan.candidates.length} new or changed skills.\n${plan.candidates.map(item => `- ${item.receipt.kind === 'enrollment' ? 'Enroll' : 'Update'}: ${item.skill.name}`).join('\n')}`);
   if (plan.conflicts.length) { report(plan.conflicts.map(message => `- Conflict: ${message}`).join('\n')); throw new Error('Resolve the listed conflicts before syncing.'); }
   if (mode === 'plan') { report('Read-only plan. No changes made.'); return; }
-  const entries = candidateEntries(plan.candidates, skills);
+  const entries = [...candidateEntries(plan.candidates, skills), ...enrollmentReadmeEntries(root, plan.candidates)];
   if (mode === 'prepare') {
     if (!entries.length) { output('sha', ''); report('No Notion imports needed.'); return; }
     const result = await github.prepare(base, entries, plan.candidates.map(item => item.skill.name));

@@ -49,12 +49,13 @@ async function main() {
   const db = await api.request('GET', `/databases/${config.databaseId}`);
   if (db.database_type !== 'skills' || !db.data_sources?.some(source => source.id.replaceAll('-', '') === config.dataSourceId.replaceAll('-', ''))) throw new Error('Configured target is not the expected native Skills database and data source.');
   const source = await api.request('GET', `/data_sources/${config.dataSourceId}`);
-  const additions = schemaChanges(source.properties);
+  const plugins = [...new Set(skills.map(skill => skill.plugin))];
+  const additions = schemaChanges(source.properties, plugins);
   if (command === 'schema') {
-    report(['# Notion schema plan', '', ...Object.keys(additions).map(name => `- Add ${name} (rich text)`), ...(!Object.keys(additions).length ? ['No schema changes needed.'] : [])]);
+    report(['# Notion schema plan', '', ...Object.keys(additions).map(name => `- ${source.properties[name] ? 'Update' : 'Add'} ${name} (${name === 'Plugin' ? 'select' : 'rich text'})`), ...(!Object.keys(additions).length ? ['No schema changes needed.'] : [])]);
     if (values.apply && Object.keys(additions).length) {
       await api.request('PATCH', `/data_sources/${config.dataSourceId}`, { properties: additions });
-      if (Object.keys(schemaChanges((await api.request('GET', `/data_sources/${config.dataSourceId}`)).properties)).length) throw new Error('Schema verification failed.');
+      if (Object.keys(schemaChanges((await api.request('GET', `/data_sources/${config.dataSourceId}`)).properties, plugins)).length) throw new Error('Schema verification failed.');
       report(['Schema additions verified.']);
     }
     return;

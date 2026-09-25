@@ -1,19 +1,47 @@
 // GitHub writes for immutable Notion import candidates.
-import { digest } from './catalog.mjs';
+import { digest, skillHash } from './catalog.mjs';
+
+const safeName = value => typeof value === 'string' && value.length <= 64 && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value);
+const hash = value => typeof value === 'string' && /^[a-f0-9]{64}$/.test(value);
+
+function requireEnrollment(skill, receipt, plugins) {
+  if (!plugins.has(skill.plugin)) throw new Error('Candidate plugin is outside the trusted catalog.');
+  if (receipt?.format !== 2 || receipt.kind !== 'enrollment' || receipt.baseline !== null ||
+      typeof receipt.repository !== 'string' || !/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(receipt.repository) ||
+      receipt.repository !== skill.origin || receipt.plugin !== skill.plugin || receipt.sourcePath !== skill.sourcePath ||
+      typeof receipt.pageId !== 'string' || !receipt.pageId.trim() || !hash(receipt.guard) || !hash(receipt.remote) ||
+      receipt.source !== skill.hash || !hash(skill.hash) || skill.hash !== skillHash(skill)) {
+    throw new Error('A valid enrollment receipt matching the new skill and its hash is required.');
+  }
+}
 
 export function candidateEntries(candidates, originals) {
   const entries = [];
+  const names = new Set(), paths = new Set();
+  const plugins = new Set(originals.map(skill => /^plugins\/([^/]+)\/skills\/[^/]+$/.exec(skill.sourcePath)?.[1]).filter(safeName));
   for (const { skill, receipt } of candidates) {
     const original = originals.find(item => item.name === skill.name);
-    if (!original || skill.sourcePath !== original.sourcePath || !/^plugins\/[a-z0-9-]+\/skills\/[a-z0-9-]+$/.test(skill.sourcePath) || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(skill.name)) throw new Error('Candidate scope is outside a known skill.');
+    const plugin = /^plugins\/([^/]+)\/skills\/[^/]+$/.exec(skill.sourcePath)?.[1];
+    if (!safeName(skill.name) || !safeName(plugin) || skill.sourcePath !== `plugins/${plugin}/skills/${skill.name}` ||
+        (original && skill.sourcePath !== original.sourcePath) || (!original && skill.plugin !== plugin)) {
+      throw new Error('Candidate scope must match its canonical skill path.');
+    }
+    if (names.has(skill.name) || paths.has(skill.sourcePath.toLowerCase())) throw new Error('Duplicate candidate name or path collision.');
+    names.add(skill.name);
+    paths.add(skill.sourcePath.toLowerCase());
+    if (original && receipt?.kind === 'enrollment') throw new Error('Enrollment cannot replace an existing skill.');
+    if (!original) requireEnrollment(skill, receipt, plugins);
     const seen = new Set();
     for (const file of skill.files) {
-      if (!file.path || file.path.split('/').some(part => !part || ['.', '..', '.git'].includes(part.toLowerCase())) || /[\\:\x00-\x1f]/.test(file.path) || ![0o644, 0o755].includes(file.mode) || seen.has(file.path.toLowerCase())) throw new Error('Unsafe candidate path or mode.');
-      seen.add(file.path.toLowerCase());
-      const old = original.files.find(item => item.path === file.path);
+      if (typeof file.path !== 'string' || !file.path || file.path.split('/').some(part => !part || ['.', '..', '.git'].includes(part.toLowerCase())) || /[\\:\x00-\x1f]/.test(file.path) || ![0o644, 0o755].includes(file.mode) || typeof file.data !== 'string') throw new Error('Unsafe candidate path or mode.');
+      const normalized = file.path.toLowerCase();
+      if ([...seen].some(path => path === normalized || path.startsWith(`${normalized}/`) || normalized.startsWith(`${path}/`))) throw new Error('Candidate file path collision.');
+      seen.add(normalized);
+      const old = original?.files.find(item => item.path === file.path);
       if (!old || old.data !== file.data || old.mode !== file.mode) entries.push({ path: `${skill.sourcePath}/${file.path}`, mode: file.mode === 0o755 ? '100755' : '100644', type: 'blob', data: file.data });
     }
-    for (const old of original.files) if (!skill.files.some(file => file.path === old.path)) entries.push({ path: `${skill.sourcePath}/${old.path}`, mode: '100644', type: 'blob', sha: null });
+    if (!original && !skill.files.some(file => file.path === 'SKILL.md')) throw new Error('Enrollment requires a SKILL.md file.');
+    for (const old of original?.files ?? []) if (!skill.files.some(file => file.path === old.path)) entries.push({ path: `${skill.sourcePath}/${old.path}`, mode: '100644', type: 'blob', sha: null });
     entries.push({ path: `.notion-sync/${skill.name}.json`, mode: '100644', type: 'blob', data: Buffer.from(`${JSON.stringify(receipt, null, 2)}\n`).toString('base64') });
   }
   return entries.sort((a, b) => a.path < b.path ? -1 : a.path > b.path ? 1 : 0);
@@ -80,7 +108,7 @@ export class GitHub {
     if (pulls.length > 1) throw new Error('Ambiguous import pull requests; inspect them before retrying.');
     const pull = pulls[0] ?? await this.request('POST', '/pulls', {
       title: `Sync Notion edits: ${names.join(', ')}`.slice(0, 200), head: branch, base: 'main',
-      body: `Imports edits made in the managed Notion skills: ${names.map(name => `\`${name}\``).join(', ')}.\n\nThe sync runs repository validation, installation checks, and bundled script tests before merging. It rechecks the exact source snapshots and candidate commit before publication. Changes on both sides require resolution.\n\nPrepared from \`${base}\`.`,
+      body: `Imports new or edited Notion skills: ${names.map(name => `\`${name}\``).join(', ')}. New skills enroll through their selected Plugin and include README entries.\n\nThe sync runs repository validation, installation checks, and bundled script tests before merging. It rechecks the exact source snapshots and candidate commit before publication. Changes on both sides require resolution.\n\nPrepared from \`${base}\`.`,
     });
     if (pull.head.sha !== sha) throw new Error('Import pull request changed during preparation.');
     return { sha, pr: pull.number, url: pull.html_url };

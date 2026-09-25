@@ -1,13 +1,15 @@
 import { digest, packSkill } from './catalog.mjs';
 
-const TYPES = { 'Skill name': 'title', Description: 'rich_text', Files: 'files', Origin: 'rich_text', 'Source path': 'rich_text', 'Sync state': 'rich_text' };
+const TYPES = { 'Skill name': 'title', Description: 'rich_text', Files: 'files', Plugin: 'select', Origin: 'rich_text', 'Source path': 'rich_text', 'Sync state': 'rich_text' };
 const rich = value => ({ rich_text: [{ text: { content: value } }] });
+const skillPlugin = skill => skill.plugin ?? skill.sourcePath.split('/')[1];
+export const pluginOf = row => row.properties?.Plugin?.select?.name ?? '';
 export function propertyText(property) {
   const values = property?.title ?? property?.rich_text ?? [];
   return values.map(value => value.plain_text ?? value.text?.content ?? '').join('');
 }
 
-export function schemaChanges(properties) {
+export function schemaChanges(properties, plugins = []) {
   const missing = {};
   for (const [name, type] of Object.entries(TYPES)) {
     if (properties[name] && properties[name].type !== type) throw new Error(`Notion property ${name} must have type ${type}. No schema changes made.`);
@@ -16,6 +18,9 @@ export function schemaChanges(properties) {
       missing[name] = { [type]: {} };
     }
   }
+  const options = properties.Plugin?.select?.options ?? [];
+  const additions = [...new Set(plugins)].sort().filter(name => !options.some(option => option.name === name)).map(name => ({ name }));
+  if (!properties.Plugin || additions.length) missing.Plugin = { select: { options: [...options, ...additions] } };
   return missing;
 }
 
@@ -56,7 +61,19 @@ async function snapshot(api, row) {
 }
 
 export function revisionGuard(row) {
-  return digest(JSON.stringify({ state: propertyText(row.properties['Sync state']), parent: row.parent }));
+  const plugin = pluginOf(row);
+  return digest(JSON.stringify({ state: propertyText(row.properties['Sync state']), parent: row.parent, ...(plugin ? { plugin } : {}) }));
+}
+
+export function enrollmentReceiptMatches(receipt, row, skill, config) {
+  return receipt?.format === 2 && receipt.kind === 'enrollment' && receipt.repository === config.repository &&
+    receipt.baseline === null && stateOf(row) === null && receipt.pageId === row.id &&
+    receipt.plugin === skillPlugin(skill) && pluginOf(row) === receipt.plugin &&
+    receipt.sourcePath === skill.sourcePath && receipt.source === skill.hash && receipt.guard === revisionGuard(row) &&
+    row.parent?.data_source_id?.replaceAll('-', '') === config.dataSourceId.replaceAll('-', '') &&
+    propertyText(row.properties['Skill name']) === skill.name &&
+    ['', skill.origin].includes(propertyText(row.properties.Origin)) &&
+    ['', skill.sourcePath].includes(propertyText(row.properties['Source path']));
 }
 
 export function receiptContextMatches(receipt, row) {
@@ -81,7 +98,16 @@ export async function planSync(api, config, skills, { repair = [], receipts = {}
   for (const skill of skills) {
     const owned = indexed.filter(item => item.state?.repo === config.repository && item.state.key === skill.name);
     const adoptionId = config.adopt?.[skill.name];
-    const adopt = adoptionId ? indexed.find(item => item.row.id.replaceAll('-', '') === adoptionId.replaceAll('-', '')) : undefined;
+    const receipt = receipts[skill.name];
+    const enrolling = !owned.length && receipt?.format === 2 && receipt.kind === 'enrollment';
+    if (enrolling && adoptionId && adoptionId.replaceAll('-', '') !== receipt.pageId?.replaceAll('-', '')) {
+      conflicts.push(`Enrollment receipt and adoption mapping disagree for ${skill.name}; preserve the original Notion row.`); continue;
+    }
+    const targetId = enrolling ? receipt.pageId : adoptionId;
+    const adopt = targetId ? indexed.find(item => item.row.id.replaceAll('-', '') === targetId.replaceAll('-', '')) : undefined;
+    if (enrolling && (!adopt || !enrollmentReceiptMatches(receipt, adopt.row, skill, config))) {
+      conflicts.push(`Enrollment for ${skill.name} no longer matches its original Notion page or Git skill. Preserve both versions and resolve the enrollment.`); continue;
+    }
     const matches = owned.length ? owned : adopt ? [adopt] : [];
     const collisions = indexed.filter(item => item.name === skill.name && !matches.includes(item));
     if (matches.length > 1 || collisions.length) {
@@ -97,10 +123,13 @@ export async function planSync(api, config, skills, { repair = [], receipts = {}
     if (state && (state.repo !== config.repository || state.key !== skill.name)) {
       conflicts.push(`Page ${row.id} belongs to ${state.repo}/${state.key}; it cannot be adopted.`); continue;
     }
-    if (!state && (name !== skill.name || propertyText(row.properties.Origin) !== skill.origin)) {
+    if (!state && !enrolling && (name !== skill.name || propertyText(row.properties.Origin) !== skill.origin)) {
       conflicts.push(`Adoption name or Origin disagrees for ${skill.name} on page ${row.id}.`); continue;
     }
     const current = await snapshot(api, row);
+    if (enrolling && receipt.remote !== current) {
+      conflicts.push(`Enrollment for ${skill.name} changed in Notion after import. Preserve both versions and resolve the enrollment.`); continue;
+    }
     const repairing = repair.includes(skill.name);
     if (state && state.phase !== 'complete' && !repairing) {
       conflicts.push(`Incomplete publish for ${skill.name}. Inspect the page, then use --repair ${skill.name}.`); continue;
@@ -110,7 +139,7 @@ export async function planSync(api, config, skills, { repair = [], receipts = {}
     if (state?.phase === 'complete' && !repairing && ((state.remote !== current && !imported) || pendingImportChanged)) {
       conflicts.push(`Managed content for ${skill.name} was edited in Notion. Preserve the edit in Git before using --repair ${skill.name}.`); continue;
     }
-    const kind = !state ? 'adopt' : repairing ? 'repair' : state.source === skill.hash && state.remote === current ? 'skip' : 'update';
+    const kind = !state ? 'adopt' : repairing ? 'repair' : state.source === skill.hash && state.remote === current && pluginOf(row) === skillPlugin(skill) ? 'skip' : 'update';
     actions.push({ kind, skill, pageId: row.id, snapshot: current, guard: revisionGuard(row) });
   }
   return { actions, conflicts, ignored: indexed.filter(item => !item.state && !names.has(item.name)).length };
@@ -149,6 +178,7 @@ export async function applyPlan(api, config, plan, { revision } = {}) {
     const pending = { repo: config.repository, key: skill.name, phase: 'pending', source: skill.hash, revision };
     const properties = {
       'Skill name': { title: [{ text: { content: skill.name } }] }, Description: rich(skill.description),
+      Plugin: { select: { name: skillPlugin(skill) } },
       Origin: rich(skill.origin), 'Source path': rich(skill.sourcePath), Files: { files: [file] },
       'Sync state': rich(JSON.stringify(pending)),
     };
@@ -172,6 +202,7 @@ export async function applyPlan(api, config, plan, { revision } = {}) {
     for (const key of ['Skill name', 'Description', 'Origin', 'Source path']) {
       if (propertyText(row.properties[key]) !== propertyText(properties[key])) throw new Error(`Notion property verification failed for ${skill.name}: ${key}.`);
     }
+    if (pluginOf(row) !== skillPlugin(skill)) throw new Error(`Notion property verification failed for ${skill.name}: Plugin.`);
     if (row.properties.Files?.files?.length !== 1 || row.properties.Files.files[0].name !== `${skill.name}.zip`) throw new Error(`Notion file verification failed for ${skill.name}.`);
     await api.verifyFile(row.properties.Files.files[0], archives.get(skill.name));
     const readback = await api.request('GET', `/pages/${id}/markdown`);

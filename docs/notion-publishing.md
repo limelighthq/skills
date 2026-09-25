@@ -6,11 +6,29 @@ GitHub and Notion are both places to edit managed skills. Git `main` is the vali
 
 ## Editing and review
 
-Edit a managed skill's page instructions or Description in Notion. Keep its publisher footer, Skill name, Origin, Source path, and Sync state intact. The importer preserves other YAML fields and comments from Git. To change supporting files in Notion, replace Files with one complete `<skill-name>.zip`, keeping `SKILL.md` at the archive root and including every supporting file. The page body and Description take precedence over the ZIP's older `SKILL.md`; change other frontmatter fields through Git. New Notion-only rows are not automatically enrolled. Create new skills through the repository so their team plugin is explicit.
+Edit a managed skill's page instructions or Description in Notion. Keep its publisher footer, Skill name, Origin, Source path, and Sync state intact. The importer preserves other YAML fields and comments from Git. To change supporting files in Notion, replace Files with one complete `<skill-name>.zip`, keeping `SKILL.md` at the archive root and including every supporting file. The page body and Description take precedence over the ZIP's older `SKILL.md`; change other frontmatter fields through Git. New Notion skills join the sync when an author chooses a Plugin, as described below.
 
 Each import opens an auditable pull request. The default automatically merges after marketplace, installation, and Linux/macOS/Windows script checks succeed. Set `NOTION_IMPORT_AUTO_MERGE=false` to require human review instead. Both-side edits, identity changes, unsupported content, invalid ZIPs, and failed checks remain pending; automation does not choose which version wins. Preserve both versions, resolve them in Git, then use the reviewed repair procedure below if needed.
 
 Small files under `.notion-sync/` are committed import receipts, not temporary run output. They bind the exact Notion snapshot, previous publisher state, page ID, and resulting Git skill hash. The publisher uses them to acknowledge imported edits and prevent loops. Do not edit these receipts by hand. A change after planning makes the candidate stale; rerun to prepare a fresh import. A stale pull request stays open for inspection and can be closed once its replacement has shipped. Notion normalizes Markdown formatting, so an imported body can change whitespace, emphasis syntax, and code-fence labels. Frontmatter and supporting files are preserved independently; unchanged sync runs do not rewrite Git files.
+
+## Creating a skill in Notion
+
+1. Add a page to the Limelight Skills database. Leave Plugin empty while drafting.
+2. Give it a unique Skill name using lowercase letters, numbers, and single hyphens, such as `meeting-recap` (at most 64 characters). Add a one-line Description that says what it does and when to use it, and write the instructions in the page body.
+3. For supporting files, attach one complete `<skill-name>.zip` in Files. Put a valid `SKILL.md` with the same name at the archive root and include every required file. Leave Files empty for a text-only skill. On first enrollment, optional YAML fields come from the ZIP; the Notion Description and page body take precedence.
+4. Choose an existing Plugin, such as `company`, `engineering`, or `design`, when the skill is ready to sync. Leave Origin, Source path, and Sync state empty. Choosing a Plugin opts the draft into the next scheduled sync.
+5. Check **Sync skills with Notion** in GitHub Actions for its import PR or an actionable conflict. The PR adds the complete skill, its README entries, and a receipt. All existing validation and merge settings apply. After merge, publication updates the original Notion page with its Git identity and complete ZIP.
+
+Rows without a Plugin stay outside the sync. Choosing a Plugin does not create a new plugin or move a managed skill between plugins; those changes still go through Git. Duplicate names, unsupported page content, invalid bundles, and conflicting ownership stop the run without publishing. Validation errors stay visible in the PR checks.
+
+Before merge, changing a draft invalidates its candidate and the next sync prepares a fresh one. After merge but before the first publication, changing, renaming, moving, or removing that page stops enrollment. Preserve the Notion and Git versions and resolve them in Git; restoring the exact imported page and Git snapshot allows publication to resume. A repair flag cannot bypass this enrollment check. Once publication succeeds, ordinary two-way editing applies.
+
+### Enable Notion creation on an existing installation
+
+The Plugin dropdown requires a one-time schema update after this implementation reaches `main`. Until that update, publication stops with a missing-field message; no skill rows are changed. Use **Publish skills to Notion** mode `schema-plan`, review the proposed Plugin select field and options, then run `schema-apply`. Existing tags and select options are preserved. Run **Sync skills with Notion** mode `plan`, then `sync`; existing managed rows receive their Plugin value on publication. Leave unrelated rows unselected.
+
+Verify the live workflow with a new text-only skill: choose its Plugin, inspect the import PR and all four check jobs, confirm that publication reused the same page, then run a no-op plan. This feature's local tests simulate Notion and GitHub; they do not establish live activation. Run schema setup again when adding a new team plugin to make its option available.
 
 ## Activating two-way sync
 
@@ -62,7 +80,7 @@ All activation steps can run using the GitHub secret; no local token copy is nee
 - **Move between plugins:** keep the skill name; the existing Notion row is updated with its new source path.
 - **Rename or remove:** the sync reports the old managed row. Review its dependencies, retire it explicitly in Notion, remove a stale adoption mapping, and rerun. No remote row is deleted automatically.
 - **Edit in Notion:** managed instructions, Description, and complete supporting ZIPs return through the coordinated import flow. Comments and unrelated properties do not count as skill edits. Until two-way activation, the original publisher stops on these edits and requires preserving them in Git before repair.
-- **Create a new skill:** use the GitHub request or authoring flow to assign a team plugin. Once published, it participates in both directions automatically. Unmanaged Notion-only rows remain untouched.
+- **Create a new skill:** use GitHub, or write it in Notion and choose its Plugin to enroll it through a validated PR. Once published, it participates in both directions automatically. Notion rows without a Plugin remain untouched.
 
 ## Commands
 

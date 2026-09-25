@@ -1,0 +1,28 @@
+{
+  "repository": "limelighthq/skills",
+  "branch": "main",
+  "databaseId": "0368efd4-73c1-42a0-8302-c2e183ef7616",
+  "dataSourceId": "e1fbcbba-39c7-4e9a-abf0-496952ad0b1a",
+  "origins": {
+    "handoff": "limelighthq/agent-platform",
+    "recap": "limelighthq/agent-platform",
+    "research": "limelighthq/agent-platform",
+    "one-percent-better": "limelighthq/agent-platform",
+    "deep-module-scan": "limelighthq/agent-platform",
+    "annotate-ui-screenshots": "limelighthq/agent-platform",
+    "md-render": "limelighthq/limelight-site",
+    "limelight-work": "limelighthq/ai-workflows",
+    "decide": "glisom/skills"
+  },
+  "adopt": {
+    "limelight-work": "3e411093-8099-818c-8c65-f13b10813045",
+    "md-render": "3ca11093-8099-81d7-b238-dcff3a3a5f42",
+    "design-change-log": "3e311093-8099-81ad-b05c-cb98b290ecd4",
+    "annotate-ui-screenshots": "3ca11093-8099-81da-9305-c64974380ceb",
+    "deep-module-scan": "3ca11093-8099-81b4-a966-fd6b3b839bd0",
+    "handoff": "3ca11093-8099-8143-9078-d499194f5fff",
+    "one-percent-better": "3ca11093-8099-81d1-8f0e-ce33960f7937",
+    "recap": "3ca11093-8099-81a2-b4ad-dc24922605d3",
+    "research": "3ca11093-8099-8119-927a-f8c0e63c624a"
+  }
+}

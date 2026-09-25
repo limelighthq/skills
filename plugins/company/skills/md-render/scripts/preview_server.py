@@ -16,12 +16,14 @@ from watchdog.events import FileSystemEventHandler
 from md_to_html import convert_md_to_html
 import tempfile
 from urllib.parse import quote
+from threading import Lock
 
 class MarkdownHandler(FileSystemEventHandler):
-    def __init__(self, md_file, html_file, theme):
+    def __init__(self, md_file, html_file, theme, render_lock):
         self.md_file = md_file
         self.html_file = html_file
         self.theme = theme
+        self.render_lock = render_lock
         self.last_modified = 0
         
     def on_modified(self, event):
@@ -36,7 +38,8 @@ class MarkdownHandler(FileSystemEventHandler):
             self.last_modified = current_time
             
             print(f"🔄 Detected change in {self.md_file.name}, regenerating...")
-            convert_md_to_html(str(self.md_file), str(self.html_file), self.theme)
+            with self.render_lock:
+                convert_md_to_html(str(self.md_file), str(self.html_file), self.theme)
 
 class PreviewServer:
     def __init__(self, md_file, port, theme, open_browser=True):
@@ -53,7 +56,8 @@ class PreviewServer:
         convert_md_to_html(str(self.md_file), str(self.html_file), self.theme)
         
         # Set up file watcher
-        event_handler = MarkdownHandler(self.md_file, self.html_file, self.theme)
+        render_lock = Lock()
+        event_handler = MarkdownHandler(self.md_file, self.html_file, self.theme, render_lock)
         observer = Observer()
         observer.schedule(event_handler, str(self.md_file.parent), recursive=False)
         observer.start()
@@ -61,6 +65,15 @@ class PreviewServer:
         # Serve output without changing the process working directory.
         
         class QuietHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
+            # Keep headers and body consistent while the watcher rewrites HTML.
+            def do_GET(self):
+                with render_lock:
+                    super().do_GET()
+
+            def do_HEAD(self):
+                with render_lock:
+                    super().do_HEAD()
+
             def log_message(self, format, *args):
                 pass  # Suppress request logs
                 

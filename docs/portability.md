@@ -44,6 +44,8 @@ npm run test:install
 
 The installer check requires network access to npm. It uses `skills@1.7.0` in a temporary project with explicit Codex, Claude Code, Cursor, and OpenCode targets. It checks every installed file against the source bundle and rejects extra skills. It does not modify a personal installation or require access to the private remote repository.
 
+The Notion publisher is repository maintenance, outside the installed skills. Its Node tests run its Python ZIP helper and inspect complete file contents and executable modes. It needs Python 3.10+ (`python3`, or the interpreter named by `PYTHON`). `npm run notion:catalog` checks local discovery without credentials. Live publication and Notion-client compatibility must be verified during activation as described in `notion-publishing.md`.
+
 For bundled scripts, create an isolated Python environment and select its interpreter. From the repository root, run:
 
 ```text

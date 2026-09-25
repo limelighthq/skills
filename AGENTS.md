@@ -17,7 +17,7 @@ This repo is a plugin marketplace of agent skills. People outside engineering re
 - Do not create a plugin with no skills. Add the plugin in the same change as its first skill, and list it in `.claude-plugin/marketplace.json`.
 - A reworded `description` changes when agents pick the skill. Treat it as a behavior change and test it on real requests.
 - Never commit secrets, customer data, personal home-directory paths, or run artifacts.
-- Notion is a copy, never a source. Publish repo to Notion with the `publish-skills-to-notion` skill in `.claude/skills/`, and never edit a skill in Notion expecting it to come back.
+- GitHub and Notion are authoring surfaces for managed skills; Git main is the validated release. Use the coordinated sync and activation/recovery rules in `docs/notion-publishing.md`. Never bypass a conflict with repair before preserving both versions. The legacy `publish-skills-to-notion` skill must not overwrite rows with publisher metadata in `Sync state`.
 
 ## Adding a skill
 

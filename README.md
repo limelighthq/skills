@@ -88,7 +88,7 @@ You do not need to code, and you do not need a local setup.
 
 - **Ask for it.** Open a [skill request](https://github.com/limelighthq/skills/issues/new?template=skill-request.yml). Describe the task the way you would explain it to a new teammate.
 - **Edit it on GitHub.** Open the skill's `SKILL.md`, select the pencil icon, change the text, and select "Propose changes". GitHub opens a pull request for you. A check validates the skill, and an owner reviews it.
-- **Edit an existing managed skill in Notion.** Edit its instructions or Description in [Limelight Skills](https://app.notion.com/p/0368efd473c142a08302c2e183ef7616). Automation opens a GitHub change, runs the repository checks, and merges it if there is no conflict. The [sync runbook](docs/notion-publishing.md) explains supporting files, review mode, and conflicts. Create new skills through GitHub so their destination plugin is explicit.
+- **Create or edit a skill in Notion.** In [Limelight Skills](https://app.notion.com/p/0368efd473c142a08302c2e183ef7616), edit an existing skill's instructions or Description. For a new skill, add its name, description, and instructions, then choose its Plugin when ready to sync. Automation opens a GitHub change, runs the repository checks, and merges it if there is no conflict. The [sync runbook](docs/notion-publishing.md) explains the one-time Plugin setup, supporting files, review mode, and conflicts.
 
 Engineers can work locally:
 

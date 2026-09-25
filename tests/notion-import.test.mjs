@@ -2,7 +2,12 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { planSync, applyPlan } from '../tools/notion/sync.mjs';
 import * as importer from '../tools/notion/import.mjs';
-import { digest, packSkill } from '../tools/notion/catalog.mjs';
+import { buildCatalog, digest, packSkill } from '../tools/notion/catalog.mjs';
+import { candidateEntries } from '../tools/notion/github.mjs';
+import { enrollmentReadmeEntries } from '../tools/notion/readmes.mjs';
+import { makeRepo, tempDir, writeFiles } from './helpers.mjs';
+import { chmodSync, rmSync } from 'node:fs';
+import { join } from 'node:path';
 import { parseSkillFile } from '../tools/lib/frontmatter.mjs';
 import { NotionClient } from '../tools/notion/client.mjs';
 import { execFileSync } from 'node:child_process';
@@ -43,6 +48,133 @@ async function published() {
   return { api, original };
 }
 const rich = value => ({ rich_text: [{ text: { content: value } }] });
+
+function newPage(api, { name = 'new-skill', plugin = 'company', description = 'Helps teammates. Use when someone asks for help.' } = {}) {
+  api.pages.set('draft', { id: 'draft', parent: { data_source_id: 'ds' }, properties: {
+    'Skill name': { title: [{ text: { content: name } }] }, Description: rich(description),
+    Plugin: { select: plugin ? { name: plugin } : null }, Files: { files: [] },
+  } });
+  api.bodies.set('draft', '# New skill\n\nFollow these instructions.');
+  return api.pages.get('draft');
+}
+
+test('a new Notion skill opts into an existing plugin and publishes back to the same page', async t => {
+  const api = remote(), original = skill();
+  newPage(api);
+  const plan = await importer.planImports(api, config, [original]);
+  assert.deepEqual(plan.conflicts, []);
+  assert.equal(plan.candidates.length, 1);
+  const { skill: incoming, receipt } = plan.candidates[0];
+  assert.equal(incoming.sourcePath, 'plugins/company/skills/new-skill');
+  assert.equal(incoming.origin, config.repository);
+  assert.equal(parseSkillFile(text(incoming.files[0])).data.name, 'new-skill');
+  assert.equal(receipt.kind, 'enrollment');
+  assert.equal(receipt.baseline, null);
+  // Materialize the exact GitHub blobs, then rediscover the released skill as the publisher does.
+  const root = makeRepo(tempDir(), { plugins: { company: ['hello'] } });
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  writeFiles(root, {
+    'README.md': '# Skills\n\n| Plugin | For | Skills |\n| --- | --- | --- |\n| [`company`](plugins/company) | Everyone | `hello` |\n',
+    'plugins/company/README.md': '# Company\n\n| Skill | Use it to |\n| --- | --- |\n| [`hello`](skills/hello/SKILL.md) | Help teammates. |\n',
+  });
+  for (const entry of [...candidateEntries(plan.candidates, [original]), ...enrollmentReadmeEntries(root, plan.candidates)]) {
+    writeFiles(root, { [entry.path]: Buffer.from(entry.data, 'base64') });
+    chmodSync(join(root, entry.path), entry.mode === '100755' ? 0o755 : 0o644);
+  }
+  execFileSync('git', ['init', '-q', root]);
+  execFileSync('git', ['-C', root, 'add', '.']);
+  const released = buildCatalog(root, config).find(item => item.name === incoming.name);
+  assert.equal(released.hash, receipt.source);
+  const receipts = { 'new-skill': receipt };
+  // A merged candidate can be replanned before its first publication without importing twice.
+  const replan = await importer.planImports(api, config, [original, incoming], receipts);
+  assert.deepEqual(replan.conflicts, []);
+  assert.equal(replan.candidates.length, 0);
+  const publish = await planSync(api, config, [released], { receipts });
+  assert.deepEqual(publish.conflicts, []);
+  assert.equal(publish.actions[0].pageId, 'draft');
+  await applyPlan(api, config, publish, { revision: 'c'.repeat(40) });
+  assert.equal(api.pages.size, 1);
+  assert.equal((await importer.planImports(api, config, [original, incoming], receipts)).candidates.length, 0);
+  assert.equal((await planSync(api, config, [incoming], { receipts })).actions[0].kind, 'skip');
+});
+
+test('unselected Notion drafts remain untouched and invalid enrollment is reported', async () => {
+  const api = remote();
+  newPage(api, { plugin: '' });
+  assert.deepEqual(await importer.planImports(api, config, [skill()]), { candidates: [], conflicts: [] });
+  for (const options of [{ plugin: 'unknown' }, { plugin: '../company' }, { name: 'Bad Name' }, { name: 'a'.repeat(65) }, { name: 'hello' }, { description: '' }, { description: 'line one\nline two' }]) {
+    newPage(api, options);
+    const plan = await importer.planImports(api, config, [skill()]);
+    assert.equal(plan.candidates.length, 0, JSON.stringify(options));
+    assert.equal(plan.conflicts.length, 1, JSON.stringify(options));
+  }
+});
+
+test('enrollment refuses duplicate names, foreign provenance, moved pages and empty instructions', async () => {
+  for (const change of [
+    (api, row) => api.pages.set('duplicate', { ...structuredClone(row), id: 'duplicate' }),
+    (_api, row) => { row.properties.Origin = rich('other/repo'); },
+    (_api, row) => { row.properties['Source path'] = rich('plugins/engineering/skills/new-skill'); },
+    (_api, row) => { row.parent = { page_id: 'elsewhere' }; },
+    api => api.bodies.set('draft', '  '),
+  ]) {
+    const api = remote(), row = newPage(api);
+    change(api, row);
+    const plan = await importer.planImports(api, config, [skill()]);
+    assert.equal(plan.candidates.length, 0);
+    assert.ok(plan.conflicts.length);
+  }
+});
+
+test('new skill ZIP preserves optional YAML and executable supporting files while page text takes precedence', async () => {
+  const api = remote(), row = newPage(api);
+  const source = skill();
+  source.files[0].data = Buffer.from(text(source.files[0]).replace('name: hello', 'name: new-skill')).toString('base64');
+  row.properties.Files.files = [await api.upload('new-skill.zip', packSkill(source))];
+  const plan = await importer.planImports(api, config, [skill()]);
+  assert.deepEqual(plan.conflicts, []);
+  assert.equal(plan.candidates.length, 1);
+  const incoming = plan.candidates[0].skill;
+  const parsed = parseSkillFile(text(incoming.files[0]));
+  assert.equal(parsed.data.compatibility, 'Python 3.10+');
+  assert.match(parsed.source, /# Keep this comment/);
+  assert.equal(parsed.body.trim(), api.bodies.get('draft'));
+  assert.equal(parsed.data.description, 'Helps teammates. Use when someone asks for help.');
+  assert.deepEqual(incoming.files[1], source.files[1]);
+});
+
+test('new skill enrollment rejects invalid bundles and changes during readback', async () => {
+  const api = remote(), row = newPage(api);
+  row.properties.Files.files = [await api.upload('new-skill.zip', packSkill(skill()))];
+  assert.match((await importer.planImports(api, config, [skill()])).conflicts.join(), /name/i);
+  row.properties.Files.files = [await api.upload('new-skill.zip', packSkill({ files: [] }))];
+  assert.match((await importer.planImports(api, config, [skill()])).conflicts.join(), /SKILL.md/i);
+  row.properties.Files.files = [];
+  const request = api.request;
+  api.request = async (method, path, data) => {
+    if (path === '/pages/draft') row.properties.Plugin.select.name = 'engineering';
+    return request(method, path, data);
+  };
+  const plan = await importer.planImports(api, config, [skill()]);
+  assert.equal(plan.candidates.length, 0);
+  assert.match(plan.conflicts.join(), /changed/i);
+});
+
+test('a pending enrollment cannot become a second skill after rename, revocation or deletion', async () => {
+  for (const change of [
+    row => { row.properties['Skill name'] = { title: [{ text: { content: 'renamed-skill' } }] }; },
+    row => { row.properties.Plugin.select = null; },
+    (_row, api) => api.pages.delete('draft'),
+  ]) {
+    const api = remote(), row = newPage(api), original = skill();
+    const [{ skill: incoming, receipt }] = (await importer.planImports(api, config, [original])).candidates;
+    change(row, api);
+    const plan = await importer.planImports(api, config, [original, incoming], { 'new-skill': receipt });
+    assert.equal(plan.candidates.length, 0);
+    assert.match(plan.conflicts.join(), /enrollment/i);
+  }
+});
 
 test('Notion body import preserves YAML and executable files, acknowledges only the exact edit, and converges', async () => {
   assert.equal(typeof importer.planImports, 'function');

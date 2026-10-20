@@ -9,3 +9,4 @@ Skills for everyone at Limelight. Install this plugin first.
 | [`limelight-marketing-design-system`](skills/limelight-marketing-design-system/SKILL.md) | Build mocks of website pages, review pages and brand assets, or look up the Limelight brand. Mocks need a browser and network access. |
 | [`limelight-product-design-system`](skills/limelight-product-design-system/SKILL.md) | Build, implement, review, or look up screens inside the Limelight app with the Proposal D design system. Prototypes need a browser and network access. |
 | [`md-render`](skills/md-render/SKILL.md) | Turn Markdown into HTML or PDF, or serve a local preview. Needs Python 3.10+ and the bundled requirements. |
+| [`designg-system-check`](skills/designg-system-check/SKILL.md) | Audit actual component reuse, tokens, icons, and interactions on a Limelight screen. |

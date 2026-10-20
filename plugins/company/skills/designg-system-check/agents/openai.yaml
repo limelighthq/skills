@@ -1,0 +1,4 @@
+interface:
+  display_name: "DESIGNG SYSTEM CHECK"
+  short_description: "Audit Limelight screens against the approved design system"
+  default_prompt: "Use $designg-system-check to audit every component on the specified Limelight screen against our approved design system."

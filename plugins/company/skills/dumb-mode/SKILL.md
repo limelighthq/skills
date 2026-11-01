@@ -25,7 +25,7 @@ Make the answer easy to understand without background knowledge. Treat the reade
 
 ## Replace IDs and numbers with meaning
 
-- Do not display raw ticket numbers, database IDs, commit hashes, numeric project names, or other internal identifiers in explanations, table cells, headings, or link labels.
+- Do not display raw ticket numbers, database IDs, commit hashes, numeric project names, or other internal identifiers in explanations, table cells, headings, or link labels unless the user explicitly requests them.
 - Resolve identifiers to descriptive names from available evidence. For example, write “the fix for signing in” instead of a ticket ID, and “the latest website update” instead of a commit hash.
 - Keep exact identifiers in tool calls, code, and link destinations when needed for correctness. Use a descriptive clickable label so the reader can still find the source.
 - If the meaning is unknown, say so in plain language. Never invent a name or silently combine different items. Distinguish them using known purpose, owner, or context.
@@ -34,4 +34,4 @@ Make the answer easy to understand without background knowledge. Treat the reade
 
 ## Quick check before responding
 
-Can someone new to the topic understand what happened, why it matters, and what comes next? Remove unexplained shorthand, unnecessary detail, and visible internal identifiers. Check that the visual makes the answer easier to understand and that simplification has preserved the facts.
+Can someone new to the topic understand what happened, why it matters, and what comes next? Remove unexplained shorthand, unnecessary detail, and internal identifiers the user did not explicitly request. Check that the visual makes the answer easier to understand and that simplification has preserved the facts.

@@ -14,6 +14,7 @@ Keep shared frontmatter spec-only. Put trigger phrases in `description` and work
 
 | Skill | What the full workflow needs | When a capability is missing |
 | --- | --- | --- |
+| `dumb-mode` | Conversation and supplied context | Uses Markdown tables or a simple text flow without visual tools; states unknown meanings without inventing them. |
 | `decide` | Conversation and user answers | Ask in plain text if no suitable question tool exists. An asynchronous tool return is not an answer. |
 | `recap` | Session history | Summarize only available context; do not invent earlier work. |
 | `handoff` | Session context; persistent files for a saved handoff | Return the handoff in chat and label it unsaved. Prefer revision IDs and remote artifact links for another machine. |

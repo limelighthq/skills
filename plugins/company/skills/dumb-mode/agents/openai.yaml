@@ -1,0 +1,4 @@
+interface:
+  display_name: "Dumb Mode"
+  short_description: "Plain answers with useful visuals and no jargon"
+  default_prompt: "Use $dumb-mode to explain this in simple, non-technical language, with helpful visuals and descriptive names instead of IDs."

@@ -106,5 +106,14 @@
       "What does the specification say about deleting an absent key?"
     ],
     "negative": "Summarize the steps we already took in this conversation."
+  },
+  {
+    "skill": "dumb-mode",
+    "positive": [
+      "Use dumb-mode to explain why signing in stopped working.",
+      "Give me a jargon-free explanation of these project updates.",
+      "Explain these options for someone out of the loop, using a simple table."
+    ],
+    "negative": "Return the exact database IDs as a JSON array."
   }
 ]

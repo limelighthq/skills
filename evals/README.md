@@ -12,6 +12,9 @@ Load the complete skill and needed bundled references in a fresh evaluation cont
 
 | Skill | Scenario | Expected behavior |
 | --- | --- | --- |
+| `dumb-mode` | Explain a supplied incident with ticket IDs and technical terms; text output only | Uses plain language and a useful table or flow; replaces IDs with supported descriptions; preserves cause, impact, and uncertainty. |
+| `dumb-mode` | Compare supplied plans with exact costs and deadlines | Makes the tradeoff visual, explains meaningful quantities accurately in words, and does not hide costs or deadlines. |
+| `dumb-mode` | Unknown identifier supplied without context | States that the item is unidentified without inventing its meaning; keeps the response brief. |
 | `decide` | Planning request with three unresolved decisions, no question tool | One decision at a time, three options with a recommendation, wait for answers; stop after the completed planning summary. |
 | `decide` | Authorized implementation blocked on choices; asynchronous question tool | Returning from the tool does not select its default. Continue independent work; resume dependent work only after an answer. |
 | `decide` | Free-text answer resolves two decisions; remaining choices have routine defaults | Accept the answer, remove resolved questions, choose routine defaults, continue the authorized task without requesting authorization again. |

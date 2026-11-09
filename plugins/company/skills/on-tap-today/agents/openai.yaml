@@ -1,0 +1,4 @@
+interface:
+  display_name: "On Tap Today"
+  short_description: "A ranked plan for the rest of today's Limelight work"
+  default_prompt: "Use $on-tap-today to build a ranked plan for the rest of my day from my calendar, meeting action items, tasks, Linear and GitHub."

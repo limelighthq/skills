@@ -10,3 +10,4 @@ Skills for engineers. They work in any repo. Skills that depend on one repo's la
 | [`one-percent-better`](skills/one-percent-better/SKILL.md) | Find and open one small, evidence-backed improvement PR. |
 | [`recap`](skills/recap/SKILL.md) | Get a terse step-by-step recap of the current session. |
 | [`research`](skills/research/SKILL.md) | Investigate primary sources and produce a cited note, inline or with a background agent. |
+| [`engineering-change-video`](skills/engineering-change-video/SKILL.md) | Create a concise engineering-demo MP4 with voiceover and a transcript for all meaningful files, code, configuration, and workspace artifacts changed during the current agent session. Use when an engineering agent has implemented or modified changes and needs a narrated before/after walkthrough, release handoff, demo, or implementation summary. |

@@ -6,9 +6,9 @@ The repo is a plugin marketplace named `limelight`. Each team has one plugin. Sh
 
 | Plugin | For | Skills |
 | --- | --- | --- |
-| [`company`](plugins/company) | Everyone | `decide`, `dumb-mode`, `limelight-marketing-design-system`, `limelight-product-design-system`, `limelight-work`, `md-render`, `on-tap-today` |
+| [`company`](plugins/company) | Everyone | `decide`, `designg-system-check`, `dumb-mode`, `limelight-marketing-design-system`, `limelight-product-design-system`, `limelight-work`, `md-render`, `on-tap-today` |
 | [`design`](plugins/design) | Designers | `design-change-log` |
-| [`engineering`](plugins/engineering) | Engineers | `annotate-ui-screenshots`, `deep-module-scan`, `handoff`, `one-percent-better`, `recap`, `research` |
+| [`engineering`](plugins/engineering) | Engineers | `annotate-ui-screenshots`, `deep-module-scan`, `engineering-change-video`, `handoff`, `one-percent-better`, `recap`, `research` |
 
 ## Install
 

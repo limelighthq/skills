@@ -78,10 +78,10 @@ All activation steps can run using the GitHub secret; no local token copy is nee
 
 - **Add or edit:** use the normal reviewed PR flow. Publishing detects changes in scripts and assets as well as `SKILL.md`.
 - **Move between plugins:** keep the skill name; the existing Notion row is updated with its new source path.
-- **Rename:** change the Notion row first, then Git. Order matters: a row with a Plugin and no Sync state is a new Notion skill, so the next sync enrolls it under whatever name it carries.
-  1. In Notion, set the row's Skill name to the new name, clear Plugin, and clear Sync state. Leave Origin as this repository. Until step 3 merges, syncs stop with a conflict and write nothing.
-  2. In one PR, rename the skill directory and its `name`, update both README tables, delete `.notion-sync/<old-name>.json`, and add `"<new-name>": "<page id>"` under `adopt` in `notion-sync.json`.
-  3. Merge. The sync adopts the same page under the new name and restores its Plugin, Source path, and ZIP.
+- **Rename:** change Git first, then the Notion row. While the row's Sync state still names the old skill, every sync stops with a "still owns page" conflict before it writes anything. That conflict holds the row safe until the Notion edit.
+  1. In one PR, rename the skill directory and its `name`, update both README tables, delete `.notion-sync/<old-name>.json` if it exists, and add `"<new-name>": "<page id>"` under `adopt` in `notion-sync.json`. Merge it.
+  2. In Notion, on the same row, set Skill name to the new name and clear Plugin. Clear Sync state last. Leave Origin as this repository. A row with a Plugin and no Sync state is a new Notion skill, so clearing Sync state first would enroll the row again under its old name.
+  3. The next sync adopts the page under the new name and restores its Plugin, Source path, and ZIP. Doing step 2 before step 1 can instead make the publisher create a second page for the old name.
 - **Remove:** the sync reports the old managed row. Review its dependencies, retire it explicitly in Notion by clearing Sync state and Plugin, remove a stale adoption mapping, and rerun. No remote row is deleted automatically.
 - **Edit in Notion:** managed instructions, Description, and complete supporting ZIPs return through the coordinated import flow. Comments and unrelated properties do not count as skill edits. Until two-way activation, the original publisher stops on these edits and requires preserving them in Git before repair.
 - **Create a new skill:** use GitHub, or write it in Notion and choose its Plugin to enroll it through a validated PR. Once published, it participates in both directions automatically. Notion rows without a Plugin remain untouched.

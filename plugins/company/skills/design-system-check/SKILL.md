@@ -1,9 +1,9 @@
 ---
-name: designg-system-check
-description: "Provides the approved Limelight design-system context and audit every component on a specified platform screen, route, or section for actual component reuse, tokens, icons, and interaction consistency. Use when asked for DESIGNG SYSTEM CHECK, design-system compliance, or when implementing changes to a named Limelight screen. Applies to Limelight UI, not unrelated products. Report findings by default; fix only within the user's requested scope."
+name: design-system-check
+description: "Provides the approved Limelight design-system context and audit every component on a specified platform screen, route, or section for actual component reuse, tokens, icons, and interaction consistency. Use when asked for a design system check, design-system compliance, or when implementing changes to a named Limelight screen. Applies to Limelight UI, not unrelated products. Report findings by default; fix only within the user's requested scope."
 ---
 
-# DESIGNG SYSTEM CHECK
+# Design system check
 ## Context to establish every time
 The approved Limelight reference is [Proposal D Studio](https://limelight-proposal-d-studio.agustinarevenga.chatgpt.site/?screen=Find+creators&agent=ivy&campaign=0&tab=Creators&discovery=ai).
 Verified from its local source on 2026-10-20:

@@ -30,8 +30,10 @@ permissions:
   contents: read
 
 # A newer push replaces the review that is still running for the same pull request.
+# A bot editing the description (CodeRabbit adds its summary) gets its own group,
+# so it cannot cancel the review that the author's push started.
 concurrency:
-  group: pr-review-${{ github.event.pull_request.number || inputs.pr_number }}
+  group: pr-review-${{ github.event.pull_request.number || inputs.pr_number }}${{ github.event.action == 'edited' && github.event.sender.type == 'Bot' && '-bot-edit' || '' }}
   cancel-in-progress: true
 
 env:
@@ -51,7 +53,8 @@ jobs:
       github.event_name == 'workflow_dispatch' ||
       (!github.event.pull_request.draft &&
        github.event.pull_request.head.repo.full_name == github.repository &&
-       github.event.pull_request.user.login != 'github-actions[bot]')
+       github.event.pull_request.user.login != 'github-actions[bot]' &&
+       !(github.event.action == 'edited' && github.event.sender.type == 'Bot'))
     runs-on: ubuntu-latest
     # A dry run on #13 (367 files, a 3,639-line diff) took about 10 minutes.
     timeout-minutes: 30

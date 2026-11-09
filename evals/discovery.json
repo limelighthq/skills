@@ -115,5 +115,32 @@
       "Explain these options for someone out of the loop, using a simple table."
     ],
     "negative": "Return the exact database IDs as a JSON array."
+  },
+  {
+    "skill": "on-tap-today",
+    "positive": [
+      "What's on tap for me today?",
+      "Look across my calendar, Linear and GitHub and tell me what to work on today.",
+      "Plan the rest of my day."
+    ],
+    "negative": "Summarize last quarter's revenue by month."
+  },
+  {
+    "skill": "design-system-check",
+    "positive": [
+      "Run a design system check on the creator marketplace.",
+      "Audit actual component reuse on the Limelight saved creators screen.",
+      "Implement changes to the Limelight campaign creator list using approved components."
+    ],
+    "negative": "Design a restaurant website unrelated to Limelight."
+  },
+  {
+    "skill": "engineering-change-video",
+    "positive": [
+      "Create a video with voiceover for the changes we made in this session.",
+      "Make a narrated demo of what this PR changed.",
+      "Record an engineering walkthrough of today's implementation for the release handoff."
+    ],
+    "negative": "Write unit tests for the parser."
   }
 ]

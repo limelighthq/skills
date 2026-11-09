@@ -1,0 +1,4 @@
+interface:
+  display_name: "Design System Check"
+  short_description: "Audit Limelight screens against the approved design system"
+  default_prompt: "Use $design-system-check to audit every component on the specified Limelight screen against our approved design system."

@@ -1,0 +1,12 @@
+{
+  "format": 2,
+  "kind": "enrollment",
+  "repository": "limelighthq/skills",
+  "plugin": "company",
+  "sourcePath": "plugins/company/skills/designg-system-check",
+  "pageId": "40011093-8099-8192-a217-fbe9a0cb5bab",
+  "baseline": null,
+  "guard": "f4aca58c9ead3e011a28409ec84d35d400d5cb3b9dba882ccb115d24d95330cd",
+  "source": "4d2dc795a3dbbd999551be25ef48739092bf415144f2edb7350fc87cae504fd8",
+  "remote": "765e8165121d817e555fdd7a5938d8b4832076ae612a44a0307b32f3ce2858c9"
+}

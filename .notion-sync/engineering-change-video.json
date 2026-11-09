@@ -1,0 +1,12 @@
+{
+  "format": 2,
+  "kind": "enrollment",
+  "repository": "limelighthq/skills",
+  "plugin": "engineering",
+  "sourcePath": "plugins/engineering/skills/engineering-change-video",
+  "pageId": "3e611093-8099-8011-9e02-f1543eb1ba6a",
+  "baseline": null,
+  "guard": "cc16865eafba373e1ef64bf031b2b95ec51a52e4490c0876f7af16e857f2e6c7",
+  "source": "a9a335f33073c59140b612b942cc775f68ae417789a3b01e90f6666fe77446ed",
+  "remote": "ff8253b852c76fbf8941ba806556e3003895e1d447fecadadccc77791e8280d5"
+}

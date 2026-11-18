@@ -14,6 +14,7 @@ Keep shared frontmatter spec-only. Put trigger phrases in `description` and work
 
 | Skill | What the full workflow needs | When a capability is missing |
 | --- | --- | --- |
+| `ask-luna`, `ask-lumi` | Authenticated Slack send and reply-read access; a worker with those capabilities for background conversations | Runs in the foreground without a suitable worker. Without Slack sending, returns an unsent draft; without reply access, returns the sent message link and blocker. Does not promise persistence after the session closes. |
 | `dumb-mode` | Conversation and supplied context | Uses Markdown tables or a simple text flow without visual tools; states unknown meanings without inventing them. |
 | `decide` | Conversation and user answers | Ask in plain text if no suitable question tool exists. An asynchronous tool return is not an answer. |
 | `recap` | Session history | Summarize only available context; do not invent earlier work. |

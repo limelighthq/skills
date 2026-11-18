@@ -1,12 +1,17 @@
 ---
 name: limelight-work
 description: "Route Limelight work requests to the right repo/process docs and keep the company workflow index current. Use when someone asks where work should happen, how to turn an idea into execution, what workflow doc to follow, or asks Luna to update the workflow docs when guidance is missing or stale. Triggers on requests like \"use limelight-work\", \"where should this go\", \"how do we handle this\", \"add this to the workflow doc\", or \"ask Luna to update this doc using skill limelight-work\"."
-compatibility: Needs authenticated read access to limelighthq/ai-workflows through a checkout, GitHub CLI, API, or repository connector. Publishing changes also needs write and PR access.
+compatibility: Direct execution needs authenticated read access to limelighthq/ai-workflows through a checkout, GitHub CLI, API, or repository connector; publishing also needs write and PR access. Delegating to Luna needs Slack send and reply-read access through Ask Luna instead.
 ---
 
 # Limelight Work
 
 Single routing skill for Limelight work requests.
+
+If you are a local assistant being asked to ask Luna to do this work, first use
+Ask Luna to hand off the request and its authorized scope. Do not start the local
+editing workflow as well. The steps below apply when the work is assigned to you
+directly, including when you are Luna receiving the handoff.
 
 **Primary index:** `company/workflow/Readme.md`
 **Repo:** `limelighthq/ai-workflows`
@@ -68,7 +73,7 @@ When a user says the docs should include something:
 - If a request is operational and recurring, document it.
 - If a request is repo-specific, put the detail in that repo or the relevant detailed workflow page, not only in chat.
 - If guidance changes often, keep the index stable and update the linked doc.
-- If the user asks Luna to use `limelight-work`, treat that as permission to update the docs, not just answer from them.
+- If the user asks you to ask Luna to use `limelight-work`, delegate the authorized doc update through Ask Luna; do not also perform it locally. When you are Luna receiving that request, perform the doc workflow below.
 
 ## Trigger phrase to honor literally
 
@@ -76,4 +81,4 @@ If someone says:
 
 > ask Luna to update this doc using skill `limelight-work`
 
-then read the workflow index, update the right markdown file in `limelighthq/ai-workflows`, and ship the doc change through PR and merge under the rules above. The name Luna is part of the trigger phrase, not a required agent or integration.
+then use Ask Luna to send the request and relevant context to the team agent. The explicit update request authorizes that doc workflow, subject to the rules above. If Ask Luna or Slack access is unavailable, return an unsent handoff rather than silently substituting local execution. When you are Luna receiving the delegated request, read the workflow index, update the right markdown file in `limelighthq/ai-workflows`, and ship the doc change through PR and merge under the rules above.

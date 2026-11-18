@@ -4,6 +4,8 @@ Skills for everyone at Limelight. Install this plugin first.
 
 | Skill | Use it to |
 | --- | --- |
+| [`ask-luna`](skills/ask-luna/SKILL.md) | Consult Luna through Slack, handle follow-up questions, and bring the answer back. Defaults to DMs; uses a background worker when available. |
+| [`ask-lumi`](skills/ask-lumi/SKILL.md) | Consult Lumi through Slack, handle follow-up questions, and bring the answer back. Defaults to DMs; uses a background worker when available. |
 | [`decide`](skills/decide/SKILL.md) | Resolve open decisions one at a time, with options and a recommendation. |
 | [`dumb-mode`](skills/dumb-mode/SKILL.md) | Explain complex topics in everyday language, with useful visuals and descriptions instead of internal IDs. |
 | [`limelight-work`](skills/limelight-work/SKILL.md) | Find where a piece of work belongs and which workflow doc to follow. |

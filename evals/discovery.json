@@ -142,5 +142,23 @@
       "Record an engineering walkthrough of today's implementation for the release handoff."
     ],
     "negative": "Write unit tests for the parser."
+  },
+  {
+    "skill": "ask-luna",
+    "positive": [
+      "Ask Luna how creator outreach works after approval.",
+      "Have Luna review this plan in the background and answer any clarification questions from our notes.",
+      "Follow up with Luna in the Slack thread we started earlier."
+    ],
+    "negative": "Explain the phases of the moon."
+  },
+  {
+    "skill": "ask-lumi",
+    "positive": [
+      "Ask Lumi how creator outreach works after approval.",
+      "Have Lumi review this plan in the background and answer any clarification questions from our notes.",
+      "Follow up with Lumi in the Slack thread we started earlier."
+    ],
+    "negative": "Review this plan yourself without contacting anyone."
   }
 ]

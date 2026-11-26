@@ -160,5 +160,14 @@
       "Follow up with Lumi in the Slack thread we started earlier."
     ],
     "negative": "Review this plan yourself without contacting anyone."
+  },
+  {
+    "skill": "app-demo-video",
+    "positive": [
+      "Record a narrated demo of our app in staging with ElevenLabs and Limelight theming.",
+      "Make a video showing these features in our production app, using real footage and clean chapter cuts.",
+      "Replace the screenshots in this app demo with real video from my local environment."
+    ],
+    "negative": "Summarize the code changes in this PR as a text message."
   }
 ]
